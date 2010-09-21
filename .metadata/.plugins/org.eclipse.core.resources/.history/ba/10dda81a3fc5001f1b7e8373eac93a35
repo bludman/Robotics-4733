@@ -1,0 +1,63 @@
+
+
+public interface CommandSet {
+
+	public abstract void Start();
+
+	public abstract void Baud(int baudCode);
+
+	public abstract void Control();
+
+	public abstract void Safe();
+
+	public abstract void Full();
+
+	public abstract void Spot();
+
+	public abstract void Cover();
+
+	public abstract void Demo(int demoMode);
+
+	public abstract void Drive(int velocityHigh, int velocityLow,
+			int radiusHigh, int radiusLow);
+
+	public abstract void LowSideDrivers(int outputBits);
+
+	public abstract void LEDs(int LEDBits, int color, int intensity);
+
+	public abstract void Song();
+
+	public abstract void Play(int songNumber);
+
+	public abstract void CoverAndDock();
+
+	public abstract void PMWLowSideDrivers(int lsd2, int lsd1, int lsd0);
+
+	public abstract void DriveDirect(int rightHigh, int rightLow, int leftHigh,
+			int leftLow);
+
+	public abstract void DigitalOutputs(int outputBits);
+
+	public abstract void Stream();
+
+	public abstract void QueryList();
+
+	public abstract void PauseResumeStream(int range);
+
+	public abstract void SendIR(int value);
+
+	public abstract void Script();
+
+	public abstract void PlayScript();
+
+	public abstract void StopScript();
+
+	public abstract void WaitTime(int time);
+
+	public abstract void WaitDistance(int highDistance, int lowDistance);
+
+	public abstract void WaitAngle(int highAngle, int lowAngle);
+
+	public abstract void WaitEvent(int eventID);
+
+}
