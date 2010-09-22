@@ -2,62 +2,66 @@
 
 public interface CommandSet {
 
-	public abstract byte[] Start();
+	public  byte[] Start();
 
-	public abstract byte[] Baud(int baudCode);
+	public  byte[] Baud(int baudCode);
 
-	public abstract byte[] Control();
+	public  byte[] Control();
 
-	public abstract byte[] Safe();
+	public  byte[] Safe();
 
-	public abstract byte[] Full();
+	public  byte[] Full();
 
-	public abstract byte[] Spot();
+	public  byte[] Spot();
 
-	public abstract byte[] Cover();
+	public  byte[] Cover();
 
-	public abstract byte[] Demo(int demoMode);
+	public  byte[] Demo(int demoMode);
 
-	public abstract byte[] Drive(int velocityHigh, int velocityLow,
+	public  byte[] Drive(int velocityHigh, int velocityLow,
 			int radiusHigh, int radiusLow);
 
-	public abstract byte[] LowSideDrivers(int outputBits);
+	public  byte[] LowSideDrivers(int outputBits);
 
-	public abstract byte[] LEDs(int LEDBits, int color, int intensity);
+	public  byte[] LEDs(int LEDBits, int color, int intensity);
 
-	public abstract byte[] Song();
+	public  byte[] Song();
 
-	public abstract byte[] Play(int songNumber);
+	public  byte[] Play(int songNumber);
 
-	public abstract byte[] CoverAndDock();
+	public  byte[] CoverAndDock();
 
-	public abstract byte[] PMWLowSideDrivers(int lsd2, int lsd1, int lsd0);
+	public  byte[] PMWLowSideDrivers(int lsd2, int lsd1, int lsd0);
 
-	public abstract byte[] DriveDirect(int rightHigh, int rightLow, int leftHigh,
+	public  byte[] DriveDirect(int rightHigh, int rightLow, int leftHigh,
 			int leftLow);
 
-	public abstract byte[] DigitalOutputs(int outputBits);
+	public  byte[] DigitalOutputs(int outputBits);
 
-	public abstract byte[] Stream();
+	public  byte[] Stream();
 
-	public abstract byte[] QueryList();
+	public  byte[] QueryList();
 
-	public abstract byte[] PauseResumeStream(int range);
+	public  byte[] PauseResumeStream(int range);
 
-	public abstract byte[] SendIR(int value);
+	public  byte[] SendIR(int value);
 
-	public abstract byte[] Script();
+	public  byte[] Script();
 
-	public abstract byte[] PlayScript();
+	public  byte[] PlayScript();
 
-	public abstract byte[] StopScript();
+	public  byte[] StopScript();
 
-	public abstract byte[] WaitTime(int time);
+	public  byte[] WaitTime(int time);
 
-	public abstract byte[] WaitDistance(int highDistance, int lowDistance);
+	public  byte[] WaitDistance(int highDistance, int lowDistance);
 
-	public abstract byte[] WaitAngle(int highAngle, int lowAngle);
+	public  byte[] WaitAngle(int highAngle, int lowAngle);
 
-	public abstract byte[] WaitEvent(int eventID);
+	public  byte[] WaitEvent(int eventID);
+	
+	public SensorData querySingleSensor(int packetId);
+	public SensorData querySensorList(int[] packetIds);
+	public SensorData streamSensorList(int[] packetIds);
 
 }

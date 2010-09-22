@@ -13,6 +13,8 @@ public class CommandSetImpl implements CommandSet
 	
 	// TODO: Sensing commands
 	
+	
+	
 	/* (non-Javadoc)
 	 * @see CommandSet#Start()
 	 */
@@ -441,5 +443,66 @@ public class CommandSetImpl implements CommandSet
 			System.err.println("Error: Event ID must be between -20 and 20 (inclusive), excluding 0.");
 			return null;
 		}
+	}
+
+	@Override
+	public SensorData querySingleSensor(int packetId) 
+	{
+		SensorData data = new SensorData();
+		if(0<=packetId && packetId<=42)
+		{
+			byte[] command = new byte[2];	
+			command[0] = (byte)142;
+			command[1] = (byte)packetId;
+			data.setQueryCommand(command);
+			return data;
+		}
+		else
+		{
+			System.err.println("Error: packetId should be between 0 and 42 (inclusive).");
+			return null;
+		}
+	}
+
+	@Override
+	public SensorData querySensorList(int[] packetIds) {
+		
+		/**
+		 * Implementation note:
+		 * Will skip over any packet ids that are invalid and
+		 * alter the size of the request accordingly as 
+		 * long as there is at least a single packet requested
+		 */
+		SensorData data = new SensorData();
+		int expectedNumberOfCommands=packetIds.length;
+		byte[] command = new byte[2+expectedNumberOfCommands];
+		
+		command[0] = (byte) 148;
+		
+		/* Read each packet id and add it to the command if it is valid*/
+		for(int i = 0; i < packetIds.length;i++)
+		{
+			if(0<=packetIds[i] && packetIds[i]<=42)
+			{
+				command[i+2] = (byte)packetIds[i];
+				data.setQueryCommand(command);
+			}
+			else
+			{
+				System.err.println("Error in packet "+i+": packetId should be between 0 and 42 (inclusive).");
+				expectedNumberOfCommands--;
+			}
+		}
+		command[1] = (byte) expectedNumberOfCommands;
+		if(expectedNumberOfCommands>0)
+			return data;
+		else
+			return null;
+	}
+
+	@Override
+	public SensorData streamSensorList(int[] packetIds) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
