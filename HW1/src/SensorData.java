@@ -144,14 +144,14 @@ public class SensorData {
 			throw new IllegalArgumentException("Invalid command");
 		
 		/* Single sensor packet request */ 
-		if(command[1]==OPCODE_SENSORS && packetIdIsInValidRange(command[2]))
+		if(command[0]==OPCODE_SENSORS && packetIdIsInValidRange(command[1]))
 		{
-			return size+=RESPONSE_SIZES[command[2]];
+			return size+=RESPONSE_SIZES[command[1]];
 		}
 		/* Query list or Stream */
-		else if(command[1]==OPCODE_STREAM || command[1]==OPCODE_QUERY_LIST)
+		else if(command[0]==OPCODE_STREAM || command[0]==OPCODE_QUERY_LIST)
 		{
-			for(int i=3;i<command.length;i++)
+			for(int i=2;i<command.length;i++)
 			{
 				if(packetIdIsInValidRange(command[i]))
 				{
@@ -185,23 +185,27 @@ public class SensorData {
 			throw new IllegalArgumentException("Invalid command");
 		
 		/* Single sensor packet request */ 
-		if(command[1]==OPCODE_SENSORS && packetIdIsInValidRange(command[2]))
+		if(command[0]==OPCODE_SENSORS && packetIdIsInValidRange(command[1]))
 		{
-			sensorData[0]=(int)readData[0];
+			sensorData[command[1]]=(int)readData[0];
 		}
 		/* Query list or Stream */
-		else if(command[1]==OPCODE_STREAM || command[1]==OPCODE_QUERY_LIST)
+		else if(command[0]==OPCODE_STREAM || command[0]==OPCODE_QUERY_LIST)
 		{
-			for(int i=3;i<command.length;i++)
+			int lengthOffset=0;
+			for(int packetIndex=2, dataByteIndex=0;packetIndex<command.length;packetIndex++,dataByteIndex+=lengthOffset)
 			{
-				if(packetIdIsInValidRange(command[i]))
+				int packetId=command[packetIndex];
+				if(packetIdIsInValidRange(packetId))
 				{
-					if(RESPONSE_SIZES[command[i]]==1)
+					if(RESPONSE_SIZES[packetId]==1)
 					{
-						
-					}else if(RESPONSE_SIZES[command[i]]==2)
+						sensorData[packetId]=(int)readData[dataByteIndex];
+						lengthOffset=1;
+					}else if(RESPONSE_SIZES[packetId]==2)
 					{
-						
+						sensorData[packetId]=twoBytesToInt(readData[dataByteIndex],readData[dataByteIndex+1]);
+						lengthOffset=2;
 					}
 				}
 			}
@@ -213,6 +217,36 @@ public class SensorData {
 		
 	}
 	
+	/**
+	 * Convert two read bytes into a single int, interpreting the bytes as signed or unsigned
+	 * @param highByte
+	 * @param lowByte
+	 * @param signedness
+	 * @return
+	 */
+	private int twoBytesToInt(byte highByte, byte lowByte,SIGNEDNESS signedness ) {
+		int value=0;
+		if(signedness==SIGNEDNESS.SIGNED)
+		{
+			value|=highByte;
+			value=value<<8;
+			value|=lowByte;
+			return value;
+		}else if(signedness==SIGNEDNESS.UNSIGNED)
+		{
+			value|=highByte;
+			value=value<<8;
+			value|=lowByte;
+			return value;
+		}
+		
+		throw new IllegalArgumentException("Invalid SIGNEDNESS"); //flow shouldn't reach here
+	}
+
+	private static int unsignedByteToInt(byte uByte) {
+	    return (int) uByte & 0xFF;
+	    }
+
 	public int getRawSensorData(PACKET_IDS id)
 	{
 		//TODO: Implement this
@@ -239,6 +273,7 @@ public class SensorData {
 		/* Ignore bits 5-7 */
 	};
 	
+	private static enum SIGNEDNESS{UNSIGNED,SIGNED};
 	private int OPCODE_SENSORS= 142;
 	private int OPCODE_STREAM= 148;
 	private int OPCODE_QUERY_LIST= 149;

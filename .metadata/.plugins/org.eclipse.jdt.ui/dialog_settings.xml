@@ -3,8 +3,8 @@
 	<item value="true" key="Replace"/>
 	<item value="true" key="Comments"/>
 	<item value="false" key="InstanceOf"/>
-	<item value="true" key="Abstract"/>
 	<item value="true" key="Public"/>
+	<item value="true" key="Abstract"/>
 	<section name="OptionalMessageDialog.hide.">
 		<item value="true" key="org.eclipse.jdt.ui.typecomment.deprecated"/>
 	</section>
@@ -22,6 +22,8 @@
 	<section name="RefactoringWizard.preview">
 		<item value="410" key="height"/>
 		<item value="610" key="width"/>
+	</section>
+	<section name="RenameInformationPopup">
 	</section>
 	<section name="org.eclipse.ltk.ui.refactoring.settings">
 		<item value="1" key="updateSimilarElementsMatchStrategy"/>

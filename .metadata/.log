@@ -1763,3 +1763,31 @@ Java Model Exception: Java Model Status [<project root> [in Sandbox] is not on i
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1311)
 !SUBENTRY 1 org.eclipse.jdt.core 4 1006 2010-09-25 11:30:10.562
 !MESSAGE <project root> [in Sandbox] is not on its project's build path
+!SESSION 2010-09-25 19:20:30.916 -----------------------------------------------
+eclipse.buildId=M20090917-0800
+java.version=1.6.0_20
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.jface 2 0 2010-09-25 19:21:19.751
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2010-09-25 19:21:19.751
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(com.python.pydev.analysis.actions.pyGlobalsBrowserWorkbench,Python Show Class Browser,
+		Show Class Browser,
+		Category(org.python.pydev.ui.category.source,Pydev - Editor,Pydev editor category,true),
+		,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)

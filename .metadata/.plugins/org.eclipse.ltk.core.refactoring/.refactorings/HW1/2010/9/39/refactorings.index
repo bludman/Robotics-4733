@@ -5,3 +5,6 @@
 1285387457082	Rename local variable 'packetIds'
 1285388171689	Rename method 'packetIdIsValid'
 1285388245952	Rename method 'setExpectedResponseSize'
+1285430994921	Rename local variable 'packetNumber'
+1285431003938	Rename local variable 'dataByteNumber'
+1285433377952	Rename local variable 's'
