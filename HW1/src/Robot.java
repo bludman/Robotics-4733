@@ -3,7 +3,8 @@
  */
 
 /**
- * @author Ben
+ * @author Mike Hernandez
+ * @author Benjamin Ludman
  *
  */
 public class Robot {
