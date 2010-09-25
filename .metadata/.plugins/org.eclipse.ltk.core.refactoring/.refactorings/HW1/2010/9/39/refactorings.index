@@ -2,3 +2,6 @@
 1285045802665	Extract interface 'CommandSet'
 1285086452799	Rename type 'iRobot'
 1285123100324	Rename local variable 'data'
+1285387457082	Rename local variable 'packetIds'
+1285388171689	Rename method 'packetIdIsValid'
+1285388245952	Rename method 'setExpectedResponseSize'

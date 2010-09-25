@@ -449,7 +449,7 @@ public class CommandSetImpl implements CommandSet
 	public SensorData querySingleSensor(int packetId) 
 	{
 		SensorData data = new SensorData();
-		if(0<=packetId && packetId<=42)
+		if(SensorData.packetIdIsInValidRange(packetId))
 		{
 			byte[] command = new byte[2];	
 			command[0] = (byte)142;
@@ -482,7 +482,7 @@ public class CommandSetImpl implements CommandSet
 		/* Read each packet id and add it to the command if it is valid*/
 		for(int i = 0; i < packetIds.length;i++)
 		{
-			if(0<=packetIds[i] && packetIds[i]<=42)
+			if(SensorData.packetIdIsInValidRange(packetIds[i]))
 			{
 				command[i+2] = (byte)packetIds[i];
 				data.setQueryCommand(command);
@@ -502,7 +502,16 @@ public class CommandSetImpl implements CommandSet
 
 	@Override
 	public SensorData streamSensorList(int[] packetIds) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
 	}
+
+
+
+
+	public class NotImplementedException extends RuntimeException{
+		 public NotImplementedException(String message) {
+         super(message);
+      }
+		public NotImplementedException() {}
+	};
 }

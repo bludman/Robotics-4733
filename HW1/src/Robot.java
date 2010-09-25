@@ -9,6 +9,8 @@
 public class Robot {
 	OpenCommPort ocp;
 	CommandSet command;
+	SensorData sensors;
+	
 	
 	public class NotImplementedException extends RuntimeException{
 		 public NotImplementedException(String message) {
@@ -21,6 +23,7 @@ public class Robot {
 	{
 		ocp= new OpenCommPort();
 		command = new CommandSetImpl();
+		sensors = new SensorData();
 	}
 	
 	public  byte[] Start(){ throw new NotImplementedException("TODO");}
@@ -81,4 +84,6 @@ public class Robot {
 
 	public  byte[] WaitEvent(int eventID){ throw new NotImplementedException("TODO");}
 
+	
+	
 }
