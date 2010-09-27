@@ -54,6 +54,12 @@ public class OpenCommPort
 					SerialPort.DATABITS_8,
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
+			
+			/* Flush read buffer */
+			for (int i = 0; i < 15; i++)
+			{
+				read(new byte[1]);
+			}
 		}
 		catch(UnsupportedCommOperationException e)
 		{
@@ -83,6 +89,7 @@ public class OpenCommPort
 			System.err.println("IOException: " + e);
 		}
 	}
+	
 	
 	public void read(byte[] data)
 	{
