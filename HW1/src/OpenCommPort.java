@@ -16,7 +16,7 @@ public class OpenCommPort
 	
 	public static final int BAUD = 57600;
 	
-	String wantedPortName = "COM8";
+	String wantedPortName = "COM9";
 	
 	public int setUpBam()
 	{
@@ -55,17 +55,18 @@ public class OpenCommPort
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 			
-			/* Flush read buffer */
+			/* Flush read buffer 
 			for (int i = 0; i < 15; i++)
 			{
 				read(new byte[1]);
 			}
+			*/
 		}
 		catch(UnsupportedCommOperationException e)
 		{
 			System.err.println("Failed to set up port: " + e);
 		}
-		
+		System.out.println("Port should be open now");
 		return 0;
 	}
 

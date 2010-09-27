@@ -224,3 +224,12 @@ activated,editor,org.eclipse.jdt.ui,3.5.2.r352_v20100106-0800,"org.eclipse.jdt.u
 activated,editor,org.eclipse.jdt.ui,3.5.2.r352_v20100106-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1285462509505
 deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1285462520151
 activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1285462521903
+activated,view,org.eclipse.ui.console,3.4.0.v20090513,"org.eclipse.ui.console.ConsoleView",1285462521926
+activated,editor,org.eclipse.jdt.ui,3.5.2.r352_v20100106-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1285462538080
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1285462540035
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1285462541666
+activated,view,org.eclipse.ui.console,3.4.0.v20090513,"org.eclipse.ui.console.ConsoleView",1285462541691
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1285462598609
+activated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1285510536903
+started,bundle,org.eclipse.epp.usagedata.ui,1.1.1.R201001291118,"org.eclipse.epp.usagedata.ui",1285510537549
+deactivated,workbench,org.eclipse.ui.workbench,3.5.1.M20090826-0800a,"",1285510538250

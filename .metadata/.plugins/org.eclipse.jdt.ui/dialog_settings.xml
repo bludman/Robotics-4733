@@ -2,9 +2,11 @@
 <section name="Workbench">
 	<item value="true" key="Replace"/>
 	<item value="true" key="Comments"/>
+	<item value="C:\Program Files\Java\jre1.6.0_07\lib" key="org.eclipse.jdt.ui.lastextjar"/>
 	<item value="false" key="InstanceOf"/>
-	<item value="true" key="Public"/>
+	<item value="C:\Users\Ben\Downloads\template\template" key="org.eclipse.jdt.ui.last.external.project"/>
 	<item value="true" key="Abstract"/>
+	<item value="true" key="Public"/>
 	<section name="OptionalMessageDialog.hide.">
 		<item value="true" key="org.eclipse.jdt.ui.typecomment.deprecated"/>
 	</section>
@@ -19,15 +21,18 @@
 	</section>
 	<section name="JavaElementSearchActions">
 	</section>
+	<section name="BuildPathsPropertyPage">
+		<item value="2" key="pageIndex"/>
+	</section>
 	<section name="RefactoringWizard.preview">
 		<item value="410" key="height"/>
 		<item value="610" key="width"/>
-	</section>
-	<section name="RenameInformationPopup">
 	</section>
 	<section name="org.eclipse.ltk.ui.refactoring.settings">
 		<item value="1" key="updateSimilarElementsMatchStrategy"/>
 		<item value="true" key="updateTextualMatches"/>
 		<item value="true" key="updateSimilarElements"/>
+	</section>
+	<section name="RenameInformationPopup">
 	</section>
 </section>

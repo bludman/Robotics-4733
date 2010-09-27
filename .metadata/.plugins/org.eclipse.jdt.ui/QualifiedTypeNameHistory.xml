@@ -4,9 +4,17 @@
 <fullyQualifiedTypeName name="OpenCommPort"/>
 <fullyQualifiedTypeName name="CommandSetImpl"/>
 <fullyQualifiedTypeName name="CommandSetImpl.NotImplementedException"/>
-<fullyQualifiedTypeName name="SensorData"/>
-<fullyQualifiedTypeName name="SensorData.PACKET_IDS"/>
 <fullyQualifiedTypeName name="java.util.BitSet"/>
 <fullyQualifiedTypeName name="SensorData.SIGNEDNESS"/>
+<fullyQualifiedTypeName name="java.lang.IllegalAccessError"/>
+<fullyQualifiedTypeName name="SensorData.GROUPS_PACKET_CONTENTS"/>
+<fullyQualifiedTypeName name="sun.management.Sensor"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
+<fullyQualifiedTypeName name="SensorData"/>
+<fullyQualifiedTypeName name="SensorData.PACKET_IDS"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="SensorData.BUMPS_AND_WHEEL_DROPS"/>
+<fullyQualifiedTypeName name="java.util.Arrays"/>
 </qualifiedTypeNameHistroy>

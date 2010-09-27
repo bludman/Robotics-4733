@@ -227,7 +227,7 @@ public class ControlGUI extends JPanel implements ActionListener
 	{
 		if (e.getActionCommand().equals("Open"))
 		{
-			robot.ocp.setUpBam();
+			System.out.println("Setting up robot: "+robot.Setup());
 		}
 		
 		// Default velocity selected
@@ -356,6 +356,11 @@ public class ControlGUI extends JPanel implements ActionListener
 			// Read sensors
 			// Set values for checkboxes
 			// Set values for sliders
+			//SensorData.PACKET_IDS[] packets= {SensorData.PACKET_IDS.BUMPS_AND_WHEEL_DROPS};
+			robot.querySingleSensor(SensorData.PACKET_IDS.BUMPS_AND_WHEEL_DROPS);
+			System.out.println("Wheel drop left: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_LEFT));
+			System.out.println("Wheel drop right: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_RIGHT));
+			System.out.println("Wheel drop caster: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_CASTER));
 		}
 		
 		// Square
@@ -368,6 +373,8 @@ public class ControlGUI extends JPanel implements ActionListener
 		if (e.getActionCommand().equals("Mode"))
 		{
 			// Set mode to Safe Mode
+			//this should get refactored but for now this works
+			robot.test();
 		}
 	}
 }
