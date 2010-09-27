@@ -279,24 +279,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Stream()
-	 */
-	public byte[] Stream()
-	{
-		// TODO: Write this method.
-		return null;
-	}
-	
-	/* (non-Javadoc)
-	 * @see CommandSet#QueryList()
-	 */
-	public byte[] QueryList()
-	{
-		// TODO: Write this method.
-		return null;
-	}
-	
+		
 	/* (non-Javadoc)
 	 * @see CommandSet#PauseResumeStream(int)
 	 */
@@ -446,16 +429,15 @@ public class CommandSetImpl implements CommandSet
 	}
 
 	@Override
-	public SensorData querySingleSensor(int packetId) 
+	public byte[] querySingleSensor(SensorData.PACKET_IDS thePacketId) 
 	{
-		SensorData data = new SensorData();
+		int packetId=thePacketId.ordinal();
 		if(SensorData.isValidPacketId(packetId))
 		{
 			byte[] command = new byte[2];	
 			command[0] = (byte)142;
 			command[1] = (byte)packetId;
-			data.setQueryCommand(command);
-			return data;
+			return command;
 		}
 		else
 		{
@@ -465,43 +447,33 @@ public class CommandSetImpl implements CommandSet
 	}
 
 	@Override
-	public SensorData querySensorList(int[] packetIds) {
+	public byte[] querySensorList(SensorData.PACKET_IDS[] packetIds)
+	{
+		if (packetIds==null)
+			throw new IllegalArgumentException("Invalid number of packet ids");
 		
-		/**
-		 * Implementation note:
-		 * Will skip over any packet ids that are invalid and
-		 * alter the size of the request accordingly as 
-		 * long as there is at least a single packet requested
-		 */
-		SensorData data = new SensorData();
 		int expectedNumberOfCommands=packetIds.length;
 		byte[] command = new byte[2+expectedNumberOfCommands];
 		
-		command[0] = (byte) 148;
+		command[0] = (byte) SensorData.OPCODE_QUERY_LIST;
+		command[1] = (byte) expectedNumberOfCommands;
 		
-		/* Read each packet id and add it to the command if it is valid*/
+		/* Read each packet id and add it to the command if it is valid */
 		for(int i = 0; i < packetIds.length;i++)
 		{
-			if(SensorData.isValidPacketId(packetIds[i]))
-			{
-				command[i+2] = (byte)packetIds[i];
-				data.setQueryCommand(command);
-			}
-			else
-			{
-				System.err.println("Error in packet "+i+": packetId should be between 0 and 42 (inclusive).");
-				expectedNumberOfCommands--;
-			}
+			int packetId=packetIds[i].ordinal();
+			command[i+2] = (byte)packetId;
 		}
-		command[1] = (byte) expectedNumberOfCommands;
+		
 		if(expectedNumberOfCommands>0)
-			return data;
+			return command;
 		else
-			return null;
+			throw new IllegalArgumentException("Invalid number of packet ids");
 	}
 
 	@Override
-	public SensorData streamSensorList(int[] packetIds) {
+	public byte[] streamSensorList(SensorData.PACKET_IDS[] packetIds)
+	{
 		throw new NotImplementedException();
 	}
 

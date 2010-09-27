@@ -1,15 +1,19 @@
+import sun.management.Sensor;
+
 /**
  * 
  */
 
 /**
+ * A wrapper class that allows easy interaction with the iRobot Create.
+ * 
  * @author Mike Hernandez
  * @author Benjamin Ludman
  *
  */
 public class Robot {
 	OpenCommPort ocp;
-	CommandSet command;
+	CommandSet commandSet;
 	SensorData sensors;
 	
 	
@@ -23,11 +27,26 @@ public class Robot {
 	Robot()
 	{
 		ocp= new OpenCommPort();
-		command = new CommandSetImpl();
+		commandSet = new CommandSetImpl();
 		sensors = new SensorData();
 	}
 	
-	public  byte[] Start(){ throw new NotImplementedException("TODO");}
+	
+	/**
+	 * Setup communications with the robot
+	 * @return if setup was succesfull, false if it wasn't
+	 */
+	public boolean Setup()
+	{
+		if(ocp.setUpBam()==0)
+			return true;
+		
+		return false;
+	}
+	
+	public void Start(){ 
+			ocp.write(commandSet.Start());
+	}
 
 	public  byte[] Baud(int baudCode){ throw new NotImplementedException("TODO");}
 
@@ -84,6 +103,15 @@ public class Robot {
 	public  byte[] WaitAngle(int highAngle, int lowAngle){ throw new NotImplementedException("TODO");}
 
 	public  byte[] WaitEvent(int eventID){ throw new NotImplementedException("TODO");}
+	
+	public void querySingleSensor(SensorData.PACKET_IDS packet)
+	{
+		byte[] command=commandSet.querySingleSensor(packet);
+		sensors.setQueryCommand(command);
+		ocp.write(command);
+		ocp.read(sensors.getReadBuffer());
+		sensors.processSensorData();
+	}
 
 	
 	

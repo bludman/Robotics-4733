@@ -42,10 +42,6 @@ public interface CommandSet {
 
 	public  byte[] DigitalOutputs(int outputBits);
 
-	public  byte[] Stream();
-
-	public  byte[] QueryList();
-
 	public  byte[] PauseResumeStream(int range);
 
 	public  byte[] SendIR(int value);
@@ -64,8 +60,13 @@ public interface CommandSet {
 
 	public  byte[] WaitEvent(int eventID);
 	
-	public SensorData querySingleSensor(int packetId);
-	public SensorData querySensorList(int[] packetIds);
-	public SensorData streamSensorList(int[] packetIds);
+	/**
+	 * 
+	 * @param packetId
+	 * @return the relevant command
+	 */
+	public byte[] querySingleSensor(SensorData.PACKET_IDS packetId);
+	public byte[] querySensorList(SensorData.PACKET_IDS[] packetIds);
+	public byte[] streamSensorList(SensorData.PACKET_IDS[] packetIds);
 
 }

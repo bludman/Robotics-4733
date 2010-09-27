@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * 
  */
@@ -25,9 +28,11 @@ public class SensorData {
 	}
 
 		
+		
 	public void setQueryCommand(byte[] command) {
 		this.command=command;
 		this.expectedDataLength=calculateExpectedResponseSize(command);
+		this.rawSensorData= new byte[this.expectedDataLength];
 	}
 	
 	public byte[] getQueryCommand()
@@ -43,18 +48,19 @@ public class SensorData {
 	 */
 	private int calculateExpectedResponseSize(byte[] command)
 	{
-		//FIXME: doesn't expand groups
 		int size=0;
+		int commandOpCode = command[0];
+		
 		if(command==null || command.length<2)
 			throw new IllegalArgumentException("Invalid command");
 		
 		/* Single sensor packet request */ 
-		if(command[0]==OPCODE_SENSORS && isValidPacketId(command[1]))
+		if(commandOpCode==OPCODE_SENSORS && isValidPacketId(command[1]))
 		{
 			return size+=RESPONSE_SIZES[command[1]];
 		}
 		/* Query list or Stream */
-		else if(command[0]==OPCODE_STREAM || command[0]==OPCODE_QUERY_LIST)
+		else if(commandOpCode==OPCODE_STREAM || commandOpCode==OPCODE_QUERY_LIST)
 		{
 			for(int i=2;i<command.length;i++)
 			{
@@ -63,13 +69,13 @@ public class SensorData {
 					size+=RESPONSE_SIZES[command[i]];
 				}
 			}
+			return size;
 		}
 		else{
 			throw new IllegalArgumentException("Opcode is not a valid sensor request code. " +
 					"Cannot calculate expected response size.");
 		}
 		
-		return size;
 	}
 		
 
@@ -105,7 +111,9 @@ public class SensorData {
 			}
 			
 		}
-		/* Query list or Stream */
+		/* Query list or Stream 
+		 * NOTE: List of multiple packets, each of which could be a single sensor or a group of sensors
+		 */
 		else if(commandOpCode==OPCODE_STREAM || commandOpCode==OPCODE_QUERY_LIST)
 		{
 			int numberOfPackets= command[1]; //convenience
@@ -136,31 +144,10 @@ public class SensorData {
 					throw new IllegalArgumentException("Invalid Packet ID");
 				}
 			}
-			
-			
-			/*
-			int lengthOffset=0;
-			for(int packetIndex=2, dataByteIndex=0;packetIndex<command.length;packetIndex++,dataByteIndex+=lengthOffset)
-			{
-				int packetId=command[packetIndex];
-				if(isValidPacketId(packetId))
-				{
-					if(RESPONSE_SIZES[packetId]==1)
-					{
-						sensorData[packetId]=(int)rawSensorData[dataByteIndex];
-						lengthOffset=1;
-					}else if(RESPONSE_SIZES[packetId]==2)
-					{
-						//FIXME: sensorData[packetId]=twoBytesToInt(rawSensorData[dataByteIndex],rawSensorData[dataByteIndex+1]);
-						lengthOffset=2;
-					}
-				}
-			}
-			*/
 		}
 		else{
 			throw new IllegalArgumentException("Opcode is not a valid sensor request code. " +
-					"Cannot calculate expected response size.");
+					"Cannot parse response data.");
 		}
 		
 	}
@@ -176,7 +163,7 @@ public class SensorData {
 		if(!isValidGroupSensorPacketId(groupPacketId))
 			throw new IllegalArgumentException(groupPacketId+" is not a valid group packet id.");
 		
-		int[] singlePacketIds=GROUPS_PACKET_CONTENTS.values()[groupPacketId].contents();
+		int[] singlePacketIds=GROUP_PACKET_CONTENTS.values()[groupPacketId].getContents();
 		int rawSensorDataIndex=0;
 		for(int packetId : singlePacketIds)
 		{
@@ -220,37 +207,45 @@ public class SensorData {
 		}
 	}
 		
-	private int parseOneByteSensorData(int packetId, byte packetData){
-		if(RESPONSE_SIGNEDNESSES[packetId]==SIGNEDNESS.SIGNED)
-		{
-			return 0; //TODO
-		}
-		else if(RESPONSE_SIGNEDNESSES[packetId]==SIGNEDNESS.UNSIGNED)
-		{
-			return 0; //TODO
-		}
-		else
-		{
-			throw new IllegalArgumentException("Unknown Signedness");
-		}
+	private int parseOneByteSensorData(int packetId, byte packetData)
+	{
+		return oneBytesToInt(packetData, RESPONSE_SIGNEDNESSES[packetId]);
 	}
 	
-	private int parseTwoByteSensorData(int packetId, byte[] packetData){
+	
+	/**
+	 * Convert a byte to an int preserving the intended signedness
+	 * @param singleByte
+	 * @param signedness
+	 * @return
+	 */
+	private static int oneBytesToInt(byte singleByte, SIGNEDNESS signedness ) {
+		if(signedness==SIGNEDNESS.SIGNED)
+		{
+			return (int)singleByte;
+		}else if(signedness==SIGNEDNESS.UNSIGNED)
+		{
+			return unsignedByteToInt(singleByte);
+		}
+		
+		throw new IllegalArgumentException("Invalid SIGNEDNESS"); //flow shouldn't reach here
+	}
+	
+	/**
+	 * Convert an unsigned byte into an int
+	 * @param uByte
+	 * @return
+	 */
+	private static int unsignedByteToInt(byte uByte) 
+	{
+	    return (int) uByte & 0xFF;
+    }
+	
+	private static int parseTwoByteSensorData(int packetId, byte[] packetData){
 		if(packetData.length != 2)
 			throw new IllegalArgumentException("Wrong size of raw data! Expected two bytes!");
 		
-		if(RESPONSE_SIGNEDNESSES[packetId]==SIGNEDNESS.SIGNED)
-		{
-			return 0; //TODO
-		}
-		else if(RESPONSE_SIGNEDNESSES[packetId]==SIGNEDNESS.UNSIGNED)
-		{
-			return 0; //TODO
-		}
-		else
-		{
-			throw new IllegalArgumentException("Unknown Signedness");
-		}
+		return twoBytesToInt(packetData[0], packetData[1], RESPONSE_SIGNEDNESSES[packetId]);
 	}
 	
 	/**
@@ -260,7 +255,7 @@ public class SensorData {
 	 * @param signedness
 	 * @return
 	 */
-	private int twoBytesToInt(byte highByte, byte lowByte,SIGNEDNESS signedness ) {
+	private static int twoBytesToInt(byte highByte, byte lowByte,SIGNEDNESS signedness ) {
 		int value=0;
 		if(signedness==SIGNEDNESS.SIGNED)
 		{
@@ -270,41 +265,16 @@ public class SensorData {
 			return value;
 		}else if(signedness==SIGNEDNESS.UNSIGNED)
 		{
-			value|=highByte;
+			//FIXME: This may not yield the proper answer and needs to be tested
+			value|=unsignedByteToInt(highByte);
 			value=value<<8;
-			value|=lowByte;
+			value|=unsignedByteToInt(lowByte);
 			return value;
 		}
 		
-		throw new IllegalArgumentException("Invalid SIGNEDNESS"); //flow shouldn't reach here
+		throw new IllegalArgumentException("Invalid Signedness"); //flow shouldn't reach here
 	}
 	
-	/**
-	 * Convert a byte to an int preserving the intended signedness
-	 * @param singleByte
-	 * @param signedness
-	 * @return
-	 */
-	private int oneBytesToInt(byte singleByte, SIGNEDNESS signedness ) {
-		if(signedness==SIGNEDNESS.SIGNED)
-		{
-			return singleByte;
-		}else if(signedness==SIGNEDNESS.UNSIGNED)
-		{
-			return unsignedByteToInt(singleByte);
-		}
-		
-		throw new IllegalArgumentException("Invalid SIGNEDNESS"); //flow shouldn't reach here
-	}
-
-	/**
-	 * Convert an unsigned byte into an int
-	 * @param uByte
-	 * @return
-	 */
-	private static int unsignedByteToInt(byte uByte) {
-	    return (int) uByte & 0xFF;
-	    }
 
 	
 	/**
@@ -344,9 +314,9 @@ public class SensorData {
 	};
 	
 	private static enum SIGNEDNESS{UNSIGNED,SIGNED};
-	private int OPCODE_SENSORS= 142;
-	private int OPCODE_STREAM= 148;
-	private int OPCODE_QUERY_LIST= 149;
+	public static int OPCODE_SENSORS= 142;
+	public static int OPCODE_STREAM= 148;
+	public static int OPCODE_QUERY_LIST= 149;
 	
 	
 	
@@ -544,7 +514,7 @@ public class SensorData {
 	final private static int TOTAL_NUMBER_OF_PACKETS=42;
 
 	/** Keep track of which single packets are contained in each group packet */
-	public static enum GROUPS_PACKET_CONTENTS {
+	private static enum GROUP_PACKET_CONTENTS {
 	    GROUP0 (7,26),
 	    GROUP1 (7,16),
 	    GROUP2 (17,20),
@@ -554,15 +524,24 @@ public class SensorData {
 	    GROUP6 (7,42);
 
 	    private final int[] contents; 
-	    GROUPS_PACKET_CONTENTS(int first, int last) 
+	    GROUP_PACKET_CONTENTS(int first, int last) 
 	    {
 	        this.contents = new int[last-first+1];
 	        for(int i=0;i<contents.length;i++){
 	        	contents[i]=first+i;
 	        }
 	    }
-	    public int[] contents()   { return this.contents; }
+	    public int[] getContents()   { return this.contents; }
 
+	}
+
+	/**
+	 * Give a user of the class a buffer of the proper size to write the raw data into for parsing
+	 * IMPLEMENTATION NOTE: This is allocated every time the command for the sensor data is set
+	 * @return the buffer
+	 */
+	public byte[] getReadBuffer() {
+		return rawSensorData;
 	}
 	
 	

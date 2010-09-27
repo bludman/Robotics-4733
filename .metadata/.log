@@ -2055,3 +2055,26 @@ java.lang.NegativeArraySizeException
 	at org.eclipse.php.internal.debug.core.daemon.AbstractDebuggerCommunicationDaemon$ReceiverThread.run(AbstractDebuggerCommunicationDaemon.java:188)
 	at java.lang.Thread.run(Unknown Source)
 
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-27 00:40:35.302
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession : Unexpected null from readResponse waiting for Init
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-27 00:40:35.709
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon : Unexpected Exception: Listener thread still listening
+java.lang.NegativeArraySizeException
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.readResponse(DBGpSession.java:467)
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.<init>(DBGpSession.java:83)
+	at org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon.startConnectionThread(XDebugCommunicationDaemon.java:129)
+	at org.eclipse.php.internal.debug.core.daemon.AbstractDebuggerCommunicationDaemon$ReceiverThread.run(AbstractDebuggerCommunicationDaemon.java:188)
+	at java.lang.Thread.run(Unknown Source)
+
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-27 00:41:09.604
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon : Unexpected Exception: Listener thread still listening
+java.lang.NegativeArraySizeException
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.readResponse(DBGpSession.java:467)
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.<init>(DBGpSession.java:83)
+	at org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon.startConnectionThread(XDebugCommunicationDaemon.java:129)
+	at org.eclipse.php.internal.debug.core.daemon.AbstractDebuggerCommunicationDaemon$ReceiverThread.run(AbstractDebuggerCommunicationDaemon.java:188)
+	at java.lang.Thread.run(Unknown Source)
+
