@@ -1791,3 +1791,267 @@ Binding(CTRL+SHIFT+T,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.ui.editors 4 10001 2010-09-25 19:41:16.181
+!MESSAGE Ignoring template 'getterbody' since validation failed.
+!STACK 0
+org.eclipse.jface.text.templates.TemplateException: Pattern is not a valid Java comment.
+	at org.eclipse.jdt.internal.corext.template.java.CodeTemplateContextType.validate(CodeTemplateContextType.java:340)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.validateTemplate(ContributionTemplateStore.java:194)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.readIncludedTemplates(ContributionTemplateStore.java:156)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.readContributedTemplates(ContributionTemplateStore.java:120)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.loadContributedTemplates(ContributionTemplateStore.java:107)
+	at org.eclipse.jface.text.templates.persistence.TemplateStore.load(TemplateStore.java:108)
+	at org.eclipse.jdt.internal.ui.JavaPlugin.getCodeTemplateStore(JavaPlugin.java:899)
+	at org.eclipse.jdt.internal.ui.viewsupport.ProjectTemplateStore.<init>(ProjectTemplateStore.java:47)
+	at org.eclipse.jdt.internal.corext.codemanipulation.StubUtility.getCodeTemplate(StubUtility.java:1439)
+	at org.eclipse.jdt.internal.corext.codemanipulation.StubUtility.getMethodComment(StubUtility.java:416)
+	at org.eclipse.jdt.ui.CodeGeneration.getMethodComment(CodeGeneration.java:272)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavaDocAutoIndentStrategy.createMethodTags(JavaDocAutoIndentStrategy.java:271)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavaDocAutoIndentStrategy.createJavaDocTags(JavaDocAutoIndentStrategy.java:213)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavaDocAutoIndentStrategy.indentAfterNewLine(JavaDocAutoIndentStrategy.java:126)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavaDocAutoIndentStrategy.customizeDocumentCommand(JavaDocAutoIndentStrategy.java:398)
+	at org.eclipse.jface.text.TextViewer.customizeDocumentCommand(TextViewer.java:3727)
+	at org.eclipse.jface.text.TextViewer.handleVerifyEvent(TextViewer.java:3764)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.handleVerifyEvent(ProjectionViewer.java:1276)
+	at org.eclipse.jface.text.TextViewer$TextVerifyListener.verifyText(TextViewer.java:433)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:249)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1003)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1027)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1012)
+	at org.eclipse.swt.widgets.Widget.notifyListeners(Widget.java:770)
+	at org.eclipse.swt.custom.StyledText.modifyContent(StyledText.java:6602)
+	at org.eclipse.swt.custom.StyledText.sendKeyEvent(StyledText.java:7442)
+	at org.eclipse.swt.custom.StyledText.doContent(StyledText.java:2441)
+	at org.eclipse.swt.custom.StyledText.handleKey(StyledText.java:5814)
+	at org.eclipse.swt.custom.StyledText.handleKeyDown(StyledText.java:5839)
+	at org.eclipse.swt.custom.StyledText$7.handleEvent(StyledText.java:5541)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1003)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1027)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1012)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1040)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1036)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1368)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4053)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:346)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:3946)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:342)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4589)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessageW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(OS.java:2410)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3471)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2405)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2369)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2221)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:500)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:493)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:113)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:194)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:368)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:559)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:514)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1311)
+
+!ENTRY org.eclipse.ui.editors 4 10001 2010-09-25 19:41:16.517
+!MESSAGE Ignoring template 'setterbody' since validation failed.
+!STACK 0
+org.eclipse.jface.text.templates.TemplateException: Pattern is not a valid Java comment.
+	at org.eclipse.jdt.internal.corext.template.java.CodeTemplateContextType.validate(CodeTemplateContextType.java:340)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.validateTemplate(ContributionTemplateStore.java:194)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.readIncludedTemplates(ContributionTemplateStore.java:156)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.readContributedTemplates(ContributionTemplateStore.java:120)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.loadContributedTemplates(ContributionTemplateStore.java:107)
+	at org.eclipse.jface.text.templates.persistence.TemplateStore.load(TemplateStore.java:108)
+	at org.eclipse.jdt.internal.ui.JavaPlugin.getCodeTemplateStore(JavaPlugin.java:899)
+	at org.eclipse.jdt.internal.ui.viewsupport.ProjectTemplateStore.<init>(ProjectTemplateStore.java:47)
+	at org.eclipse.jdt.internal.corext.codemanipulation.StubUtility.getCodeTemplate(StubUtility.java:1439)
+	at org.eclipse.jdt.internal.corext.codemanipulation.StubUtility.getMethodComment(StubUtility.java:416)
+	at org.eclipse.jdt.ui.CodeGeneration.getMethodComment(CodeGeneration.java:272)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavaDocAutoIndentStrategy.createMethodTags(JavaDocAutoIndentStrategy.java:271)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavaDocAutoIndentStrategy.createJavaDocTags(JavaDocAutoIndentStrategy.java:213)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavaDocAutoIndentStrategy.indentAfterNewLine(JavaDocAutoIndentStrategy.java:126)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavaDocAutoIndentStrategy.customizeDocumentCommand(JavaDocAutoIndentStrategy.java:398)
+	at org.eclipse.jface.text.TextViewer.customizeDocumentCommand(TextViewer.java:3727)
+	at org.eclipse.jface.text.TextViewer.handleVerifyEvent(TextViewer.java:3764)
+	at org.eclipse.jface.text.source.projection.ProjectionViewer.handleVerifyEvent(ProjectionViewer.java:1276)
+	at org.eclipse.jface.text.TextViewer$TextVerifyListener.verifyText(TextViewer.java:433)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:249)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1003)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1027)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1012)
+	at org.eclipse.swt.widgets.Widget.notifyListeners(Widget.java:770)
+	at org.eclipse.swt.custom.StyledText.modifyContent(StyledText.java:6602)
+	at org.eclipse.swt.custom.StyledText.sendKeyEvent(StyledText.java:7442)
+	at org.eclipse.swt.custom.StyledText.doContent(StyledText.java:2441)
+	at org.eclipse.swt.custom.StyledText.handleKey(StyledText.java:5814)
+	at org.eclipse.swt.custom.StyledText.handleKeyDown(StyledText.java:5839)
+	at org.eclipse.swt.custom.StyledText$7.handleEvent(StyledText.java:5541)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1003)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1027)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1012)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1040)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1036)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1368)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4053)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:346)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:3946)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:342)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4589)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessageW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(OS.java:2410)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3471)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2405)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2369)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2221)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:500)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:493)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:113)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:194)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:368)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:559)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:514)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1311)
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.433
+!MESSAGE NLS unused message: missingOneOfTwoAttributes in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.433
+!MESSAGE NLS unused message: categoryNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.434
+!MESSAGE NLS unused message: actionNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.435
+!MESSAGE NLS unused message: actionAlreadyDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.435
+!MESSAGE NLS unused message: presetNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.435
+!MESSAGE NLS unused message: templateNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.436
+!MESSAGE NLS unused message: invalidActionType in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.436
+!MESSAGE NLS unused message: invalidEventHandlerType in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.437
+!MESSAGE NLS unused message: invalidRequiresConstraint in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.437
+!MESSAGE NLS unused message: invalidConflictsConstraint in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.437
+!MESSAGE NLS unused message: deprecatedRuntimeChangedAction in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.438
+!MESSAGE NLS unused message: tracingActionSorting in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.438
+!MESSAGE NLS unused message: tracingFrameworkActivationStarting in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.439
+!MESSAGE NLS unused message: tracingFrameworkActivationFinished in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.439
+!MESSAGE NLS missing message: problemCaseNotRecognized in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-25 19:41:23.439
+!MESSAGE NLS missing message: runtimeComponentTypeNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.wst.common.project.facet.core 4 0 2010-09-25 19:41:23.440
+!MESSAGE Project facet jst.web has not been defined. It is used in plugin org.eclipse.wst.jsdt.web.core.
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-25 20:08:28.660
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession : Unexpected null from readResponse waiting for Init
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-25 20:08:28.883
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon : Unexpected Exception: Listener thread still listening
+java.lang.NegativeArraySizeException
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.readResponse(DBGpSession.java:467)
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.<init>(DBGpSession.java:83)
+	at org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon.startConnectionThread(XDebugCommunicationDaemon.java:129)
+	at org.eclipse.php.internal.debug.core.daemon.AbstractDebuggerCommunicationDaemon$ReceiverThread.run(AbstractDebuggerCommunicationDaemon.java:188)
+	at java.lang.Thread.run(Unknown Source)
+
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-25 20:08:35.922
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon : Unexpected Exception: Listener thread still listening
+java.lang.NegativeArraySizeException
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.readResponse(DBGpSession.java:467)
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.<init>(DBGpSession.java:83)
+	at org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon.startConnectionThread(XDebugCommunicationDaemon.java:129)
+	at org.eclipse.php.internal.debug.core.daemon.AbstractDebuggerCommunicationDaemon$ReceiverThread.run(AbstractDebuggerCommunicationDaemon.java:188)
+	at java.lang.Thread.run(Unknown Source)
+
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-26 13:03:27.686
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession : Unexpected null from readResponse waiting for Init
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-26 13:03:29.018
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession : Unexpected null from readResponse waiting for Init
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-26 13:03:29.019
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession : Unexpected null from readResponse waiting for Init
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-26 20:46:45.909
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession : Unexpected null from readResponse waiting for Init
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-26 20:46:46.265
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon : Unexpected Exception: Listener thread still listening
+java.lang.NegativeArraySizeException
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.readResponse(DBGpSession.java:467)
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.<init>(DBGpSession.java:83)
+	at org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon.startConnectionThread(XDebugCommunicationDaemon.java:129)
+	at org.eclipse.php.internal.debug.core.daemon.AbstractDebuggerCommunicationDaemon$ReceiverThread.run(AbstractDebuggerCommunicationDaemon.java:188)
+	at java.lang.Thread.run(Unknown Source)
+
+
+!ENTRY org.eclipse.compare 4 1 2010-09-26 21:34:08.252
+!MESSAGE content type 'jasko.tim.lisp.lispSource' not found
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-26 22:19:58.301
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession : Unexpected null from readResponse waiting for Init
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-26 22:19:58.916
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon : Unexpected Exception: Listener thread still listening
+java.lang.NegativeArraySizeException
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.readResponse(DBGpSession.java:467)
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.<init>(DBGpSession.java:83)
+	at org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon.startConnectionThread(XDebugCommunicationDaemon.java:129)
+	at org.eclipse.php.internal.debug.core.daemon.AbstractDebuggerCommunicationDaemon$ReceiverThread.run(AbstractDebuggerCommunicationDaemon.java:188)
+	at java.lang.Thread.run(Unknown Source)
+
+
+!ENTRY org.eclipse.php.debug.core 4 4 2010-09-26 22:20:40.593
+!MESSAGE class org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon : Unexpected Exception: Listener thread still listening
+java.lang.NegativeArraySizeException
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.readResponse(DBGpSession.java:467)
+	at org.eclipse.php.internal.debug.core.xdebug.dbgp.session.DBGpSession.<init>(DBGpSession.java:83)
+	at org.eclipse.php.internal.debug.core.xdebug.communication.XDebugCommunicationDaemon.startConnectionThread(XDebugCommunicationDaemon.java:129)
+	at org.eclipse.php.internal.debug.core.daemon.AbstractDebuggerCommunicationDaemon$ReceiverThread.run(AbstractDebuggerCommunicationDaemon.java:188)
+	at java.lang.Thread.run(Unknown Source)
+

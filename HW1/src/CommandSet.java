@@ -8,6 +8,10 @@ public interface CommandSet {
 
 	public  byte[] Control();
 
+	/**
+	 * Put robot in safe mode
+	 * @return
+	 */
 	public  byte[] Safe();
 
 	public  byte[] Full();

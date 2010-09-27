@@ -449,7 +449,7 @@ public class CommandSetImpl implements CommandSet
 	public SensorData querySingleSensor(int packetId) 
 	{
 		SensorData data = new SensorData();
-		if(SensorData.packetIdIsInValidRange(packetId))
+		if(SensorData.isValidPacketId(packetId))
 		{
 			byte[] command = new byte[2];	
 			command[0] = (byte)142;
@@ -482,7 +482,7 @@ public class CommandSetImpl implements CommandSet
 		/* Read each packet id and add it to the command if it is valid*/
 		for(int i = 0; i < packetIds.length;i++)
 		{
-			if(SensorData.packetIdIsInValidRange(packetIds[i]))
+			if(SensorData.isValidPacketId(packetIds[i]))
 			{
 				command[i+2] = (byte)packetIds[i];
 				data.setQueryCommand(command);
