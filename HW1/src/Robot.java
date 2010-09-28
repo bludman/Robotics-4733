@@ -9,13 +9,13 @@ import java.util.Arrays;
 
 public class Robot 
 {
-	// OpenCommPort object that allows communication with the iRobot Create.
+	/** OpenCommPort object that allows communication with the iRobot Create. */
 	private OpenCommPort ocp;
 	
-	// An instance of the CommandSet interface, containing basic operations for the iRobot Create.
+	/** An instance of the CommandSet interface, containing basic operations for the iRobot Create. */
 	private CommandSet commandSet;
 	
-	// Similar to the above, contains basic methods of obtaining sensor data for the iRobot Create.
+	/** Manages the known state of the sensors */
 	private SensorData sensors;
 	
 	/**
@@ -34,7 +34,7 @@ public class Robot
 	 * methods, documentation has been specified in this file.
 	 */
 	
-	public boolean Setup()
+	public boolean setup()
 	{
 		if(ocp.setUpBam() == 0)
 			return true;
@@ -42,73 +42,73 @@ public class Robot
 		return false;
 	}
 	
-	public void Start()
+	public void start()
 	{ 
 		ocp.write(commandSet.start());
 	}
 
-	public void Baud(int baudCode)
+	public void baud(int baudCode)
 	{
 		ocp.write(commandSet.baud(baudCode));
 	}
 
-	public void Control()
+	public void control()
 	{
 		ocp.write(commandSet.control());
 	}
 
-	public void Safe()
+	public void safe()
 	{
 		ocp.write(commandSet.safe());
 	}
 
-	public void Full()
+	public void full()
 	{
 		ocp.write(commandSet.full());
 	}
 
-	public void Spot()
+	public void spot()
 	{
 		ocp.write(commandSet.spot());
 	}
 
-	public void Cover()
+	public void cover()
 	{
 		ocp.write(commandSet.cover());
 	}
 
-	public void Demo(int demoMode)
+	public void demo(int demoMode)
 	{
 		ocp.write(commandSet.demo(demoMode));
 	}
 
-	public void Drive(int velocity, int radius)
+	public void drive(int velocity, int radius)
 	{ 
 		ocp.write(commandSet.drive(velocity, radius));
 	}
 
-	public byte LowSideDrivers(int outputBits)
+	public byte lowSideDrivers(int outputBits)
 	{
 		ocp.write(commandSet.lowSideDrivers(outputBits));
 		return (byte)outputBits;
 	}
 
-	public void LEDs(int LEDBits, int color, int intensity)
+	public void setLEDs(int LEDBits, int color, int intensity)
 	{
 		ocp.write(commandSet.setLEDs(LEDBits, color, intensity));
 	}
 
-	public void Song()
+	public void song()
 	{
 		ocp.write(commandSet.song());
 	}
 
-	public void Play(int songNumber)
+	public void play(int songNumber)
 	{
 		ocp.write(commandSet.play(songNumber));
 	}
 
-	public void CoverAndDock()
+	public void coverAndDock()
 	{
 		ocp.write(commandSet.coverAndDock());
 	}
@@ -118,163 +118,211 @@ public class Robot
 		ocp.write(commandSet.PMWLowSideDrivers(lsd2, lsd1, lsd0));
 	}
 
-	public void DriveDirect(int right, int left)
+	public void driveDirect(int right, int left)
 	{
 		ocp.write(commandSet.driveDirect(right, left));
 	}
 
-	public byte DigitalOutputs(int outputBits)
+	public byte digitalOutputs(int outputBits)
 	{
 		ocp.write(commandSet.digitalOutputs(outputBits));
 		return (byte)outputBits;
 	}
 
-	public void PauseResumeStream(int range)
+	public void pauseResumeStream(int range)
 	{
 		ocp.write(commandSet.pauseResumeStream(range));
 	}
 
-	public void SendIR(int value)
+	public void sendIR(int value)
 	{
 		ocp.write(commandSet.sendIR(value));
 	}
 
-	public void Script()
+	public void script()
 	{
 		ocp.write(commandSet.script());
 	}
 
-	public void PlayScript()
+	public void playScript()
 	{
 		ocp.write(commandSet.playScript());
 	}
 
-	public void ShowScript()
+	public void showScript()
 	{
 		ocp.write(commandSet.showScript());
 	}
 
-	public void WaitTime(int time)
+	public void waitTime(int time)
 	{
 		ocp.write(commandSet.waitTime(time));
 	}
 
-	public void WaitDistance(int distance)
+	public void waitDistance(int distance)
 	{
 		ocp.write(commandSet.waitDistance(distance));
 	}
 
-	public void WaitAngle(int angle)
+	public void waitAngle(int angle)
 	{
 		ocp.write(commandSet.waitAngle(angle));
 	}
 
-	public void WaitEvent(int eventID)
+	public void waitEvent(int eventID)
 	{
 		ocp.write(commandSet.waitEvent(eventID));
 	}
 	
 	/**
 	 * Instructs the iRobot Create to travel in the shape of a square.
-	 * @param moveVelocityValue The velocity at which the iRobot Create will travel in mm/s.
-	 * @param moveDistanceValue The distance of one side of the square in mm.
+	 * @param driveVelocity The velocity at which the iRobot Create will travel in mm/s.
+	 * @param squareSideLength The distance of one side of the square in mm.
 	 * @return
 	 */
-	public void Square(int moveVelocityValue, int moveDistanceValue)
+	public void driveSquare(int driveVelocity, int squareSideLength)
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			ocp.write(commandSet.driveDirect(moveVelocityValue, moveVelocityValue));
-			ocp.write(commandSet.waitDistance(moveDistanceValue));
-			ocp.write(commandSet.driveDirect(moveVelocityValue, -moveVelocityValue));
+			ocp.write(commandSet.driveDirect(driveVelocity, driveVelocity));
+			ocp.write(commandSet.waitDistance(squareSideLength));
+			ocp.write(commandSet.driveDirect(driveVelocity, -driveVelocity));
 			ocp.write(commandSet.waitAngle(90));
 		}
-		ocp.write(commandSet.driveDirect(0, 0));
+		stop();
 	}
 	
 	/**
 	 * Stops the robot from moving.
 	 */
-	public void Stop()
+	public void stop()
 	{
 		ocp.write(commandSet.driveDirect(0, 0));
 	}
 	
-	public byte[] ReadBumpsAndWheelDrops()
+	/*---------------------------------------------------------------------------
+	 * Basic implementation of minimal sensor reading functions
+	 * Note: should be refactored to cleaner interface in the future
+	 *---------------------------------------------------------------------------*/
+	private final static int BUFFER_FLUSH_ITTERATION_SIZE = 200;
+	
+	
+	/**
+	 * Read the wall signal sensor
+	 * NOTE: Includes read buffer flushing
+	 */
+	public byte[] readWallSignal() 
 	{
-		byte[] data = new byte[2];
-		data[0] = (byte)142;
-		data[1] = (byte)7;
-		byte[] recieved = new byte[1];
+		byte[] command = new byte[2];
+		command[0] = (byte)142;
+		command[1] = (byte)27;
+		byte[] recieved = new byte[2];
 		
-		for (int i = 0; i < 200; i++)
+		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
 		{
-			recieved = new byte[1];
-			ocp.write(data);
+			recieved = new byte[2];
+			ocp.write(command);
 			ocp.read(recieved);
 		}
 		
 		return recieved;
 	}
 	
-	public byte[] ReadWallsAndCliffs()
+	
+	/**
+	 * Read the bump and wheel drop sensor
+	 * NOTE: Includes read buffer flushing
+	 * @return
+	 */
+	public byte[] readBumpsAndWheelDrops()
+	{
+		byte[] command = new byte[2];
+		command[0] = (byte)142;
+		command[1] = (byte)7;
+		byte[] recieved = new byte[1];
+		
+		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
+		{
+			recieved = new byte[1];
+			ocp.write(command);
+			ocp.read(recieved);
+		}
+		
+		return recieved;
+	}
+	
+	/**
+	 * Read the wall and cliff sensors
+	 * NOTE: Includes read buffer flushing
+	 * @return
+	 */
+	public byte[] readWallsAndCliffs()
 	{
 		byte[] returned = new byte[6];
-		byte[] data = new byte[2];
-		data[0] = (byte)142;
-		data[1] = (byte)8;
-				
+		byte[] command = new byte[2];
+		command[0] = (byte)142;
 		byte[] recieved = new byte[1];
 	
-		for (int i = 0; i < 200; i++)
+		
+		command[1] = (byte)8;
+		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
 		{
-			ocp.write(data);
+			ocp.write(command);
 			ocp.read(recieved);
 		}
 		returned[0] = recieved[0];
 		
-		data[1] = (byte)9;
-		for (int i = 0; i < 200; i++)
+		command[1] = (byte)9;
+		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
 		{
-			ocp.write(data);
+			ocp.write(command);
 			ocp.read(recieved);
 		}
 		returned[1] = recieved[0];
 		
-		data[1] = (byte)10;
-		for (int i = 0; i < 200; i++)
+		command[1] = (byte)10;
+		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
 		{
-			ocp.write(data);
+			ocp.write(command);
 			ocp.read(recieved);
 		}
 		returned[2] = recieved[0];
 		
-		data[1] = (byte)11;
-		for (int i = 0; i < 200; i++)
+		command[1] = (byte)11;
+		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
 		{
-			ocp.write(data);
+			ocp.write(command);
 			ocp.read(recieved);
 		}
 		returned[3] = recieved[0];
 		
-		data[1] = (byte)12;
-		for(int i = 0; i < 200; i++)
+		command[1] = (byte)12;
+		for(int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
 		{
-			ocp.write(data);
+			ocp.write(command);
 			ocp.read(recieved);
 		}
 		returned[4] = recieved[0];
 		
-		data[1] = (byte)13;
-		for (int i = 0; i < 200; i++)
+		command[1] = (byte)13;
+		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
 		{
-			ocp.write(data);
+			ocp.write(command);
 			ocp.read(recieved);
 		}
 		returned[5] = recieved[0];
 	
 		return returned;
 	}
+	
+	
+	
+	
+	/*---------------------------------------------------------------------------
+	 * Cleaner interface for dealing with sensors.
+	 * Does not flush buffer and thus as issues with getting sensor data
+	 *---------------------------------------------------------------------------*/
+	
 	
 	/**
 	 * Query a single sensor and parse the returned data
@@ -296,74 +344,12 @@ public class Robot
 		sensors.processSensorData();
 	}
 
-	public void test()
-	{	
-		SetMode();
-		LED_On();	
-	}
-	
-	private void SetMode()
-    {
-		byte[] data = new byte[2];
-		
-		data[0] = (byte)128;  //start
-        data[1] = (byte)131;  //Safe Mode
-		
-		ocp.write(data);
-    }
-
-    private void LED_On()
-    {
-        byte[] data = new byte[4];
-        int numBytes = 4;
-
-        data[0] = (byte)139;  //LED command
-        data[1] = (byte)8;    //Select LED (Play : 8, power : 2) 
-        data[2] = (byte)0;    //Color 0 = green, 255 = red
-        data[3] = (byte)128;  //Intensity
-
-        ocp.write(data);
-
-        data[0] = (byte)139;  //LED command
-        data[1] = (byte)2;    //Select LED (Play : 8, power : 2) 
-        data[2] = (byte)255;    //Color 0 = green, 255 = red
-        data[3] = (byte)128;  //Intensity
-
-        ocp.write(data);     
-    }
+	    
     
     public boolean getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS sensor)
     {
     	 return sensors.getBumpOrWheelDropStatus(sensor);
     }
 
-	public void flushReadData() {
-		for(int i=0;i<100;i++)
-		{
-		ocp.write(new byte[]{(byte) 142,15});
-		byte[] data= new byte[2];
-		ocp.read(data);
-		System.out.println("JUNK: "+Arrays.toString(data));
-		}
-		
-		
-	}
-
-	public byte[] readWallSignal() 
-	{
-		byte[] data = new byte[2];
-		data[0] = (byte)142;
-		data[1] = (byte)27;
-		byte[] recieved = new byte[2];
-		
-		for (int i = 0; i < 200; i++)
-		{
-			recieved = new byte[2];
-			ocp.write(data);
-			ocp.read(recieved);
-		}
-		
-		return recieved;
-	}
 	
 }

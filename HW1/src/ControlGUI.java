@@ -235,11 +235,11 @@ public class ControlGUI extends JPanel implements ActionListener
 		// Open
 		if (e.getActionCommand().equals("Open"))
 		{
-			boolean setupStatus=robot.Setup();
+			boolean setupStatus=robot.setup();
 			message.setText("Setting up robot: " + setupStatus);
 			if(setupStatus)
 			{
-				robot.Start();
+				robot.start();
 				OpenPort.setEnabled(false);
 			}
 			
@@ -293,20 +293,20 @@ public class ControlGUI extends JPanel implements ActionListener
 				turnDegreeValue = Integer.parseInt(TurnDegreeBox.getText());
 				if (turnDegreeValue < 0)
 				{
-					robot.DriveDirect(-moveVelocityValue, moveVelocityValue);
-					robot.WaitAngle(-turnDegreeValue);
-					robot.Stop();
+					robot.driveDirect(-moveVelocityValue, moveVelocityValue);
+					robot.waitAngle(-turnDegreeValue);
+					robot.stop();
 				}
 				else
 				{
-					robot.DriveDirect(moveVelocityValue, -moveVelocityValue);
-					robot.WaitAngle(turnDegreeValue);
-					robot.Stop();
+					robot.driveDirect(moveVelocityValue, -moveVelocityValue);
+					robot.waitAngle(turnDegreeValue);
+					robot.stop();
 				}
 			}
 			else
 			{
-				robot.DriveDirect(moveVelocityValue, -moveVelocityValue);
+				robot.driveDirect(moveVelocityValue, -moveVelocityValue);
 			}
 		}
 		
@@ -317,20 +317,20 @@ public class ControlGUI extends JPanel implements ActionListener
 			{
 				if (turnDegreeValue < 0)
 				{
-					robot.DriveDirect(-moveVelocityValue, moveVelocityValue);
-					robot.WaitAngle(-turnDegreeValue);
-					robot.Stop();
+					robot.driveDirect(-moveVelocityValue, moveVelocityValue);
+					robot.waitAngle(-turnDegreeValue);
+					robot.stop();
 				}
 				else
 				{
-					robot.DriveDirect(moveVelocityValue, -moveVelocityValue);
-					robot.WaitAngle(turnDegreeValue);
-					robot.Stop();
+					robot.driveDirect(moveVelocityValue, -moveVelocityValue);
+					robot.waitAngle(turnDegreeValue);
+					robot.stop();
 				}
 			}
 			else
 			{
-				robot.DriveDirect(-moveVelocityValue, moveVelocityValue);
+				robot.driveDirect(-moveVelocityValue, moveVelocityValue);
 			}
 		}
 		
@@ -341,25 +341,25 @@ public class ControlGUI extends JPanel implements ActionListener
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
 				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				robot.DriveDirect(moveVelocityValue, moveVelocityValue);
-				robot.WaitDistance(moveDistanceValue);
-				robot.Stop();
+				robot.driveDirect(moveVelocityValue, moveVelocityValue);
+				robot.waitDistance(moveDistanceValue);
+				robot.stop();
 			}
 			else if (MoveVelocityBox.isEnabled() && !MoveDistanceBox.isEnabled())
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
-				robot.DriveDirect(moveVelocityValue, moveVelocityValue);
+				robot.driveDirect(moveVelocityValue, moveVelocityValue);
 			}
 			else if (!MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
 			{
 				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				robot.DriveDirect(moveVelocityValue, moveVelocityValue);
-				robot.WaitDistance(moveDistanceValue);
-				robot.Stop();
+				robot.driveDirect(moveVelocityValue, moveVelocityValue);
+				robot.waitDistance(moveDistanceValue);
+				robot.stop();
 			}
 			else
 			{
-				robot.DriveDirect(moveVelocityValue, moveVelocityValue);
+				robot.driveDirect(moveVelocityValue, moveVelocityValue);
 			}
 		}
 		
@@ -370,32 +370,32 @@ public class ControlGUI extends JPanel implements ActionListener
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
 				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
-				robot.WaitDistance(-moveDistanceValue);
-				robot.Stop();
+				robot.driveDirect(-moveVelocityValue, -moveVelocityValue);
+				robot.waitDistance(-moveDistanceValue);
+				robot.stop();
 			}
 			else if (MoveVelocityBox.isEnabled() && !MoveDistanceBox.isEnabled())
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
-				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
+				robot.driveDirect(-moveVelocityValue, -moveVelocityValue);
 			}
 			else if (!MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
 			{
 				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
-				robot.WaitDistance(-moveDistanceValue);
-				robot.Stop();
+				robot.driveDirect(-moveVelocityValue, -moveVelocityValue);
+				robot.waitDistance(-moveDistanceValue);
+				robot.stop();
 			}
 			else
 			{
-				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
+				robot.driveDirect(-moveVelocityValue, -moveVelocityValue);
 			}
 		}
 		
 		// Stop
 		if (e.getActionCommand().equals("Stop"))
 		{
-			robot.Stop();
+			robot.stop();
 		}
 		
 		// Read Sensors
@@ -405,7 +405,7 @@ public class ControlGUI extends JPanel implements ActionListener
 			clearCheckboxes();
 			
 			byte[] data = new byte[1];
-			data = robot.ReadBumpsAndWheelDrops();
+			data = robot.readBumpsAndWheelDrops();
 			System.out.println(String.valueOf(Arrays.toString(data)));
 			
 			WHEEL_DROP_CASTER.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_CASTER, data[0]));
@@ -416,7 +416,7 @@ public class ControlGUI extends JPanel implements ActionListener
 		
 			
 			data = new byte[6];
-			data = robot.ReadWallsAndCliffs();
+			data = robot.readWallsAndCliffs();
 			System.out.println(String.valueOf(Arrays.toString(data)));
 			
 			WALL.setSelected(byteToBool(data[0]));
@@ -442,13 +442,13 @@ public class ControlGUI extends JPanel implements ActionListener
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
 			}
-			robot.Square(moveVelocityValue, 400);
+			robot.driveSquare(moveVelocityValue, 400);
 		}
 		
 		// Safe Mode
 		if (e.getActionCommand().equals("Mode"))
 		{
-			robot.Safe();
+			robot.safe();
 		}
 	}
 
