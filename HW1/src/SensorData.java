@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * @author Benjamin Ludman
  * @author Mike Hernandez
@@ -24,6 +26,7 @@ public class SensorData {
 		this.command=command;
 		this.expectedDataLength=calculateExpectedResponseSize(command);
 		this.rawSensorData= new byte[this.expectedDataLength];
+		System.out.println("Expecting "+this.expectedDataLength+" bytes of data.");
 	}
 	
 	public byte[] getQueryCommand()
@@ -77,6 +80,8 @@ public class SensorData {
 	 */
 	public void processSensorData()
 	{
+		System.out.println(Arrays.toString(rawSensorData));
+		
 		if(command==null || command.length<2)
 			throw new IllegalArgumentException("Invalid command");
 		
@@ -140,6 +145,8 @@ public class SensorData {
 			throw new IllegalArgumentException("Opcode is not a valid sensor request code. " +
 					"Cannot parse response data.");
 		}
+		
+		System.out.println(Arrays.toString(sensorData));
 		
 	}
 	
@@ -305,9 +312,9 @@ public class SensorData {
 	};
 	
 	private static enum SIGNEDNESS{UNSIGNED,SIGNED};
-	public static int OPCODE_SENSORS= 142;
-	public static int OPCODE_STREAM= 148;
-	public static int OPCODE_QUERY_LIST= 149;
+	public static byte OPCODE_SENSORS= (byte)142;
+	public static byte OPCODE_STREAM= (byte)148;
+	public static byte OPCODE_QUERY_LIST= (byte)149;
 	
 	
 	
@@ -326,6 +333,7 @@ public class SensorData {
 	 */
 	public static boolean isValidPacketId(int id)
 	{
+		//return true;
 		return isValidGroupSensorPacketId(id) || isValidSingleSensorPacketId(id);
 	}
 	
@@ -336,6 +344,7 @@ public class SensorData {
 	 */
 	public static boolean isValidSingleSensorPacketId(int id)
 	{
+		//return true;
 		return MIN_SINGLE_PACKET_ID<=id && id<=MAX_SINGLE_PACKET_ID;
 	}
 	
@@ -346,6 +355,7 @@ public class SensorData {
 	 */
 	public static boolean isValidGroupSensorPacketId(int id)
 	{
+		//return true;
 		return MIN_GROUP_PACKET_ID<=id && id<=MAX_GROUP_PACKET_ID;
 	}
 	

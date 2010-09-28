@@ -2157,3 +2157,231 @@ Binding(CTRL+SHIFT+T,
 
 !ENTRY org.eclipse.wst.common.project.facet.core 4 0 2010-09-27 01:36:46.638
 !MESSAGE Project facet jst.web has not been defined. It is used in plugin org.eclipse.wst.jsdt.web.core.
+!SESSION 2010-09-27 20:56:47.307 -----------------------------------------------
+eclipse.buildId=M20090917-0800
+java.version=1.6.0_20
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.jface 2 0 2010-09-27 21:02:19.751
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2010-09-27 21:02:19.751
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(com.python.pydev.analysis.actions.pyGlobalsBrowserWorkbench,Python Show Class Browser,
+		Show Class Browser,
+		Category(org.python.pydev.ui.category.source,Pydev - Editor,Pydev editor category,true),
+		,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: missingOneOfTwoAttributes in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: categoryNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: actionNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: actionAlreadyDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: presetNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: templateNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: invalidActionType in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: invalidEventHandlerType in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: invalidRequiresConstraint in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: invalidConflictsConstraint in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: deprecatedRuntimeChangedAction in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: tracingActionSorting in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.271
+!MESSAGE NLS unused message: tracingFrameworkActivationStarting in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.281
+!MESSAGE NLS unused message: tracingFrameworkActivationFinished in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.281
+!MESSAGE NLS missing message: problemCaseNotRecognized in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.osgi 2 1 2010-09-27 21:02:31.281
+!MESSAGE NLS missing message: runtimeComponentTypeNotDefined in: org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl
+
+!ENTRY org.eclipse.wst.common.project.facet.core 4 0 2010-09-27 21:02:31.281
+!MESSAGE Project facet jst.web has not been defined. It is used in plugin org.eclipse.wst.jsdt.web.core.
+
+!ENTRY org.eclipse.help.base 4 4 2010-09-27 22:24:35.982
+!MESSAGE Help documentation could not be indexed completely.
+!SUBENTRY 1 org.eclipse.help.base 4 4 2010-09-27 22:24:35.982
+!MESSAGE Help document /net.sourceforge.phpeclipse.phphelp/doc/appendixes.html cannot be opened.
+!SUBENTRY 1 org.eclipse.help.base 4 4 2010-09-27 22:24:35.982
+!MESSAGE Help document /net.sourceforge.phpeclipse.phphelp/doc/internals.html cannot be opened.
+!SUBENTRY 1 org.eclipse.help.base 4 4 2010-09-27 22:24:35.982
+!MESSAGE Help document /net.sourceforge.phpeclipse.phphelp/doc/phpeclipse/index.html cannot be opened.
+
+!ENTRY org.eclipse.ui.editors 4 10001 2010-09-28 00:32:37.338
+!MESSAGE Ignoring template 'getterbody' since validation failed.
+!STACK 0
+org.eclipse.jface.text.templates.TemplateException: Pattern is not a valid Java comment.
+	at org.eclipse.jdt.internal.corext.template.java.CodeTemplateContextType.validate(CodeTemplateContextType.java:340)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.validateTemplate(ContributionTemplateStore.java:194)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.readIncludedTemplates(ContributionTemplateStore.java:156)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.readContributedTemplates(ContributionTemplateStore.java:120)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.loadContributedTemplates(ContributionTemplateStore.java:107)
+	at org.eclipse.jface.text.templates.persistence.TemplateStore.load(TemplateStore.java:108)
+	at org.eclipse.jdt.internal.ui.JavaPlugin.getCodeTemplateStore(JavaPlugin.java:899)
+	at org.eclipse.jdt.internal.ui.viewsupport.ProjectTemplateStore.<init>(ProjectTemplateStore.java:47)
+	at org.eclipse.jdt.internal.corext.codemanipulation.StubUtility.getCodeTemplate(StubUtility.java:1439)
+	at org.eclipse.jdt.internal.corext.codemanipulation.StubUtility.getMethodBodyContent(StubUtility.java:130)
+	at org.eclipse.jdt.ui.CodeGeneration.getMethodBodyContent(CodeGeneration.java:322)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.AbstractMethodCorrectionProposal.getStub(AbstractMethodCorrectionProposal.java:153)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.AbstractMethodCorrectionProposal.getRewrite(AbstractMethodCorrectionProposal.java:93)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.ASTRewriteCorrectionProposal.addEdits(ASTRewriteCorrectionProposal.java:93)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal.createTextChange(CUCorrectionProposal.java:380)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal.createChange(CUCorrectionProposal.java:389)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.ChangeCorrectionProposal.getChange(ChangeCorrectionProposal.java:264)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.ChangeCorrectionProposal.performChange(ChangeCorrectionProposal.java:111)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal.performChange(CUCorrectionProposal.java:323)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal.apply(CUCorrectionProposal.java:301)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractAnnotationHover$AnnotationInformationControl.apply(AbstractAnnotationHover.java:506)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractAnnotationHover$AnnotationInformationControl.access$2(AbstractAnnotationHover.java:483)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractAnnotationHover$5.widgetSelected(AbstractAnnotationHover.java:476)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:228)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1003)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1027)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1012)
+	at org.eclipse.swt.widgets.Link.wmNotifyChild(Link.java:1004)
+	at org.eclipse.swt.widgets.Control.wmNotify(Control.java:4877)
+	at org.eclipse.swt.widgets.Composite.wmNotify(Composite.java:1757)
+	at org.eclipse.swt.widgets.Control.WM_NOTIFY(Control.java:4507)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4000)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4602)
+	at org.eclipse.swt.internal.win32.OS.CallWindowProcW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.CallWindowProc(OS.java:2313)
+	at org.eclipse.swt.widgets.Link.callWindowProc(Link.java:172)
+	at org.eclipse.swt.widgets.Widget.wmLButtonUp(Widget.java:1917)
+	at org.eclipse.swt.widgets.Control.WM_LBUTTONUP(Control.java:4301)
+	at org.eclipse.swt.widgets.Link.WM_LBUTTONUP(Link.java:842)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:3982)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4602)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessageW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(OS.java:2410)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3471)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2405)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2369)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2221)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:500)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:493)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:113)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:194)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:368)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:559)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:514)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1311)
+
+!ENTRY org.eclipse.ui.editors 4 10001 2010-09-28 00:32:37.340
+!MESSAGE Ignoring template 'setterbody' since validation failed.
+!STACK 0
+org.eclipse.jface.text.templates.TemplateException: Pattern is not a valid Java comment.
+	at org.eclipse.jdt.internal.corext.template.java.CodeTemplateContextType.validate(CodeTemplateContextType.java:340)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.validateTemplate(ContributionTemplateStore.java:194)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.readIncludedTemplates(ContributionTemplateStore.java:156)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.readContributedTemplates(ContributionTemplateStore.java:120)
+	at org.eclipse.ui.editors.text.templates.ContributionTemplateStore.loadContributedTemplates(ContributionTemplateStore.java:107)
+	at org.eclipse.jface.text.templates.persistence.TemplateStore.load(TemplateStore.java:108)
+	at org.eclipse.jdt.internal.ui.JavaPlugin.getCodeTemplateStore(JavaPlugin.java:899)
+	at org.eclipse.jdt.internal.ui.viewsupport.ProjectTemplateStore.<init>(ProjectTemplateStore.java:47)
+	at org.eclipse.jdt.internal.corext.codemanipulation.StubUtility.getCodeTemplate(StubUtility.java:1439)
+	at org.eclipse.jdt.internal.corext.codemanipulation.StubUtility.getMethodBodyContent(StubUtility.java:130)
+	at org.eclipse.jdt.ui.CodeGeneration.getMethodBodyContent(CodeGeneration.java:322)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.AbstractMethodCorrectionProposal.getStub(AbstractMethodCorrectionProposal.java:153)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.AbstractMethodCorrectionProposal.getRewrite(AbstractMethodCorrectionProposal.java:93)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.ASTRewriteCorrectionProposal.addEdits(ASTRewriteCorrectionProposal.java:93)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal.createTextChange(CUCorrectionProposal.java:380)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal.createChange(CUCorrectionProposal.java:389)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.ChangeCorrectionProposal.getChange(ChangeCorrectionProposal.java:264)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.ChangeCorrectionProposal.performChange(ChangeCorrectionProposal.java:111)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal.performChange(CUCorrectionProposal.java:323)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.CUCorrectionProposal.apply(CUCorrectionProposal.java:301)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractAnnotationHover$AnnotationInformationControl.apply(AbstractAnnotationHover.java:506)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractAnnotationHover$AnnotationInformationControl.access$2(AbstractAnnotationHover.java:483)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractAnnotationHover$5.widgetSelected(AbstractAnnotationHover.java:476)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:228)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1003)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1027)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1012)
+	at org.eclipse.swt.widgets.Link.wmNotifyChild(Link.java:1004)
+	at org.eclipse.swt.widgets.Control.wmNotify(Control.java:4877)
+	at org.eclipse.swt.widgets.Composite.wmNotify(Composite.java:1757)
+	at org.eclipse.swt.widgets.Control.WM_NOTIFY(Control.java:4507)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4000)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4602)
+	at org.eclipse.swt.internal.win32.OS.CallWindowProcW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.CallWindowProc(OS.java:2313)
+	at org.eclipse.swt.widgets.Link.callWindowProc(Link.java:172)
+	at org.eclipse.swt.widgets.Widget.wmLButtonUp(Widget.java:1917)
+	at org.eclipse.swt.widgets.Control.WM_LBUTTONUP(Control.java:4301)
+	at org.eclipse.swt.widgets.Link.WM_LBUTTONUP(Link.java:842)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:3982)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4602)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessageW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(OS.java:2410)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3471)
+	at org.eclipse.ui.internal.Workbench.runEventLoop(Workbench.java:2405)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2369)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2221)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:500)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:493)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:113)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:194)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:368)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:559)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:514)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1311)

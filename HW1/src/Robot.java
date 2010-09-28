@@ -182,13 +182,14 @@ public class Robot
 	 */
 	public void Square(int moveVelocityValue, int moveDistanceValue)
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			ocp.write(commandSet.DriveDirect(moveVelocityValue, moveVelocityValue));
 			ocp.write(commandSet.WaitDistance(moveDistanceValue));
 			ocp.write(commandSet.DriveDirect(moveVelocityValue, -moveVelocityValue));
 			ocp.write(commandSet.WaitAngle(90));
 		}
+		ocp.write(commandSet.DriveDirect(0, 0));
 	}
 	
 	/**
@@ -199,12 +200,89 @@ public class Robot
 		ocp.write(commandSet.DriveDirect(0, 0));
 	}
 	
+	public byte[] ReadBumpsAndWheelDrops()
+	{
+		byte[] data = new byte[2];
+		data[0] = (byte)142;
+		data[1] = (byte)7;
+		byte[] recieved = new byte[1];
+		
+		for (int i = 0; i < 200; i++)
+		{
+			recieved = new byte[1];
+			ocp.write(data);
+			ocp.read(recieved);
+		}
+		
+		return recieved;
+	}
+	
+	public byte[] ReadWallsAndCliffs()
+	{
+		byte[] returned = new byte[6];
+		byte[] data = new byte[2];
+		data[0] = (byte)142;
+		data[1] = (byte)8;
+				
+		byte[] recieved = new byte[1];
+	
+		for (int i = 0; i < 200; i++)
+		{
+			ocp.write(data);
+			ocp.read(recieved);
+		}
+		returned[0] = recieved[0];
+		
+		data[1] = (byte)9;
+		for (int i = 0; i < 200; i++)
+		{
+			ocp.write(data);
+			ocp.read(recieved);
+		}
+		returned[1] = recieved[0];
+		
+		data[1] = (byte)10;
+		for (int i = 0; i < 200; i++)
+		{
+			ocp.write(data);
+			ocp.read(recieved);
+		}
+		returned[2] = recieved[0];
+		
+		data[1] = (byte)11;
+		for (int i = 0; i < 200; i++)
+		{
+			ocp.write(data);
+			ocp.read(recieved);
+		}
+		returned[3] = recieved[0];
+		
+		data[1] = (byte)12;
+		for(int i = 0; i < 200; i++)
+		{
+			ocp.write(data);
+			ocp.read(recieved);
+		}
+		returned[4] = recieved[0];
+		
+		data[1] = (byte)13;
+		for (int i = 0; i < 200; i++)
+		{
+			ocp.write(data);
+			ocp.read(recieved);
+		}
+		returned[5] = recieved[0];
+	
+		return returned;
+	}
+	
 	/**
 	 * Query a single sensor and parse the returned data
 	 * @param packet
 	 */
 	public void querySingleSensor(SensorData.PACKET_IDS packet)
 	{
+		System.out.println("Starting!");
 		byte[] command=commandSet.querySingleSensor(packet);
 		System.out.println("Setting query command: "+Arrays.toString(command));
 		sensors.setQueryCommand(command);
@@ -258,5 +336,17 @@ public class Robot
     {
     	 return sensors.getBumpOrWheelDropStatus(sensor);
     }
+
+	public void flushReadData() {
+		for(int i=0;i<100;i++)
+		{
+		ocp.write(new byte[]{(byte) 142,15});
+		byte[] data= new byte[2];
+		ocp.read(data);
+		System.out.println("JUNK: "+Arrays.toString(data));
+		}
+		
+		
+	}
 	
 }

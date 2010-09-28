@@ -471,8 +471,9 @@ public class CommandSetImpl implements CommandSet
 		int packetId=thePacketId.ordinal();
 		if(SensorData.isValidPacketId(packetId))
 		{
-			byte[] command = new byte[2];	
+			byte[] command = new byte[2];
 			command[0] = (byte)142;
+			System.out.println("Setting opcode to: "+(byte)command[0]);
 			command[1] = (byte)packetId;
 			return command;
 		}

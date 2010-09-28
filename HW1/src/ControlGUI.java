@@ -5,9 +5,12 @@
  */
 
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class ControlGUI extends JPanel implements ActionListener
 {
@@ -143,12 +146,14 @@ public class ControlGUI extends JPanel implements ActionListener
 		TurnLeft.addActionListener(this);
 		TurnRight.addActionListener(this);
 		Stop.addActionListener(this);
+		Square.addActionListener(this);
 		MoveVelocityDefault.addActionListener(this);
 		MoveVelocitySpecify.addActionListener(this);
 		MoveDistanceDefault.addActionListener(this);
 		MoveDistanceSpecify.addActionListener(this);
 		TurnDegreeDefault.addActionListener(this);
 		TurnDegreeSpecify.addActionListener(this);
+		ReadSensors.addActionListener(this);
 		
 		// Adding the Other buttons to the appropriate panel
 		Other = new JPanel(new FlowLayout());
@@ -230,9 +235,14 @@ public class ControlGUI extends JPanel implements ActionListener
 		// Open
 		if (e.getActionCommand().equals("Open"))
 		{
-			message.setText("Setting up robot: " + robot.Setup());
-			robot.Start();
-			OpenPort.setEnabled(false);
+			boolean setupStatus=robot.Setup();
+			message.setText("Setting up robot: " + setupStatus);
+			if(setupStatus)
+			{
+				robot.Start();
+				OpenPort.setEnabled(false);
+			}
+			
 		}
 		
 		// Default velocity selected
@@ -281,8 +291,18 @@ public class ControlGUI extends JPanel implements ActionListener
 			if (TurnDegreeBox.isEnabled())
 			{
 				turnDegreeValue = Integer.parseInt(TurnDegreeBox.getText());
-				robot.DriveDirect(moveVelocityValue, -moveVelocityValue);
-				robot.WaitAngle(turnDegreeValue);
+				if (turnDegreeValue < 0)
+				{
+					robot.DriveDirect(-moveVelocityValue, moveVelocityValue);
+					robot.WaitAngle(-turnDegreeValue);
+					robot.Stop();
+				}
+				else
+				{
+					robot.DriveDirect(moveVelocityValue, -moveVelocityValue);
+					robot.WaitAngle(turnDegreeValue);
+					robot.Stop();
+				}
 			}
 			else
 			{
@@ -295,9 +315,18 @@ public class ControlGUI extends JPanel implements ActionListener
 		{
 			if (TurnDegreeBox.isEnabled())
 			{
-				turnDegreeValue = Integer.parseInt(TurnDegreeBox.getText());
-				robot.DriveDirect(-moveVelocityValue, moveVelocityValue);
-				robot.WaitAngle(turnDegreeValue);
+				if (turnDegreeValue < 0)
+				{
+					robot.DriveDirect(-moveVelocityValue, moveVelocityValue);
+					robot.WaitAngle(-turnDegreeValue);
+					robot.Stop();
+				}
+				else
+				{
+					robot.DriveDirect(moveVelocityValue, -moveVelocityValue);
+					robot.WaitAngle(turnDegreeValue);
+					robot.Stop();
+				}
 			}
 			else
 			{
@@ -352,7 +381,7 @@ public class ControlGUI extends JPanel implements ActionListener
 			}
 			else if (!MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
 			{
-				moveDistanceValue = Integer.parseInt(MoveVelocityBox.getText());
+				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
 				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
 				robot.WaitDistance(-moveDistanceValue);
 				robot.Stop();
@@ -372,19 +401,91 @@ public class ControlGUI extends JPanel implements ActionListener
 		// Read Sensors
 		if (e.getActionCommand().equals("Read"))
 		{
+			// robot.flushReadData();
+			
+			BUMP_RIGHT.setSelected(false);
+			BUMP_LEFT.setSelected(false);
+			WHEEL_DROP_RIGHT.setSelected(false);
+			WHEEL_DROP_LEFT.setSelected(false);
+			WHEEL_DROP_CASTER.setSelected(false);
+			WALL.setSelected(false);
+			CLIFF_LEFT.setSelected(false);
+			CLIFF_FRONT_LEFT.setSelected(false);
+			CLIFF_FRONT_RIGHT.setSelected(false);
+			CLIFF_RIGHT.setSelected(false);
+			VIRTUAL_WALL.setSelected(false);
+			
+			byte[] data = new byte[1];
+			data = robot.ReadBumpsAndWheelDrops();
+			System.out.println(String.valueOf(Arrays.toString(data)));
+			
+			WHEEL_DROP_CASTER.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_CASTER, data[0]));
+			WHEEL_DROP_LEFT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_LEFT, data[0]));
+			WHEEL_DROP_RIGHT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_RIGHT, data[0]));
+			BUMP_LEFT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.BUMP_LEFT, data[0]));
+			BUMP_RIGHT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.BUMP_RIGHT, data[0]));
+		
+			
+			if (data[0] >= (byte)16)
+			{
+				WHEEL_DROP_CASTER.setSelected(true);
+				data[0] -= (byte)16;
+			}
+			if (data[0] >= (byte)8)
+			{
+				WHEEL_DROP_LEFT.setSelected(true);
+				data[0] -= (byte)8;
+			}
+			if (data[0] >= (byte)4)
+			{
+				WHEEL_DROP_RIGHT.setSelected(true);
+				data[0] -= (byte)4;
+			}
+			if (data[0] >= (byte)2)
+			{
+				WHEEL_DROP_LEFT.setSelected(true);
+				data[0] -= (byte)2;
+			}
+			if (data[0] > (byte)1)
+			{
+				WHEEL_DROP_CASTER.setSelected(true);
+				data[0] -= (byte)1;
+			}
+			
+			data = new byte[6];
+			data = robot.ReadWallsAndCliffs();
+			System.out.println(String.valueOf(Arrays.toString(data)));
+			
+			WALL.setEnabled(byteToBool(data[0]));
+			CLIFF_LEFT.setEnabled(byteToBool(data[1]));
+			CLIFF_FRONT_LEFT.setEnabled(byteToBool(data[2]));
+			CLIFF_FRONT_RIGHT.setEnabled(byteToBool(data[3]));
+			CLIFF_RIGHT.setEnabled(byteToBool(data[4]));
+			VIRTUAL_WALL.setEnabled(byteToBool(data[5]));
+			
+			/*
 			// Read sensors
 			// Set values for checkboxes
 			// Set values for sliders
 			//SensorData.PACKET_IDS[] packets= {SensorData.PACKET_IDS.BUMPS_AND_WHEEL_DROPS};
+			System.out.println("Grabbing sensor data!");
 			robot.querySingleSensor(SensorData.PACKET_IDS.BUMPS_AND_WHEEL_DROPS);
-			System.out.println("Wheel drop left: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_LEFT));
+			System.out.println("Bump right: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.BUMP_RIGHT));
+			System.out.println("Bump left: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.BUMP_LEFT));
 			System.out.println("Wheel drop right: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_RIGHT));
+			System.out.println("Wheel drop left: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_LEFT));
 			System.out.println("Wheel drop caster: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_CASTER));
+			*/
+			
 		}
 		
 		// Square
 		if (e.getActionCommand().equals("Square"))
 		{
+			if (MoveVelocityBox.isEnabled())
+			{
+				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
+			}
 			robot.Square(moveVelocityValue, 400);
 		}
 		
@@ -393,5 +494,36 @@ public class ControlGUI extends JPanel implements ActionListener
 		{
 			robot.Safe();
 		}
+	}
+	
+	/**
+	 * Get the boolean value of a specific sensor in the BUMPS_AND_WHEEL_DROPS sesor packet 
+	 * @param sensor
+	 * @return
+	 */
+	public static boolean getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS sensor, byte data){
+		/*
+		 * Get the raw value of the BUMPS_AND_WHEEL_DROPS sensor and then parse the
+		 * specific sensor boolean value using a bitwise AND to get the desired bit
+		 */
+		return (data & (1<<sensor.ordinal()))==0?false:true;
+	}
+	
+	
+	/* Ordinal represents the bit in the BUMPS_AND_WHEEL_DROPS sensor data's byte value */
+	public static enum BUMPS_AND_WHEEL_DROPS{
+		BUMP_RIGHT,			//bit 0
+		BUMP_LEFT,			//bit 1
+		WHEEL_DROP_RIGHT,	//bit 2
+		WHEEL_DROP_LEFT,	//bit 3
+		WHEEL_DROP_CASTER	//bit 4
+		/* Ignore bits 5-7 */
+	};
+	
+	
+	/** Convert a byte to a boolean where x==0->false, otherwise true */
+	private static boolean byteToBool(byte x)
+	{
+		return x==0?false:true;
 	}
 }
