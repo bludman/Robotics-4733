@@ -1,10 +1,3 @@
-import java.util.Iterator;
-import java.util.List;
-
-/**
- * 
- */
-
 /**
  * @author Benjamin Ludman
  * @author Mike Hernandez
@@ -26,9 +19,7 @@ public class SensorData {
 	public SensorData() {
 		sensorData= new int[TOTAL_NUMBER_OF_PACKETS];
 	}
-
-		
-		
+	
 	public void setQueryCommand(byte[] command) {
 		this.command=command;
 		this.expectedDataLength=calculateExpectedResponseSize(command);

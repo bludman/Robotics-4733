@@ -1,7 +1,7 @@
 /**
+ * Provides communication between the user and the iRobot Create. Influenced heavily by the sample program with a similar name.
  * 
  * @author Mike Hernandez, Benjamin Ludman
- *
  */
 
 import javax.comm.*;
@@ -10,13 +10,16 @@ import java.io.*;
 
 public class OpenCommPort 
 {
+	// Constructs necessary for interaction with the iRobot Create.
 	SerialPort port = null;
 	OutputStream os = null;
 	InputStream is = null;
 	
+	// Set baud rate
 	public static final int BAUD = 57600;
 	
-	String wantedPortName = "COM9";
+	// Set COM port name
+	String wantedPortName = "COM7";
 	
 	public int setUpBam()
 	{
@@ -55,12 +58,11 @@ public class OpenCommPort
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 			
-			/* Flush read buffer 
+			// Attempt to flush read buffer 
 			for (int i = 0; i < 15; i++)
 			{
 				read(new byte[1]);
 			}
-			*/
 		}
 		catch(UnsupportedCommOperationException e)
 		{
@@ -90,7 +92,6 @@ public class OpenCommPort
 			System.err.println("IOException: " + e);
 		}
 	}
-	
 	
 	public void read(byte[] data)
 	{

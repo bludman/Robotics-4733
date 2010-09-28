@@ -1,6 +1,5 @@
-
-
 /**
+ * Driver class for running the GUI for the iRobot Create.
  * 
  * @author Mike Hernandez
  * @author Benjamin Ludman
@@ -8,12 +7,12 @@
  */
 public class Driver 
 {
+	// Instance of the GUI with all of the controls.
 	static ControlGUI gui = new ControlGUI();
 	
 	public static void main(String[] args)
 	{
-		//System.out.println(Arrays.toString(SensorData.GROUP_PACKET_CONTENTS.GROUP0.contents()));
+		// Generate the GUI and its components.
 		gui.generateGUI();
-
 	}
 }

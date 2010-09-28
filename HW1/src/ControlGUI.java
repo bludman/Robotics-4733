@@ -22,7 +22,7 @@ public class ControlGUI extends JPanel implements ActionListener
 	protected JLabel WALL_SIGNAL_Label;
 	protected JPanel Controls, Options[], AllOptions, SensorsBoolean, SensorsNumerical, Other;
 	
-	protected int moveVelocityValue, moveDistanceValue, turnDegreeValue;
+	protected int moveVelocityValue = 100, moveDistanceValue, turnDegreeValue;
 	
 	public ControlGUI()
 	{
@@ -43,10 +43,10 @@ public class ControlGUI extends JPanel implements ActionListener
 		Stop.setActionCommand("Stop");
 		
 		TurnLeft = new JButton("Left");
-		TurnLeft.setActionCommand("Left");
+		TurnLeft.setActionCommand("Turn Left");
 		
 		TurnRight = new JButton("Right");
-		TurnRight.setActionCommand("Right");
+		TurnRight.setActionCommand("Turn Right");
 		
 		ReadSensors = new JButton("Read");
 		ReadSensors.setActionCommand("Read");
@@ -142,6 +142,7 @@ public class ControlGUI extends JPanel implements ActionListener
 		Backward.addActionListener(this);
 		TurnLeft.addActionListener(this);
 		TurnRight.addActionListener(this);
+		Stop.addActionListener(this);
 		MoveVelocityDefault.addActionListener(this);
 		MoveVelocitySpecify.addActionListener(this);
 		MoveDistanceDefault.addActionListener(this);
@@ -211,6 +212,7 @@ public class ControlGUI extends JPanel implements ActionListener
 	
 	public void generateGUI()
 	{
+		// Create the frame and set various options
 		JFrame frame = new JFrame("ControlGUI");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -225,21 +227,26 @@ public class ControlGUI extends JPanel implements ActionListener
 	
 	public void actionPerformed(ActionEvent e)
 	{
+		// Open
 		if (e.getActionCommand().equals("Open"))
 		{
-			System.out.println("Setting up robot: "+robot.Setup());
+			message.setText("Setting up robot: " + robot.Setup());
+			robot.Start();
+			OpenPort.setEnabled(false);
 		}
 		
 		// Default velocity selected
 		if (e.getActionCommand().equals("Default Velocity"))
 		{
 			MoveVelocityBox.setEnabled(false);
+			moveVelocityValue = 100;
 		}
 		
 		// Specified velocity selected
 		if (e.getActionCommand().equals("Specify Velocity"))
 		{
 			MoveVelocityBox.setEnabled(true);
+			MoveVelocityBox.setText("0");
 		}
 		
 		// Default distance selected
@@ -252,6 +259,7 @@ public class ControlGUI extends JPanel implements ActionListener
 		if (e.getActionCommand().equals("Specify Distance"))
 		{
 			MoveDistanceBox.setEnabled(true);
+			MoveDistanceBox.setText("0");
 		}
 		
 		// Default turn degrees selected
@@ -264,6 +272,7 @@ public class ControlGUI extends JPanel implements ActionListener
 		if (e.getActionCommand().equals("Specify Degree"))
 		{
 			TurnDegreeBox.setEnabled(true);
+			TurnDegreeBox.setText("0");
 		}
 		
 		// Turn Left
@@ -272,11 +281,12 @@ public class ControlGUI extends JPanel implements ActionListener
 			if (TurnDegreeBox.isEnabled())
 			{
 				turnDegreeValue = Integer.parseInt(TurnDegreeBox.getText());
-				// Turn degrees
+				robot.DriveDirect(moveVelocityValue, -moveVelocityValue);
+				robot.WaitAngle(turnDegreeValue);
 			}
 			else
 			{
-				// Turn degrees
+				robot.DriveDirect(moveVelocityValue, -moveVelocityValue);
 			}
 		}
 		
@@ -286,11 +296,12 @@ public class ControlGUI extends JPanel implements ActionListener
 			if (TurnDegreeBox.isEnabled())
 			{
 				turnDegreeValue = Integer.parseInt(TurnDegreeBox.getText());
-				// Turn degrees
+				robot.DriveDirect(-moveVelocityValue, moveVelocityValue);
+				robot.WaitAngle(turnDegreeValue);
 			}
 			else
 			{
-				// Turn degrees
+				robot.DriveDirect(-moveVelocityValue, moveVelocityValue);
 			}
 		}
 		
@@ -301,21 +312,25 @@ public class ControlGUI extends JPanel implements ActionListener
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
 				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				// Drive forward
+				robot.DriveDirect(moveVelocityValue, moveVelocityValue);
+				robot.WaitDistance(moveDistanceValue);
+				robot.Stop();
 			}
 			else if (MoveVelocityBox.isEnabled() && !MoveDistanceBox.isEnabled())
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
-				// Drive forward
+				robot.DriveDirect(moveVelocityValue, moveVelocityValue);
 			}
 			else if (!MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
 			{
-				moveDistanceValue = Integer.parseInt(MoveVelocityBox.getText());
-				// Drive forward
+				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
+				robot.DriveDirect(moveVelocityValue, moveVelocityValue);
+				robot.WaitDistance(moveDistanceValue);
+				robot.Stop();
 			}
 			else
 			{
-				// Drive forward
+				robot.DriveDirect(moveVelocityValue, moveVelocityValue);
 			}
 		}
 		
@@ -326,28 +341,32 @@ public class ControlGUI extends JPanel implements ActionListener
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
 				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				// Drive backward
+				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
+				robot.WaitDistance(-moveDistanceValue);
+				robot.Stop();
 			}
 			else if (MoveVelocityBox.isEnabled() && !MoveDistanceBox.isEnabled())
 			{
 				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
-				// Drive backward
+				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
 			}
 			else if (!MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
 			{
-				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				// Drive backward
+				moveDistanceValue = Integer.parseInt(MoveVelocityBox.getText());
+				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
+				robot.WaitDistance(-moveDistanceValue);
+				robot.Stop();
 			}
 			else
 			{
-				// Drive backward
+				robot.DriveDirect(-moveVelocityValue, -moveVelocityValue);
 			}
 		}
 		
 		// Stop
 		if (e.getActionCommand().equals("Stop"))
 		{
-			// Stop
+			robot.Stop();
 		}
 		
 		// Read Sensors
@@ -366,15 +385,13 @@ public class ControlGUI extends JPanel implements ActionListener
 		// Square
 		if (e.getActionCommand().equals("Square"))
 		{
-			// Make a square
+			robot.Square(moveVelocityValue, 400);
 		}
 		
 		// Safe Mode
 		if (e.getActionCommand().equals("Mode"))
 		{
-			// Set mode to Safe Mode
-			//this should get refactored but for now this works
-			robot.test();
+			robot.Safe();
 		}
 	}
 }

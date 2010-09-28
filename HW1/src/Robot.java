@@ -1,31 +1,26 @@
 import java.util.Arrays;
 
-import sun.management.Sensor;
-
 /**
- * 
- */
-
-/**
- * A wrapper class that allows easy interaction with the iRobot Create.
+ * A wrapper class that allows easy interaction with (and extension of) the iRobot Create.
  * 
  * @author Mike Hernandez
  * @author Benjamin Ludman
- *
  */
-public class Robot {
+
+public class Robot 
+{
+	// OpenCommPort object that allows communication with the iRobot Create.
 	private OpenCommPort ocp;
+	
+	// An instance of the CommandSet interface, containing basic operations for the iRobot Create.
 	private CommandSet commandSet;
+	
+	// Similar to the above, contains basic methods of obtaining sensor data for the iRobot Create.
 	private SensorData sensors;
 	
-	
-	public class NotImplementedException extends RuntimeException{
-		 public NotImplementedException(String message) {
-          super(message);
-       }
-	};
-	
-	
+	/**
+	 * Constructor for the robot that instantiates the above objects.
+	 */
 	Robot()
 	{
 		ocp= new OpenCommPort();
@@ -33,74 +28,176 @@ public class Robot {
 		sensors = new SensorData();
 	}
 	
-	
 	/**
-	 * Setup communications with the robot
-	 * @return if setup was succesfull, false if it wasn't
+	 * Note: Some of these methods are analagous to those specified in CommandSet.java. 
+	 * Please refer to that file for the documentation of each method. For any additional
+	 * methods, documentation has been specified in this file.
 	 */
+	
 	public boolean Setup()
 	{
-		if(ocp.setUpBam()==0)
+		if(ocp.setUpBam() == 0)
 			return true;
 		
 		return false;
 	}
 	
-	public void Start(){ 
-			ocp.write(commandSet.Start());
+	public void Start()
+	{ 
+		ocp.write(commandSet.Start());
 	}
 
-	public  byte[] Baud(int baudCode){ throw new NotImplementedException("TODO");}
+	public void Baud(int baudCode)
+	{
+		ocp.write(commandSet.Baud(baudCode));
+	}
 
-	public  byte[] Control(){ throw new NotImplementedException("TODO");}
+	public void Control()
+	{
+		ocp.write(commandSet.Control());
+	}
 
-	public  byte[] Safe(){ throw new NotImplementedException("TODO");}
+	public void Safe()
+	{
+		ocp.write(commandSet.Safe());
+	}
 
-	public  byte[] Full(){ throw new NotImplementedException("TODO");}
+	public void Full()
+	{
+		ocp.write(commandSet.Full());
+	}
 
-	public  byte[] Spot(){ throw new NotImplementedException("TODO");}
+	public void Spot()
+	{
+		ocp.write(commandSet.Spot());
+	}
 
-	public  byte[] Cover(){ throw new NotImplementedException("TODO");}
+	public void Cover()
+	{
+		ocp.write(commandSet.Cover());
+	}
 
-	public  byte[] Demo(int demoMode){ throw new NotImplementedException("TODO");}
+	public void Demo(int demoMode)
+	{
+		ocp.write(commandSet.Demo(demoMode));
+	}
 
-	public  byte[] Drive(int velocityHigh, int velocityLow,
-			int radiusHigh, int radiusLow){ throw new NotImplementedException("TODO");}
+	public void Drive(int velocity, int radius)
+	{ 
+		ocp.write(commandSet.Drive(velocity, radius));
+	}
 
-	public  byte[] LowSideDrivers(int outputBits){ throw new NotImplementedException("TODO");}
+	public byte LowSideDrivers(int outputBits)
+	{
+		ocp.write(commandSet.LowSideDrivers(outputBits));
+		return (byte)outputBits;
+	}
 
-	public  byte[] LEDs(int LEDBits, int color, int intensity){ throw new NotImplementedException("TODO");}
+	public void LEDs(int LEDBits, int color, int intensity)
+	{
+		ocp.write(commandSet.LEDs(LEDBits, color, intensity));
+	}
 
-	public  byte[] Song(){ throw new NotImplementedException("TODO");}
+	public void Song()
+	{
+		ocp.write(commandSet.Song());
+	}
 
-	public  byte[] Play(int songNumber){ throw new NotImplementedException("TODO");}
+	public void Play(int songNumber)
+	{
+		ocp.write(commandSet.Play(songNumber));
+	}
 
-	public  byte[] CoverAndDock(){ throw new NotImplementedException("TODO");}
+	public void CoverAndDock()
+	{
+		ocp.write(commandSet.CoverAndDock());
+	}
 
-	public  byte[] PMWLowSideDrivers(int lsd2, int lsd1, int lsd0){ throw new NotImplementedException("TODO");}
+	public void PMWLowSideDrivers(int lsd2, int lsd1, int lsd0)
+	{
+		ocp.write(commandSet.PMWLowSideDrivers(lsd2, lsd1, lsd0));
+	}
 
-	public  byte[] DriveDirect(int rightHigh, int rightLow, int leftHigh,
-			int leftLow){ throw new NotImplementedException("TODO");}
+	public void DriveDirect(int right, int left)
+	{
+		ocp.write(commandSet.DriveDirect(right, left));
+	}
 
-	public  byte[] DigitalOutputs(int outputBits){ throw new NotImplementedException("TODO");}
+	public byte DigitalOutputs(int outputBits)
+	{
+		ocp.write(commandSet.DigitalOutputs(outputBits));
+		return (byte)outputBits;
+	}
 
-	public  byte[] PauseResumeStream(int range){ throw new NotImplementedException("TODO");}
+	public void PauseResumeStream(int range)
+	{
+		ocp.write(commandSet.PauseResumeStream(range));
+	}
 
-	public  byte[] SendIR(int value){ throw new NotImplementedException("TODO");}
+	public void SendIR(int value)
+	{
+		ocp.write(commandSet.SendIR(value));
+	}
 
-	public  byte[] Script(){ throw new NotImplementedException("TODO");}
+	public void Script()
+	{
+		ocp.write(commandSet.Script());
+	}
 
-	public  byte[] PlayScript(){ throw new NotImplementedException("TODO");}
+	public void PlayScript()
+	{
+		ocp.write(commandSet.PlayScript());
+	}
 
-	public  byte[] StopScript(){ throw new NotImplementedException("TODO");}
+	public void ShowScript()
+	{
+		ocp.write(commandSet.ShowScript());
+	}
 
-	public  byte[] WaitTime(int time){ throw new NotImplementedException("TODO");}
+	public void WaitTime(int time)
+	{
+		ocp.write(commandSet.WaitTime(time));
+	}
 
-	public  byte[] WaitDistance(int highDistance, int lowDistance){ throw new NotImplementedException("TODO");}
+	public void WaitDistance(int distance)
+	{
+		ocp.write(commandSet.WaitDistance(distance));
+	}
 
-	public  byte[] WaitAngle(int highAngle, int lowAngle){ throw new NotImplementedException("TODO");}
+	public void WaitAngle(int angle)
+	{
+		ocp.write(commandSet.WaitAngle(angle));
+	}
 
-	public  byte[] WaitEvent(int eventID){ throw new NotImplementedException("TODO");}
+	public void WaitEvent(int eventID)
+	{
+		ocp.write(commandSet.WaitEvent(eventID));
+	}
+	
+	/**
+	 * Instructs the iRobot Create to travel in the shape of a square.
+	 * @param moveVelocityValue The velocity at which the iRobot Create will travel in mm/s.
+	 * @param moveDistanceValue The distance of one side of the square in mm.
+	 * @return
+	 */
+	public void Square(int moveVelocityValue, int moveDistanceValue)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			ocp.write(commandSet.DriveDirect(moveVelocityValue, moveVelocityValue));
+			ocp.write(commandSet.WaitDistance(moveDistanceValue));
+			ocp.write(commandSet.DriveDirect(moveVelocityValue, -moveVelocityValue));
+			ocp.write(commandSet.WaitAngle(90));
+		}
+	}
+	
+	/**
+	 * Stops the robot from moving.
+	 */
+	public void Stop()
+	{
+		ocp.write(commandSet.DriveDirect(0, 0));
+	}
 	
 	/**
 	 * Query a single sensor and parse the returned data
@@ -122,12 +219,9 @@ public class Robot {
 	}
 
 	public void test()
-	{
-		
+	{	
 		SetMode();
-		LED_On();
-					
-		
+		LED_On();	
 	}
 	
 	private void SetMode()
@@ -157,8 +251,7 @@ public class Robot {
         data[2] = (byte)255;    //Color 0 = green, 255 = red
         data[3] = (byte)128;  //Intensity
 
-        ocp.write(data);
-       
+        ocp.write(data);     
     }
     
     public boolean getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS sensor)

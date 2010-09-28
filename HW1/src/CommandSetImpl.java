@@ -1,19 +1,38 @@
 /**
+ * Implementation of the CommandSet interface, containing various (potentially more complex) operations for the iRobot Create.
  * 
- * @author Mike Hernandez, Benjamin Ludman
+ * @author Mike Hernandez
+ * @author Benjamin Ludman
  *
  */
 public class CommandSetImpl implements CommandSet 
 {
-	
-	
 	public CommandSetImpl()
 	{
 	}
 	
-	// TODO: Sensing commands
-	
-	
+	/**
+	 * Converts an integer value to an array of two bytes.
+	 * @param myInt The integer to be converted.
+	 * @return A byte array of size two (2).
+	 */
+	protected byte[] ConvertToByte(int myInt)
+	{
+		byte[] returnedBytes = new byte[2];
+		
+		if (myInt >= 0)
+		{
+			returnedBytes[0] = (byte)(myInt >> 8);
+			returnedBytes[1] = (byte)myInt;
+		}
+		else
+		{
+			returnedBytes[0] = (byte)(myInt >> 8 & 0x00FF);
+			returnedBytes[1] = (byte)(myInt & 0x00FF);
+		}
+		
+		return returnedBytes;
+	}
 	
 	/* (non-Javadoc)
 	 * @see CommandSet#Start()
@@ -117,17 +136,24 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Drive(int, int, int, int)
 	 */
-	public byte[] Drive(int velocityHigh, int velocityLow, int radiusHigh, int radiusLow)
+	public byte[] Drive(int velocity, int radius)
 	{
-		if (velocityHigh + velocityLow >= -500 && velocityHigh + velocityLow <= 500 &&
-				radiusHigh + radiusLow >= -2000 && radiusHigh + radiusLow <= 2000)
+		if (velocity >= -500 && velocity <= 500 &&
+				radius >= -2000 && radius <= 2000)
 		{
 			byte[] data = new byte[5];
+			byte[] conversion = new byte[2];
+			
 			data[0] = (byte)137;
-			data[1] = (byte)velocityHigh;
-			data[2] = (byte)velocityLow;
-			data[3] = (byte)radiusHigh;
-			data[4] = (byte)radiusLow;
+			
+			conversion = ConvertToByte(velocity);
+			data[1] = conversion[0];
+			data[2] = conversion[1];
+			
+			conversion = ConvertToByte(radius);
+			data[3] = conversion[0];
+			data[4] = conversion[1];
+			
 			return data;
 		}
 		else
@@ -182,7 +208,6 @@ public class CommandSetImpl implements CommandSet
 	 */
 	public byte[] Song()
 	{
-		// TODO: Write this method.
 		return null;
 	}
 	
@@ -240,17 +265,24 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#DriveDirect(int, int, int, int)
 	 */
-	public byte[] DriveDirect(int rightHigh, int rightLow, int leftHigh, int leftLow)
+	public byte[] DriveDirect(int right, int left)
 	{
-		if (rightHigh + rightLow >= -500 && rightHigh + rightLow <= 500 &&
-				leftHigh + leftLow >= -500 && leftHigh + leftLow <= 500)
+		if (right >= -500 && right <= 500 &&
+				left >= -500 && left <= 500)
 		{
 			byte[] data = new byte[5];
+			byte[] conversion = new byte[2];
+			
 			data[0] = (byte)145;
-			data[1] = (byte)rightHigh;
-			data[2] = (byte)rightLow;
-			data[3] = (byte)leftHigh;
-			data[4] = (byte)leftLow;
+			
+			conversion = ConvertToByte(right);
+			data[1] = conversion[0];
+			data[2] = conversion[1];
+			
+			conversion = ConvertToByte(left);
+			data[3] = conversion[0];
+			data[4] = conversion[1];
+			
 			return data;
 		}
 		else
@@ -323,7 +355,6 @@ public class CommandSetImpl implements CommandSet
 	 */
 	public byte[] Script()
 	{
-		//TODO: Write this method.
 		return null;
 	}
 	
@@ -340,7 +371,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#StopScript()
 	 */
-	public byte[] StopScript()
+	public byte[] ShowScript()
 	{
 		byte[] data = new byte[1];
 		data[0] = (byte)154;
@@ -370,15 +401,18 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#WaitDistance(int, int)
 	 */
-	public byte[] WaitDistance(int highDistance, int lowDistance)
+	public byte[] WaitDistance(int distance)
 	{
-		if (highDistance + lowDistance <= 32768 && highDistance + lowDistance >= -32768)
+		if (distance <= 32768 && distance >= -32768)
 		{
-			byte[] data = new byte[2];	
+			byte[] data = new byte[3];	
+			byte[] conversion = new byte[2];
+			
 			data[0] = (byte)156;
-			// Note: Assuming that the high distance byte must be sent before the low distance byte.
-			data[1] = (byte)highDistance;
-			data[2] = (byte)lowDistance;
+			
+			conversion = ConvertToByte(distance);
+			data[1] = conversion[0];
+			data[2] = conversion[1];
 			return data;
 		}
 		else
@@ -391,15 +425,18 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#WaitAngle(int, int)
 	 */
-	public byte[] WaitAngle(int highAngle, int lowAngle)
+	public byte[] WaitAngle(int angle)
 	{
-		if (highAngle + lowAngle <= 32768 && highAngle + lowAngle >= -32768)
+		if (angle <= 32768 && angle >= -32768)
 		{
-			byte[] data = new byte[2];	
+			byte[] data = new byte[3];	
+			byte[] conversion = new byte[2];
+			
 			data[0] = (byte)157;
-			// Note: Assuming that the high angle byte must be sent before the low angle byte.
-			data[1] = (byte)highAngle;
-			data[2] = (byte)lowAngle;
+			
+			conversion = ConvertToByte(angle);
+			data[1] = conversion[0];
+			data[2] = conversion[1];
 			return data;
 		}
 		else
@@ -476,9 +513,6 @@ public class CommandSetImpl implements CommandSet
 	{
 		throw new NotImplementedException();
 	}
-
-
-
 
 	public class NotImplementedException extends RuntimeException{
 		 public NotImplementedException(String message) {
