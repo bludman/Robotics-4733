@@ -14,11 +14,6 @@ public class Robot
 	 * methods, documentation has been specified in this file.
 	 */
 	
-	
-	
-
-
-
 	/** OpenCommPort object that allows communication with the iRobot Create. */
 	private OpenCommPort ocp;
 	
@@ -37,8 +32,6 @@ public class Robot
 		commandSet = new CommandSetImpl();
 		sensors = new SensorData();
 	}
-	
-	
 	
 	/**
 	 * Set up the commincation interface with the robot
@@ -221,8 +214,7 @@ public class Robot
 	 * Basic implementation of minimal sensor reading functions
 	 * Note: should be refactored to cleaner interface in the future
 	 *---------------------------------------------------------------------------*/
-	private final static int BUFFER_FLUSH_ITTERATION_SIZE = 200;
-	
+	private final static int BUFFER_FLUSH_ITERATION_SIZE = 1;
 	
 	/**
 	 * Read the wall signal sensor
@@ -235,7 +227,7 @@ public class Robot
 		command[1] = (byte)27;
 		byte[] recieved = new byte[2];
 		
-		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
+		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
 		{
 			recieved = new byte[2];
 			ocp.write(command);
@@ -244,7 +236,6 @@ public class Robot
 		
 		return recieved;
 	}
-	
 	
 	/**
 	 * Read the bump and wheel drop sensor
@@ -258,7 +249,7 @@ public class Robot
 		command[1] = (byte)7;
 		byte[] recieved = new byte[1];
 		
-		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
+		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
 		{
 			recieved = new byte[1];
 			ocp.write(command);
@@ -277,18 +268,18 @@ public class Robot
 	{
 		byte firstSensorPacket = 8;
 		byte lastSensorPacket = 13;
-		int numberOfSensors= lastSensorPacket - firstSensorPacket +1;
+		int numberOfSensors = lastSensorPacket - firstSensorPacket + 1;
 		byte[] returned = new byte[6];
 		byte[] command = new byte[2];
 		command[0] = (byte)142;
 		byte[] recieved = new byte[1];
 			
 		
-		//TODO: Test this loop to make sure consistent with below
-		for(byte i=0;i<numberOfSensors;i++)
+		// TODO: Test this loop to make sure consistent with below
+		for(byte i = 0; i < numberOfSensors; i++)
 		{
-			command[1] = (byte)(firstSensorPacket+i);
-			for (int j = 0; j < BUFFER_FLUSH_ITTERATION_SIZE; j++)
+			command[1] = (byte)(firstSensorPacket + i);
+			for (int j = 0; j < BUFFER_FLUSH_ITERATION_SIZE; j++)
 			{
 				ocp.write(command);
 				ocp.read(recieved);
@@ -296,9 +287,10 @@ public class Robot
 			returned[i] = recieved[0];
 		}
 		
-		/*//TODO: Delete this if the above loop works as expected
+        /*
+		// TODO: Delete this if the above loop works as expected
 		command[1] = (byte)8;
-		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
+		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
 		{
 			ocp.write(command);
 			ocp.read(recieved);
@@ -306,15 +298,15 @@ public class Robot
 		returned[0] = recieved[0];
 		
 		command[1] = (byte)9;
-		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
-		{
+		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
+		{ITERATION
 			ocp.write(command);
 			ocp.read(recieved);
 		}
 		returned[1] = recieved[0];
 		
 		command[1] = (byte)10;
-		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
+		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
 		{
 			ocp.write(command);
 			ocp.read(recieved);
@@ -322,7 +314,7 @@ public class Robot
 		returned[2] = recieved[0];
 		
 		command[1] = (byte)11;
-		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
+		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
 		{
 			ocp.write(command);
 			ocp.read(recieved);
@@ -330,7 +322,7 @@ public class Robot
 		returned[3] = recieved[0];
 		
 		command[1] = (byte)12;
-		for(int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
+		for(int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
 		{
 			ocp.write(command);
 			ocp.read(recieved);
@@ -338,7 +330,7 @@ public class Robot
 		returned[4] = recieved[0];
 		
 		command[1] = (byte)13;
-		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
+		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
 		{
 			ocp.write(command);
 			ocp.read(recieved);
@@ -365,7 +357,6 @@ public class Robot
 	 * Does not flush buffer and thus has issues with getting sensor data
 	 *---------------------------------------------------------------------------*/
 	
-	
 	/**
 	 * Query a single sensor and parse the returned data
 	 * @param packet
@@ -386,12 +377,9 @@ public class Robot
 		sensors.processSensorData();
 	}
 
-	    
-    
     public boolean getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS sensor)
     {
     	 return sensors.getBumpOrWheelDropStatus(sensor);
     }
-
 	
 }

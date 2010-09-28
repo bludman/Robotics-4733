@@ -299,7 +299,7 @@ public class ControlGUI extends JPanel implements ActionListener
 				if (turnDegreeValue < 0)
 				{
 					robot.driveDirect(-moveVelocityValue, moveVelocityValue);
-					robot.waitAngle(-turnDegreeValue);
+					robot.waitAngle(turnDegreeValue);
 					robot.stop();
 				}
 				else
@@ -323,7 +323,7 @@ public class ControlGUI extends JPanel implements ActionListener
 				if (turnDegreeValue < 0)
 				{
 					robot.driveDirect(-moveVelocityValue, moveVelocityValue);
-					robot.waitAngle(-turnDegreeValue);
+					robot.waitAngle(turnDegreeValue);
 					robot.stop();
 				}
 				else
@@ -499,13 +499,12 @@ public class ControlGUI extends JPanel implements ActionListener
 		 * Get the raw value of the BUMPS_AND_WHEEL_DROPS sensor and then parse the
 		 * specific sensor boolean value using a bitwise AND to get the desired bit
 		 */
-		return (rawData & (1<<sensor.ordinal()))==0?false:true;
+		return (rawData & (1 << sensor.ordinal())) == 0 ? false : true;
 	}
-	
 	
 	/** Convert a byte to a boolean where x==0->false, otherwise true */
 	private static boolean byteToBool(byte x)
 	{
-		return x==0?false:true;
+		return x == 0 ? false : true;
 	}
 }

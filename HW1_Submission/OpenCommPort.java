@@ -57,14 +57,8 @@ public class OpenCommPort
 					SerialPort.DATABITS_8,
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
-			
-			// Attempt to flush read buffer 
-			for (int i = 0; i < 15; i++)
-			{
-				read(new byte[1]);
-			}
 		}
-		catch(UnsupportedCommOperationException e)
+		catch (UnsupportedCommOperationException e)
 		{
 			System.err.println("Failed to set up port: " + e);
 		}
@@ -78,7 +72,7 @@ public class OpenCommPort
 		{
 			os = port.getOutputStream();
 		}
-		catch(IOException e)
+		catch (IOException e)
 		{
 			System.err.println("IOException: " + e);
 		}
