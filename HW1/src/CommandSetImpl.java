@@ -13,30 +13,28 @@ public class CommandSetImpl implements CommandSet
 	
 	/**
 	 * Converts an integer value to an array of two bytes.
-	 * @param myInt The integer to be converted.
+	 * @param x The integer to be converted.
 	 * @return A byte array of size two (2).
 	 */
-	protected byte[] ConvertToByte(int myInt)
+	protected static byte[] intToByte(int x)
 	{
 		byte[] returnedBytes = new byte[2];
 		
-		if (myInt >= 0)
+		if (x >= 0)
 		{
-			returnedBytes[0] = (byte)(myInt >> 8);
-			returnedBytes[1] = (byte)myInt;
+			returnedBytes[0] = (byte)(x >> 8);
+			returnedBytes[1] = (byte)x;
 		}
 		else
 		{
-			returnedBytes[0] = (byte)(myInt >> 8 & 0x00FF);
-			returnedBytes[1] = (byte)(myInt & 0x00FF);
+			returnedBytes[0] = (byte)(x >> 8 & 0x00FF);
+			returnedBytes[1] = (byte)(x & 0x00FF);
 		}
 		
 		return returnedBytes;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Start()
-	 */
+	@Override
 	public byte[] start()
 	{
 		byte[] data = new byte[1];		
@@ -44,9 +42,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Baud(int)
-	 */
+	@Override
 	public byte[] baud(int baudCode)
 	{
 		if (baudCode < 256)
@@ -64,9 +60,7 @@ public class CommandSetImpl implements CommandSet
 		
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Control()
-	 */
+	@Override
 	public byte[] control()
 	{
 		byte[] data = new byte[1];	
@@ -74,9 +68,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Safe()
-	 */
+	@Override
 	public byte[] safe()
 	{
 		byte[] data = new byte[1];	
@@ -84,9 +76,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#full()
-	 */
+	@Override
 	public byte[] full()
 	{
 		byte[] data = new byte[1];
@@ -94,9 +84,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#spot()
-	 */
+	@Override
 	public byte[] spot()
 	{
 		byte[] data = new byte[1];
@@ -104,9 +92,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Cover()
-	 */
+	@Override
 	public byte[] cover()
 	{
 		byte[] data = new byte[1];
@@ -114,9 +100,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Demo(int)
-	 */
+	@Override
 	public byte[] demo(int demoMode)
 	{
 		if (demoMode <= 9 && demoMode >= -1)
@@ -133,9 +117,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Drive(int, int, int, int)
-	 */
+	@Override
 	public byte[] drive(int velocity, int radius)
 	{
 		if (velocity >= -500 && velocity <= 500 &&
@@ -146,11 +128,11 @@ public class CommandSetImpl implements CommandSet
 			
 			data[0] = (byte)137;
 			
-			conversion = ConvertToByte(velocity);
+			conversion = intToByte(velocity);
 			data[1] = conversion[0];
 			data[2] = conversion[1];
 			
-			conversion = ConvertToByte(radius);
+			conversion = intToByte(radius);
 			data[3] = conversion[0];
 			data[4] = conversion[1];
 			
@@ -163,9 +145,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#LowSideDrivers(int)
-	 */
+	@Override
 	public byte[] lowSideDrivers(int outputBits)
 	{
 		if (outputBits <= 7 && outputBits >= 0)
@@ -182,9 +162,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#setLEDs(int, int, int)
-	 */
+	@Override
 	public byte[] setLEDs(int LEDBits, int color, int intensity)
 	{
 		if (LEDBits <= 10 && LEDBits >= 0)
@@ -203,17 +181,13 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Song()
-	 */
+	@Override
 	public byte[] song()
 	{
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Play(int)
-	 */
+	@Override
 	public byte[] play(int songNumber)
 	{
 		if (songNumber <= 15 && songNumber >= 0)
@@ -229,9 +203,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#CoverAndDock()
-	 */
+	@Override
 	public byte[] coverAndDock()
 	{
 		byte[] data = new byte[1];
@@ -239,9 +211,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#PMWLowSideDrivers(int, int, int)
-	 */
+	@Override
 	public byte[] PMWLowSideDrivers(int lsd2, int lsd1, int lsd0)
 	{
 		if (lsd0 <= 128 && lsd0 >= 0 &&
@@ -262,9 +232,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#DriveDirect(int, int, int, int)
-	 */
+	@Override
 	public byte[] driveDirect(int right, int left)
 	{
 		if (right >= -500 && right <= 500 &&
@@ -275,11 +243,11 @@ public class CommandSetImpl implements CommandSet
 			
 			data[0] = (byte)145;
 			
-			conversion = ConvertToByte(right);
+			conversion = intToByte(right);
 			data[1] = conversion[0];
 			data[2] = conversion[1];
 			
-			conversion = ConvertToByte(left);
+			conversion = intToByte(left);
 			data[3] = conversion[0];
 			data[4] = conversion[1];
 			
@@ -292,9 +260,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#DigitalOutputs(int)
-	 */
+	@Override
 	public byte[] digitalOutputs(int outputBits)
 	{
 		if (outputBits <= 7 && outputBits >= 0)
@@ -312,9 +278,7 @@ public class CommandSetImpl implements CommandSet
 	}
 	
 		
-	/* (non-Javadoc)
-	 * @see CommandSet#PauseResumeStream(int)
-	 */
+	@Override
 	public byte[] pauseResumeStream(int range)
 	{
 		if (range == 0 || range == 1)
@@ -331,9 +295,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#SendIR(int)
-	 */
+	@Override
 	public byte[] sendIR(int value)
 	{
 		if (value <= 255 && value >= 0)
@@ -350,17 +312,13 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#Script()
-	 */
+	@Override
 	public byte[] script()
 	{
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#PlayScript()
-	 */
+	@Override
 	public byte[] playScript()
 	{
 		byte[] data = new byte[1];
@@ -368,9 +326,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#StopScript()
-	 */
+	@Override
 	public byte[] showScript()
 	{
 		byte[] data = new byte[1];
@@ -378,9 +334,7 @@ public class CommandSetImpl implements CommandSet
 		return data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#WaitTime(int)
-	 */
+	@Override
 	public byte[] waitTime(int time)
 	{
 		// Note: Time is measured in tenths of a second.
@@ -398,9 +352,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#WaitDistance(int, int)
-	 */
+	@Override
 	public byte[] waitDistance(int distance)
 	{
 		if (distance <= 32768 && distance >= -32768)
@@ -410,7 +362,7 @@ public class CommandSetImpl implements CommandSet
 			
 			data[0] = (byte)156;
 			
-			conversion = ConvertToByte(distance);
+			conversion = intToByte(distance);
 			data[1] = conversion[0];
 			data[2] = conversion[1];
 			return data;
@@ -422,9 +374,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#WaitAngle(int, int)
-	 */
+	@Override
 	public byte[] waitAngle(int angle)
 	{
 		if (angle <= 32768 && angle >= -32768)
@@ -434,7 +384,7 @@ public class CommandSetImpl implements CommandSet
 			
 			data[0] = (byte)157;
 			
-			conversion = ConvertToByte(angle);
+			conversion = intToByte(angle);
 			data[1] = conversion[0];
 			data[2] = conversion[1];
 			return data;
@@ -446,9 +396,7 @@ public class CommandSetImpl implements CommandSet
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see CommandSet#WaitEvent(int)
-	 */
+	@Override
 	public byte[] waitEvent(int eventID)
 	{
 		if (eventID <= 20 && eventID >= -20 && eventID != 0)

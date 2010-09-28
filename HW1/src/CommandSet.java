@@ -180,12 +180,24 @@ public interface CommandSet
 	public byte[] waitEvent(int eventID);
 	
 	/**
-	 * 
-	 * @param packetId
+	 * Query the value of a single sensor (or sensor group)
+	 * @param packetId the sensor to read
 	 * @return the relevant command
 	 */
 	public byte[] querySingleSensor(SensorData.PACKET_IDS packetId);
+	
+	/**
+	 * Query the values of a list of sensors (and/or sensor groups)
+	 * @param packetIds the sensors to read
+	 * @return the relevant command
+	 */
 	public byte[] querySensorList(SensorData.PACKET_IDS[] packetIds);
+	
+	/**
+	 * Stream the values of a list of sensors (and/or sensor groups)
+	 * @param packetIds the sensors to read
+	 * @return the relevant command
+	 */
 	public byte[] streamSensorList(SensorData.PACKET_IDS[] packetIds);
 
 }

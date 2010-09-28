@@ -6,9 +6,19 @@ import java.util.Arrays;
  * @author Mike Hernandez
  * @author Benjamin Ludman
  */
-
 public class Robot 
 {
+	/*
+	 * Note: Some of these methods are analagous to those specified in CommandSet.java. 
+	 * Please refer to that file for the documentation of each method. For any additional
+	 * methods, documentation has been specified in this file.
+	 */
+	
+	
+	
+
+
+
 	/** OpenCommPort object that allows communication with the iRobot Create. */
 	private OpenCommPort ocp;
 	
@@ -28,12 +38,12 @@ public class Robot
 		sensors = new SensorData();
 	}
 	
-	/**
-	 * Note: Some of these methods are analagous to those specified in CommandSet.java. 
-	 * Please refer to that file for the documentation of each method. For any additional
-	 * methods, documentation has been specified in this file.
-	 */
 	
+	
+	/**
+	 * Set up the commincation interface with the robot
+	 * @return
+	 */
 	public boolean setup()
 	{
 		if(ocp.setUpBam() == 0)
@@ -42,6 +52,7 @@ public class Robot
 		return false;
 	}
 	
+	/** Start the open interface with the robo. Should be called before sending commands */
 	public void start()
 	{ 
 		ocp.write(commandSet.start());
@@ -57,11 +68,17 @@ public class Robot
 		ocp.write(commandSet.control());
 	}
 
+	/**
+	 * Put the robot into safe mode
+	 */
 	public void safe()
 	{
 		ocp.write(commandSet.safe());
 	}
 
+	/**
+	 * Put the robot into full mode
+	 */
 	public void full()
 	{
 		ocp.write(commandSet.full());
@@ -258,12 +275,28 @@ public class Robot
 	 */
 	public byte[] readWallsAndCliffs()
 	{
+		byte firstSensorPacket = 8;
+		byte lastSensorPacket = 13;
+		int numberOfSensors= lastSensorPacket - firstSensorPacket +1;
 		byte[] returned = new byte[6];
 		byte[] command = new byte[2];
 		command[0] = (byte)142;
 		byte[] recieved = new byte[1];
-	
+			
 		
+		//TODO: Test this loop to make sure consistent with below
+		for(byte i=0;i<numberOfSensors;i++)
+		{
+			command[1] = (byte)(firstSensorPacket+i);
+			for (int j = 0; j < BUFFER_FLUSH_ITTERATION_SIZE; j++)
+			{
+				ocp.write(command);
+				ocp.read(recieved);
+			}
+			returned[i] = recieved[0];
+		}
+		
+		/*//TODO: Delete this if the above loop works as expected
 		command[1] = (byte)8;
 		for (int i = 0; i < BUFFER_FLUSH_ITTERATION_SIZE; i++)
 		{
@@ -311,16 +344,25 @@ public class Robot
 			ocp.read(recieved);
 		}
 		returned[5] = recieved[0];
+		*/
 	
 		return returned;
 	}
 	
 	
-	
+	/* Ordinal represents the bit in the BUMPS_AND_WHEEL_DROPS sensor data's byte value */
+	public static enum BUMPS_AND_WHEEL_DROPS{
+		BUMP_RIGHT,			//bit 0
+		BUMP_LEFT,			//bit 1
+		WHEEL_DROP_RIGHT,	//bit 2
+		WHEEL_DROP_LEFT,	//bit 3
+		WHEEL_DROP_CASTER	//bit 4
+		/* Ignore bits 5-7 */
+	}
 	
 	/*---------------------------------------------------------------------------
 	 * Cleaner interface for dealing with sensors.
-	 * Does not flush buffer and thus as issues with getting sensor data
+	 * Does not flush buffer and thus has issues with getting sensor data
 	 *---------------------------------------------------------------------------*/
 	
 	

@@ -2385,3 +2385,6 @@ org.eclipse.jface.text.templates.TemplateException: Pattern is not a valid Java 
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:559)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:514)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1311)
+
+!ENTRY org.eclipse.compare 4 1 2010-09-28 03:31:43.936
+!MESSAGE content type 'jasko.tim.lisp.lispSource' not found

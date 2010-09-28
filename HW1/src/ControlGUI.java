@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 public class ControlGUI extends JPanel implements ActionListener
 {
+	private static final long serialVersionUID = 4428024130270567883L;
 	protected Robot robot = new Robot();
 	protected JButton Forward, Backward, Stop, TurnLeft, TurnRight, OpenPort, Mode, ReadSensors, Square;
 	protected JTextField TurnDegreeBox, MoveDistanceBox, MoveVelocityBox;
@@ -24,6 +25,7 @@ public class ControlGUI extends JPanel implements ActionListener
 	protected JSlider WALL_SIGNAL_Slider;
 	protected JLabel WALL_SIGNAL_Label;
 	protected JPanel Controls, Options[], AllOptions, SensorsBoolean, SensorsNumerical, Other;
+	protected boolean loggingEnabled=true;
 	
 	protected int moveVelocityValue = 100, moveDistanceValue, turnDegreeValue;
 	
@@ -179,15 +181,15 @@ public class ControlGUI extends JPanel implements ActionListener
 		
 		// Add checkboxes to the panel
 		SensorsBoolean = new JPanel(new GridLayout(6, 2));
-		SensorsBoolean.add(BUMP_RIGHT);
 		SensorsBoolean.add(BUMP_LEFT);
-		SensorsBoolean.add(WHEEL_DROP_RIGHT);
+		SensorsBoolean.add(BUMP_RIGHT);
 		SensorsBoolean.add(WHEEL_DROP_LEFT);
+		SensorsBoolean.add(WHEEL_DROP_RIGHT);
 		SensorsBoolean.add(WHEEL_DROP_CASTER);
 		SensorsBoolean.add(WALL);
-		SensorsBoolean.add(CLIFF_LEFT);
 		SensorsBoolean.add(CLIFF_FRONT_LEFT);
 		SensorsBoolean.add(CLIFF_FRONT_RIGHT);
+		SensorsBoolean.add(CLIFF_LEFT);
 		SensorsBoolean.add(CLIFF_RIGHT);
 		SensorsBoolean.add(VIRTUAL_WALL);
 		
@@ -213,6 +215,7 @@ public class ControlGUI extends JPanel implements ActionListener
 		this.add(SensorsBoolean);
 		this.add(SensorsNumerical);
 		this.add(Other);
+		
 	}
 	
 	public void generateGUI()
@@ -236,10 +239,12 @@ public class ControlGUI extends JPanel implements ActionListener
 		if (e.getActionCommand().equals("Open"))
 		{
 			boolean setupStatus=robot.setup();
-			message.setText("Setting up robot: " + setupStatus);
+			log("Setting up robot: " + setupStatus);
+			
 			if(setupStatus)
 			{
 				robot.start();
+				log("Open interface started");
 				OpenPort.setEnabled(false);
 			}
 			
@@ -401,23 +406,23 @@ public class ControlGUI extends JPanel implements ActionListener
 		// Read Sensors
 		if (e.getActionCommand().equals("Read"))
 		{
-			
+			log("Reading sensor data");
 			clearCheckboxes();
 			
 			byte[] data = new byte[1];
 			data = robot.readBumpsAndWheelDrops();
-			System.out.println(String.valueOf(Arrays.toString(data)));
+			log(String.valueOf(Arrays.toString(data)));
 			
-			WHEEL_DROP_CASTER.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_CASTER, data[0]));
-			WHEEL_DROP_LEFT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_LEFT, data[0]));
-			WHEEL_DROP_RIGHT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_RIGHT, data[0]));
-			BUMP_LEFT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.BUMP_LEFT, data[0]));
-			BUMP_RIGHT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.BUMP_RIGHT, data[0]));
+			WHEEL_DROP_CASTER.setSelected(getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_CASTER, data[0]));
+			WHEEL_DROP_LEFT.setSelected(getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_LEFT, data[0]));
+			WHEEL_DROP_RIGHT.setSelected(getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_RIGHT, data[0]));
+			BUMP_LEFT.setSelected(getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.BUMP_LEFT, data[0]));
+			BUMP_RIGHT.setSelected(getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.BUMP_RIGHT, data[0]));
 		
 			
 			data = new byte[6];
 			data = robot.readWallsAndCliffs();
-			System.out.println(String.valueOf(Arrays.toString(data)));
+			log(String.valueOf(Arrays.toString(data)));
 			
 			WALL.setSelected(byteToBool(data[0]));
 			CLIFF_LEFT.setSelected(byteToBool(data[1]));
@@ -432,7 +437,7 @@ public class ControlGUI extends JPanel implements ActionListener
 			int convertedData=(int)(data[0] << 8) + data[1];
 			WALL_SIGNAL_Slider.setValue(convertedData);
 			WALL_SIGNAL_Label.setText("WALL_SIGNAL: "+convertedData);
-			System.out.println(Arrays.toString(data)+"convertedData: "+convertedData);
+			log(Arrays.toString(data)+"convertedData: "+convertedData);
 		}
 		
 		// Square
@@ -448,8 +453,22 @@ public class ControlGUI extends JPanel implements ActionListener
 		// Safe Mode
 		if (e.getActionCommand().equals("Mode"))
 		{
+			log("Initiating safe mode");
 			robot.safe();
 		}
+	}
+
+	/**
+	 * Log a message for the user
+	 * @param messageText
+	 */
+	private void log(String messageText) 
+	{
+		if(!loggingEnabled)
+			return;
+		
+		message.setText(message.getText()+"\n"+messageText);
+		System.out.println(messageText);
 	}
 
 	/**
@@ -470,28 +489,18 @@ public class ControlGUI extends JPanel implements ActionListener
 	}
 	
 	/**
-	 * Get the boolean value of a specific sensor in the BUMPS_AND_WHEEL_DROPS sesor packet 
-	 * @param sensor
+	 * Get the boolean value of a specific sensor in the BUMPS_AND_WHEEL_DROPS sensor packet 
+	 * @param sensor the sensor to read
+	 * @param rawData the raw data from which to interpret the value
 	 * @return
 	 */
-	public static boolean getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS sensor, byte data){
+	public static boolean getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS sensor, byte rawData){
 		/*
 		 * Get the raw value of the BUMPS_AND_WHEEL_DROPS sensor and then parse the
 		 * specific sensor boolean value using a bitwise AND to get the desired bit
 		 */
-		return (data & (1<<sensor.ordinal()))==0?false:true;
+		return (rawData & (1<<sensor.ordinal()))==0?false:true;
 	}
-	
-	
-	/* Ordinal represents the bit in the BUMPS_AND_WHEEL_DROPS sensor data's byte value */
-	public static enum BUMPS_AND_WHEEL_DROPS{
-		BUMP_RIGHT,			//bit 0
-		BUMP_LEFT,			//bit 1
-		WHEEL_DROP_RIGHT,	//bit 2
-		WHEEL_DROP_LEFT,	//bit 3
-		WHEEL_DROP_CASTER	//bit 4
-		/* Ignore bits 5-7 */
-	};
 	
 	
 	/** Convert a byte to a boolean where x==0->false, otherwise true */
