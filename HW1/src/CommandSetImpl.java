@@ -37,7 +37,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Start()
 	 */
-	public byte[] Start()
+	public byte[] start()
 	{
 		byte[] data = new byte[1];		
 		data[0] = (byte)128;		
@@ -47,7 +47,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Baud(int)
 	 */
-	public byte[] Baud(int baudCode)
+	public byte[] baud(int baudCode)
 	{
 		if (baudCode < 256)
 		{		
@@ -67,7 +67,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Control()
 	 */
-	public byte[] Control()
+	public byte[] control()
 	{
 		byte[] data = new byte[1];	
 		data[0] = (byte)130;	
@@ -77,7 +77,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Safe()
 	 */
-	public byte[] Safe()
+	public byte[] safe()
 	{
 		byte[] data = new byte[1];	
 		data[0] = (byte)131;	
@@ -85,9 +85,9 @@ public class CommandSetImpl implements CommandSet
 	}
 	
 	/* (non-Javadoc)
-	 * @see CommandSet#Full()
+	 * @see CommandSet#full()
 	 */
-	public byte[] Full()
+	public byte[] full()
 	{
 		byte[] data = new byte[1];
 		data[0] = (byte)132;
@@ -95,9 +95,9 @@ public class CommandSetImpl implements CommandSet
 	}
 	
 	/* (non-Javadoc)
-	 * @see CommandSet#Spot()
+	 * @see CommandSet#spot()
 	 */
-	public byte[] Spot()
+	public byte[] spot()
 	{
 		byte[] data = new byte[1];
 		data[0] = (byte)134;
@@ -107,7 +107,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Cover()
 	 */
-	public byte[] Cover()
+	public byte[] cover()
 	{
 		byte[] data = new byte[1];
 		data[0] = (byte)135;
@@ -117,7 +117,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Demo(int)
 	 */
-	public byte[] Demo(int demoMode)
+	public byte[] demo(int demoMode)
 	{
 		if (demoMode <= 9 && demoMode >= -1)
 		{
@@ -136,7 +136,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Drive(int, int, int, int)
 	 */
-	public byte[] Drive(int velocity, int radius)
+	public byte[] drive(int velocity, int radius)
 	{
 		if (velocity >= -500 && velocity <= 500 &&
 				radius >= -2000 && radius <= 2000)
@@ -166,7 +166,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#LowSideDrivers(int)
 	 */
-	public byte[] LowSideDrivers(int outputBits)
+	public byte[] lowSideDrivers(int outputBits)
 	{
 		if (outputBits <= 7 && outputBits >= 0)
 		{
@@ -183,9 +183,9 @@ public class CommandSetImpl implements CommandSet
 	}
 	
 	/* (non-Javadoc)
-	 * @see CommandSet#LEDs(int, int, int)
+	 * @see CommandSet#setLEDs(int, int, int)
 	 */
-	public byte[] LEDs(int LEDBits, int color, int intensity)
+	public byte[] setLEDs(int LEDBits, int color, int intensity)
 	{
 		if (LEDBits <= 10 && LEDBits >= 0)
 		{
@@ -206,7 +206,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Song()
 	 */
-	public byte[] Song()
+	public byte[] song()
 	{
 		return null;
 	}
@@ -214,7 +214,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Play(int)
 	 */
-	public byte[] Play(int songNumber)
+	public byte[] play(int songNumber)
 	{
 		if (songNumber <= 15 && songNumber >= 0)
 		{
@@ -232,7 +232,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#CoverAndDock()
 	 */
-	public byte[] CoverAndDock()
+	public byte[] coverAndDock()
 	{
 		byte[] data = new byte[1];
 		data[0] = (byte)143;
@@ -265,7 +265,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#DriveDirect(int, int, int, int)
 	 */
-	public byte[] DriveDirect(int right, int left)
+	public byte[] driveDirect(int right, int left)
 	{
 		if (right >= -500 && right <= 500 &&
 				left >= -500 && left <= 500)
@@ -295,7 +295,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#DigitalOutputs(int)
 	 */
-	public byte[] DigitalOutputs(int outputBits)
+	public byte[] digitalOutputs(int outputBits)
 	{
 		if (outputBits <= 7 && outputBits >= 0)
 		{
@@ -315,7 +315,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#PauseResumeStream(int)
 	 */
-	public byte[] PauseResumeStream(int range)
+	public byte[] pauseResumeStream(int range)
 	{
 		if (range == 0 || range == 1)
 		{
@@ -334,7 +334,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#SendIR(int)
 	 */
-	public byte[] SendIR(int value)
+	public byte[] sendIR(int value)
 	{
 		if (value <= 255 && value >= 0)
 		{
@@ -353,7 +353,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#Script()
 	 */
-	public byte[] Script()
+	public byte[] script()
 	{
 		return null;
 	}
@@ -361,7 +361,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#PlayScript()
 	 */
-	public byte[] PlayScript()
+	public byte[] playScript()
 	{
 		byte[] data = new byte[1];
 		data[0] = (byte)153;
@@ -371,7 +371,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#StopScript()
 	 */
-	public byte[] ShowScript()
+	public byte[] showScript()
 	{
 		byte[] data = new byte[1];
 		data[0] = (byte)154;
@@ -381,7 +381,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#WaitTime(int)
 	 */
-	public byte[] WaitTime(int time)
+	public byte[] waitTime(int time)
 	{
 		// Note: Time is measured in tenths of a second.
 		if (time <= 255 && time >= 0)
@@ -401,7 +401,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#WaitDistance(int, int)
 	 */
-	public byte[] WaitDistance(int distance)
+	public byte[] waitDistance(int distance)
 	{
 		if (distance <= 32768 && distance >= -32768)
 		{
@@ -425,7 +425,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#WaitAngle(int, int)
 	 */
-	public byte[] WaitAngle(int angle)
+	public byte[] waitAngle(int angle)
 	{
 		if (angle <= 32768 && angle >= -32768)
 		{
@@ -449,7 +449,7 @@ public class CommandSetImpl implements CommandSet
 	/* (non-Javadoc)
 	 * @see CommandSet#WaitEvent(int)
 	 */
-	public byte[] WaitEvent(int eventID)
+	public byte[] waitEvent(int eventID)
 	{
 		if (eventID <= 20 && eventID >= -20 && eventID != 0)
 		{
@@ -516,9 +516,12 @@ public class CommandSetImpl implements CommandSet
 	}
 
 	public class NotImplementedException extends RuntimeException{
-		 public NotImplementedException(String message) {
+		private static final long serialVersionUID = -9071240201017346038L;
+		public NotImplementedException(String message) {
          super(message);
       }
 		public NotImplementedException() {}
-	};
+	}
+
+
 }

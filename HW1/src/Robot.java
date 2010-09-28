@@ -44,73 +44,73 @@ public class Robot
 	
 	public void Start()
 	{ 
-		ocp.write(commandSet.Start());
+		ocp.write(commandSet.start());
 	}
 
 	public void Baud(int baudCode)
 	{
-		ocp.write(commandSet.Baud(baudCode));
+		ocp.write(commandSet.baud(baudCode));
 	}
 
 	public void Control()
 	{
-		ocp.write(commandSet.Control());
+		ocp.write(commandSet.control());
 	}
 
 	public void Safe()
 	{
-		ocp.write(commandSet.Safe());
+		ocp.write(commandSet.safe());
 	}
 
 	public void Full()
 	{
-		ocp.write(commandSet.Full());
+		ocp.write(commandSet.full());
 	}
 
 	public void Spot()
 	{
-		ocp.write(commandSet.Spot());
+		ocp.write(commandSet.spot());
 	}
 
 	public void Cover()
 	{
-		ocp.write(commandSet.Cover());
+		ocp.write(commandSet.cover());
 	}
 
 	public void Demo(int demoMode)
 	{
-		ocp.write(commandSet.Demo(demoMode));
+		ocp.write(commandSet.demo(demoMode));
 	}
 
 	public void Drive(int velocity, int radius)
 	{ 
-		ocp.write(commandSet.Drive(velocity, radius));
+		ocp.write(commandSet.drive(velocity, radius));
 	}
 
 	public byte LowSideDrivers(int outputBits)
 	{
-		ocp.write(commandSet.LowSideDrivers(outputBits));
+		ocp.write(commandSet.lowSideDrivers(outputBits));
 		return (byte)outputBits;
 	}
 
 	public void LEDs(int LEDBits, int color, int intensity)
 	{
-		ocp.write(commandSet.LEDs(LEDBits, color, intensity));
+		ocp.write(commandSet.setLEDs(LEDBits, color, intensity));
 	}
 
 	public void Song()
 	{
-		ocp.write(commandSet.Song());
+		ocp.write(commandSet.song());
 	}
 
 	public void Play(int songNumber)
 	{
-		ocp.write(commandSet.Play(songNumber));
+		ocp.write(commandSet.play(songNumber));
 	}
 
 	public void CoverAndDock()
 	{
-		ocp.write(commandSet.CoverAndDock());
+		ocp.write(commandSet.coverAndDock());
 	}
 
 	public void PMWLowSideDrivers(int lsd2, int lsd1, int lsd0)
@@ -120,58 +120,58 @@ public class Robot
 
 	public void DriveDirect(int right, int left)
 	{
-		ocp.write(commandSet.DriveDirect(right, left));
+		ocp.write(commandSet.driveDirect(right, left));
 	}
 
 	public byte DigitalOutputs(int outputBits)
 	{
-		ocp.write(commandSet.DigitalOutputs(outputBits));
+		ocp.write(commandSet.digitalOutputs(outputBits));
 		return (byte)outputBits;
 	}
 
 	public void PauseResumeStream(int range)
 	{
-		ocp.write(commandSet.PauseResumeStream(range));
+		ocp.write(commandSet.pauseResumeStream(range));
 	}
 
 	public void SendIR(int value)
 	{
-		ocp.write(commandSet.SendIR(value));
+		ocp.write(commandSet.sendIR(value));
 	}
 
 	public void Script()
 	{
-		ocp.write(commandSet.Script());
+		ocp.write(commandSet.script());
 	}
 
 	public void PlayScript()
 	{
-		ocp.write(commandSet.PlayScript());
+		ocp.write(commandSet.playScript());
 	}
 
 	public void ShowScript()
 	{
-		ocp.write(commandSet.ShowScript());
+		ocp.write(commandSet.showScript());
 	}
 
 	public void WaitTime(int time)
 	{
-		ocp.write(commandSet.WaitTime(time));
+		ocp.write(commandSet.waitTime(time));
 	}
 
 	public void WaitDistance(int distance)
 	{
-		ocp.write(commandSet.WaitDistance(distance));
+		ocp.write(commandSet.waitDistance(distance));
 	}
 
 	public void WaitAngle(int angle)
 	{
-		ocp.write(commandSet.WaitAngle(angle));
+		ocp.write(commandSet.waitAngle(angle));
 	}
 
 	public void WaitEvent(int eventID)
 	{
-		ocp.write(commandSet.WaitEvent(eventID));
+		ocp.write(commandSet.waitEvent(eventID));
 	}
 	
 	/**
@@ -184,12 +184,12 @@ public class Robot
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			ocp.write(commandSet.DriveDirect(moveVelocityValue, moveVelocityValue));
-			ocp.write(commandSet.WaitDistance(moveDistanceValue));
-			ocp.write(commandSet.DriveDirect(moveVelocityValue, -moveVelocityValue));
-			ocp.write(commandSet.WaitAngle(90));
+			ocp.write(commandSet.driveDirect(moveVelocityValue, moveVelocityValue));
+			ocp.write(commandSet.waitDistance(moveDistanceValue));
+			ocp.write(commandSet.driveDirect(moveVelocityValue, -moveVelocityValue));
+			ocp.write(commandSet.waitAngle(90));
 		}
-		ocp.write(commandSet.DriveDirect(0, 0));
+		ocp.write(commandSet.driveDirect(0, 0));
 	}
 	
 	/**
@@ -197,7 +197,7 @@ public class Robot
 	 */
 	public void Stop()
 	{
-		ocp.write(commandSet.DriveDirect(0, 0));
+		ocp.write(commandSet.driveDirect(0, 0));
 	}
 	
 	public byte[] ReadBumpsAndWheelDrops()

@@ -401,19 +401,8 @@ public class ControlGUI extends JPanel implements ActionListener
 		// Read Sensors
 		if (e.getActionCommand().equals("Read"))
 		{
-			// robot.flushReadData();
 			
-			BUMP_RIGHT.setSelected(false);
-			BUMP_LEFT.setSelected(false);
-			WHEEL_DROP_RIGHT.setSelected(false);
-			WHEEL_DROP_LEFT.setSelected(false);
-			WHEEL_DROP_CASTER.setSelected(false);
-			WALL.setSelected(false);
-			CLIFF_LEFT.setSelected(false);
-			CLIFF_FRONT_LEFT.setSelected(false);
-			CLIFF_FRONT_RIGHT.setSelected(false);
-			CLIFF_RIGHT.setSelected(false);
-			VIRTUAL_WALL.setSelected(false);
+			clearCheckboxes();
 			
 			byte[] data = new byte[1];
 			data = robot.ReadBumpsAndWheelDrops();
@@ -461,6 +450,23 @@ public class ControlGUI extends JPanel implements ActionListener
 		{
 			robot.Safe();
 		}
+	}
+
+	/**
+	 * Clear the sensor display checkboxes
+	 */
+	private void clearCheckboxes() {
+		BUMP_RIGHT.setSelected(false);
+		BUMP_LEFT.setSelected(false);
+		WHEEL_DROP_RIGHT.setSelected(false);
+		WHEEL_DROP_LEFT.setSelected(false);
+		WHEEL_DROP_CASTER.setSelected(false);
+		WALL.setSelected(false);
+		CLIFF_LEFT.setSelected(false);
+		CLIFF_FRONT_LEFT.setSelected(false);
+		CLIFF_FRONT_RIGHT.setSelected(false);
+		CLIFF_RIGHT.setSelected(false);
+		VIRTUAL_WALL.setSelected(false);
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 import java.util.Arrays;
 
 /**
+ * Parses and stores iRobot Create sensor data
  * @author Benjamin Ludman
  * @author Mike Hernandez
  *
@@ -72,8 +73,6 @@ public class SensorData {
 		
 	}
 		
-
-	
 	
 	/**
 	 * Convert the raw sensor data read from the robot to the persistent internal version
@@ -538,10 +537,10 @@ public class SensorData {
 
 	/**
 	 * Give a user of the class a buffer of the proper size to write the raw data into for parsing
-	 * IMPLEMENTATION NOTE: This is allocated every time the command for the sensor data is set
 	 * @return the buffer
 	 */
 	public byte[] getReadBuffer() {
+		/* IMPLEMENTATION NOTE: This is allocated every time the command for the sensor data is set */
 		return rawSensorData;
 	}
 	
