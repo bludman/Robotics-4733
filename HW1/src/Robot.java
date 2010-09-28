@@ -348,5 +348,22 @@ public class Robot
 		
 		
 	}
+
+	public byte[] readWallSignal() 
+	{
+		byte[] data = new byte[2];
+		data[0] = (byte)142;
+		data[1] = (byte)27;
+		byte[] recieved = new byte[2];
+		
+		for (int i = 0; i < 200; i++)
+		{
+			recieved = new byte[2];
+			ocp.write(data);
+			ocp.read(recieved);
+		}
+		
+		return recieved;
+	}
 	
 }

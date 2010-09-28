@@ -426,57 +426,24 @@ public class ControlGUI extends JPanel implements ActionListener
 			BUMP_RIGHT.setSelected(getBumpOrWheelDropStatus(BUMPS_AND_WHEEL_DROPS.BUMP_RIGHT, data[0]));
 		
 			
-			if (data[0] >= (byte)16)
-			{
-				WHEEL_DROP_CASTER.setSelected(true);
-				data[0] -= (byte)16;
-			}
-			if (data[0] >= (byte)8)
-			{
-				WHEEL_DROP_LEFT.setSelected(true);
-				data[0] -= (byte)8;
-			}
-			if (data[0] >= (byte)4)
-			{
-				WHEEL_DROP_RIGHT.setSelected(true);
-				data[0] -= (byte)4;
-			}
-			if (data[0] >= (byte)2)
-			{
-				WHEEL_DROP_LEFT.setSelected(true);
-				data[0] -= (byte)2;
-			}
-			if (data[0] > (byte)1)
-			{
-				WHEEL_DROP_CASTER.setSelected(true);
-				data[0] -= (byte)1;
-			}
-			
 			data = new byte[6];
 			data = robot.ReadWallsAndCliffs();
 			System.out.println(String.valueOf(Arrays.toString(data)));
 			
-			WALL.setEnabled(byteToBool(data[0]));
-			CLIFF_LEFT.setEnabled(byteToBool(data[1]));
-			CLIFF_FRONT_LEFT.setEnabled(byteToBool(data[2]));
-			CLIFF_FRONT_RIGHT.setEnabled(byteToBool(data[3]));
-			CLIFF_RIGHT.setEnabled(byteToBool(data[4]));
-			VIRTUAL_WALL.setEnabled(byteToBool(data[5]));
+			WALL.setSelected(byteToBool(data[0]));
+			CLIFF_LEFT.setSelected(byteToBool(data[1]));
+			CLIFF_FRONT_LEFT.setSelected(byteToBool(data[2]));
+			CLIFF_FRONT_RIGHT.setSelected(byteToBool(data[3]));
+			CLIFF_RIGHT.setSelected(byteToBool(data[4]));
+			VIRTUAL_WALL.setSelected(byteToBool(data[5]));
 			
-			/*
-			// Read sensors
-			// Set values for checkboxes
-			// Set values for sliders
-			//SensorData.PACKET_IDS[] packets= {SensorData.PACKET_IDS.BUMPS_AND_WHEEL_DROPS};
-			System.out.println("Grabbing sensor data!");
-			robot.querySingleSensor(SensorData.PACKET_IDS.BUMPS_AND_WHEEL_DROPS);
-			System.out.println("Bump right: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.BUMP_RIGHT));
-			System.out.println("Bump left: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.BUMP_LEFT));
-			System.out.println("Wheel drop right: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_RIGHT));
-			System.out.println("Wheel drop left: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_LEFT));
-			System.out.println("Wheel drop caster: "+robot.getBumpOrWheelDropStatus(SensorData.BUMPS_AND_WHEEL_DROPS.WHEEL_DROP_CASTER));
-			*/
 			
+			data = new byte[2];
+			data = robot.readWallSignal();
+			int convertedData=(int)(data[0] << 8) + data[1];
+			WALL_SIGNAL_Slider.setValue(convertedData);
+			WALL_SIGNAL_Label.setText("WALL_SIGNAL: "+convertedData);
+			System.out.println(Arrays.toString(data)+"convertedData: "+convertedData);
 		}
 		
 		// Square
