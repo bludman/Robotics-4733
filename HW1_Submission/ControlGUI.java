@@ -508,6 +508,20 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		if (e.getKeyCode()==KeyEvent.VK_UP)
+			robot.stop();
+		else if (e.getKeyCode()==KeyEvent.VK_DOWN)
+			robot.stop();
+		else if (e.getKeyCode()==KeyEvent.VK_LEFT)
+			robot.stop();
+		else if (e.getKeyCode()==KeyEvent.VK_RIGHT)
+			robot.stop();
+		else if (e.getKeyCode()==KeyEvent.VK_SPACE)
+			robot.stop();
+		else if (e.getKeyCode()==KeyEvent.VK_EQUALS)
+			robot.stop();
+		else if (e.getKeyCode()==KeyEvent.VK_MINUS)
+			robot.stop();
 	}
 
 	@Override

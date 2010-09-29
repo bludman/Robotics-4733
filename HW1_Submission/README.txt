@@ -9,6 +9,7 @@ Fun Secret Features:
 	+ and - keys will change the velocity by 50 
 		(only goes into effect when you send another drive command)
 	if "Mode" button has focus you can use the arrow keys to drive the robot freestyle
+		space bar will sends stop, and will reset to safe mode if wheels drop when doing a wheely
 
 Included files:
 CommandSet.java

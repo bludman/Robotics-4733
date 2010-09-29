@@ -2,9 +2,9 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="257" key="DIALOG_WIDTH"/>
-		<item value="162" key="DIALOG_Y_ORIGIN"/>
+		<item value="118" key="DIALOG_Y_ORIGIN"/>
 		<item value="380" key="DIALOG_HEIGHT"/>
-		<item value="693" key="DIALOG_X_ORIGIN"/>
+		<item value="542" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
@@ -13,18 +13,19 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="" key="selection"/>
+		<item value="Stop" key="selection"/>
 		<list key="findhistory">
-			<item value="itera"/>
-			<item value="test"/>
-			<item value="sensors"/>
-			<item value="2"/>
-			<item value="SIGNEDNESS.SIGNED"/>
-			<item value="1"/>
-			<item value="safe"/>
-			<item value="void"/>
+			<item value="Stop"/>
+			<item value="KEY"/>
+			<item value="addKeyListener"/>
+			<item value="mode"/>
+			<item value="setaction"/>
+			<item value="Default Velocity"/>
+			<item value="actionco"/>
+			<item value="setaction "/>
 		</list>
 		<list key="replacehistory">
+			<item value=""/>
 			<item value="SIGNEDNESS.UNSIGNED"/>
 			<item value="SIGNEDNESS.SIGNED"/>
 			<item value="byte[]"/>
