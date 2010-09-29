@@ -7,12 +7,15 @@
 import javax.swing.*;
 
 
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Arrays;
 
-public class ControlGUI extends JPanel implements ActionListener
+public class ControlGUI extends JPanel implements ActionListener, KeyListener
 {
 	private static final long serialVersionUID = 4428024130270567883L;
 	protected Robot robot = new Robot();
@@ -27,7 +30,10 @@ public class ControlGUI extends JPanel implements ActionListener
 	protected JPanel Controls, Options[], AllOptions, SensorsBoolean, SensorsNumerical, Other;
 	protected boolean loggingEnabled=true;
 	
-	protected int moveVelocityValue = 100, moveDistanceValue, turnDegreeValue;
+	protected final static int defaultVelocity= 100;
+	protected int moveVelocityValue = defaultVelocity;
+	protected int moveDistanceValue = 0;
+	protected int turnDegreeValue = 0;
 	
 	public ControlGUI()
 	{
@@ -37,6 +43,7 @@ public class ControlGUI extends JPanel implements ActionListener
 				
 		Mode = new JButton("Mode");
 		Mode.setActionCommand("Mode");
+		Mode.addKeyListener(this);
 		
 		Forward = new JButton("Forward");
 		Forward.setActionCommand("Forward");
@@ -101,8 +108,11 @@ public class ControlGUI extends JPanel implements ActionListener
 		
 		// Text boxes classified under Options
 		MoveVelocityBox = new JTextField(5);
+			MoveVelocityBox.setText(Integer.toString(moveVelocityValue));
 		MoveDistanceBox = new JTextField(5);
+			MoveDistanceBox.setText(Integer.toString(moveDistanceValue));
 		TurnDegreeBox = new JTextField(5);
+			TurnDegreeBox.setText(Integer.toString(turnDegreeValue));
 		
 		// Adding the Options to the appropriate panel
 		Options = new JPanel[3];
@@ -216,6 +226,7 @@ public class ControlGUI extends JPanel implements ActionListener
 		this.add(SensorsNumerical);
 		this.add(Other);
 		
+		
 	}
 	
 	public void generateGUI()
@@ -254,14 +265,13 @@ public class ControlGUI extends JPanel implements ActionListener
 		if (e.getActionCommand().equals("Default Velocity"))
 		{
 			MoveVelocityBox.setEnabled(false);
-			moveVelocityValue = 100;
+			//moveVelocityValue = defaultVelocity;
 		}
 		
 		// Specified velocity selected
 		if (e.getActionCommand().equals("Specify Velocity"))
 		{
 			MoveVelocityBox.setEnabled(true);
-			MoveVelocityBox.setText("0");
 		}
 		
 		// Default distance selected
@@ -274,7 +284,6 @@ public class ControlGUI extends JPanel implements ActionListener
 		if (e.getActionCommand().equals("Specify Distance"))
 		{
 			MoveDistanceBox.setEnabled(true);
-			MoveDistanceBox.setText("0");
 		}
 		
 		// Default turn degrees selected
@@ -287,80 +296,48 @@ public class ControlGUI extends JPanel implements ActionListener
 		if (e.getActionCommand().equals("Specify Degree"))
 		{
 			TurnDegreeBox.setEnabled(true);
-			TurnDegreeBox.setText("0");
 		}
 		
 		// Turn Left
 		if (e.getActionCommand().equals("Turn Left"))
 		{
+			updateVelocity();
 			if (TurnDegreeBox.isEnabled())
 			{
 				turnDegreeValue = Integer.parseInt(TurnDegreeBox.getText());
-				if (turnDegreeValue < 0)
-				{
-					robot.driveDirect(-moveVelocityValue, moveVelocityValue);
-					robot.waitAngle(turnDegreeValue);
-					robot.stop();
-				}
-				else
-				{
-					robot.driveDirect(moveVelocityValue, -moveVelocityValue);
-					robot.waitAngle(turnDegreeValue);
-					robot.stop();
-				}
+				robot.turnDegrees(moveVelocityValue, turnDegreeValue);
 			}
 			else
 			{
-				robot.driveDirect(moveVelocityValue, -moveVelocityValue);
+				robot.turnInPlace(Robot.DIRECTION.LEFT, moveVelocityValue);
 			}
 		}
 		
 		// Turn Right
 		if (e.getActionCommand().equals("Turn Right"))
 		{
+			updateVelocity();
 			if (TurnDegreeBox.isEnabled())
 			{
-				if (turnDegreeValue < 0)
-				{
-					robot.driveDirect(-moveVelocityValue, moveVelocityValue);
-					robot.waitAngle(turnDegreeValue);
-					robot.stop();
-				}
-				else
-				{
-					robot.driveDirect(moveVelocityValue, -moveVelocityValue);
-					robot.waitAngle(turnDegreeValue);
-					robot.stop();
-				}
+				turnDegreeValue = Integer.parseInt(TurnDegreeBox.getText());
+				robot.turnDegrees(moveVelocityValue, turnDegreeValue);
 			}
 			else
 			{
-				robot.driveDirect(-moveVelocityValue, moveVelocityValue);
+				robot.turnInPlace(Robot.DIRECTION.RIGHT, moveVelocityValue);
 			}
 		}
 		
 		// Drive forward
 		if (e.getActionCommand().equals("Forward"))
 		{
-			if (MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
-			{
-				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
-				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				robot.driveDirect(moveVelocityValue, moveVelocityValue);
-				robot.waitDistance(moveDistanceValue);
-				robot.stop();
-			}
-			else if (MoveVelocityBox.isEnabled() && !MoveDistanceBox.isEnabled())
-			{
-				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
-				robot.driveDirect(moveVelocityValue, moveVelocityValue);
-			}
-			else if (!MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
+			
+			updateVelocity();
+			if (MoveDistanceBox.isEnabled())
 			{
 				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				robot.driveDirect(moveVelocityValue, moveVelocityValue);
-				robot.waitDistance(moveDistanceValue);
-				robot.stop();
+				robot.driveDistance(moveVelocityValue, moveDistanceValue);
+				
 			}
 			else
 			{
@@ -371,25 +348,12 @@ public class ControlGUI extends JPanel implements ActionListener
 		// Drive backwards
 		if (e.getActionCommand().equals("Backward"))
 		{
-			if (MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
-			{
-				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
-				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				robot.driveDirect(-moveVelocityValue, -moveVelocityValue);
-				robot.waitDistance(-moveDistanceValue);
-				robot.stop();
-			}
-			else if (MoveVelocityBox.isEnabled() && !MoveDistanceBox.isEnabled())
-			{
-				moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
-				robot.driveDirect(-moveVelocityValue, -moveVelocityValue);
-			}
-			else if (!MoveVelocityBox.isEnabled() && MoveDistanceBox.isEnabled())
+			updateVelocity();
+			if (MoveDistanceBox.isEnabled())
 			{
 				moveDistanceValue = Integer.parseInt(MoveDistanceBox.getText());
-				robot.driveDirect(-moveVelocityValue, -moveVelocityValue);
-				robot.waitDistance(-moveDistanceValue);
-				robot.stop();
+				robot.driveDistance(-moveVelocityValue, -moveDistanceValue);
+				
 			}
 			else
 			{
@@ -467,7 +431,7 @@ public class ControlGUI extends JPanel implements ActionListener
 		if(!loggingEnabled)
 			return;
 		
-		message.setText(message.getText()+"\n"+messageText);
+		message.setText(messageText+"\n"+message.getText());
 		System.out.println(messageText);
 	}
 
@@ -506,5 +470,47 @@ public class ControlGUI extends JPanel implements ActionListener
 	private static boolean byteToBool(byte x)
 	{
 		return x == 0 ? false : true;
+	}
+	
+	/**
+	 * Update the velocity
+	 */
+	private void updateVelocity()
+	{
+		if (MoveVelocityBox.isEnabled())
+			moveVelocityValue = Integer.parseInt(MoveVelocityBox.getText());
+		else
+			moveVelocityValue = defaultVelocity;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode()==KeyEvent.VK_UP)
+			actionPerformed(new ActionEvent(this,1,"Forward"));
+		else if (e.getKeyCode()==KeyEvent.VK_DOWN)
+			actionPerformed(new ActionEvent(this,1,"Backward"));
+		else if (e.getKeyCode()==KeyEvent.VK_LEFT)
+			actionPerformed(new ActionEvent(this,1,"Turn Left"));	
+		else if (e.getKeyCode()==KeyEvent.VK_RIGHT)
+			actionPerformed(new ActionEvent(this,1,"Turn Right"));
+		else if (e.getKeyCode()==KeyEvent.VK_SPACE)
+			actionPerformed(new ActionEvent(this,1,"Stop"));
+		else if (e.getKeyCode()==KeyEvent.VK_EQUALS){
+			MoveVelocityBox.setText(Integer.toString(Integer.parseInt(MoveVelocityBox.getText())+50));
+			actionPerformed(new ActionEvent(this,1,"Specify Velocity"));
+		}
+		else if (e.getKeyCode()==KeyEvent.VK_MINUS){
+			MoveVelocityBox.setText(Integer.toString(Integer.parseInt(MoveVelocityBox.getText())-50));
+			actionPerformed(new ActionEvent(this,1,"Specify Velocity"));
+		}
+			
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 }
