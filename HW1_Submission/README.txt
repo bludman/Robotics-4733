@@ -3,6 +3,13 @@ Computational Aspects of Robotics - COMS4733
 HW 1 - Robot 5
 Mike Hernandez [mph2121] and Benjamin Ludman [bsl2106]
 
+NOTE: Set your com port in OpenCommPort.java
+
+Fun Secret Features:
+	+ and - keys will change the velocity by 50 
+		(only goes into effect when you send another drive command)
+	if "Mode" button has focus you can use the arrow keys to drive the robot freestyle
+
 Included files:
 CommandSet.java
     Interface for the various low-level commands of the iRobot Create. This interface can easily be
@@ -32,7 +39,7 @@ OpenCommPort.java
     Borrowed heavily from the same project. This file creates the necessary input/output streams
     for interaction with the iRobot Create. In addition to this, the read and write methods have
     been included for data transfer. Within this file, one can change the necessary COM port.
-README
+README.txt
 	This file
 Robot.java
 	Main abstraction of a robot that should have a clean interface to work with from the GUI.

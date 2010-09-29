@@ -210,6 +210,54 @@ public class Robot
 		ocp.write(commandSet.driveDirect(0, 0));
 	}
 	
+	public static enum DIRECTION{RIGHT,LEFT};
+	
+	/**
+	 * Turn the robot in place
+	 * @param direction which way
+	 * @param speed how fast
+	 */
+	public void turnInPlace(DIRECTION direction, int speed){
+		if(direction==DIRECTION.RIGHT)
+			driveDirect(-speed, speed);
+		else if (direction==DIRECTION.LEFT)
+			driveDirect(speed, -speed);
+	}
+	
+	/**
+	 * Turn the robot in place a certain number of degrees
+	 * @param speed how fast
+	 * @param degrees how many
+	 */
+	public void turnDegrees(int speed, int degrees)
+	{
+		if (degrees < 0)
+		{
+			turnInPlace(DIRECTION.RIGHT, speed);
+			waitAngle(degrees);
+			stop();
+		}
+		else if(degrees > 0)
+		{
+			turnInPlace(DIRECTION.LEFT, speed);
+			waitAngle(degrees);
+			stop();
+		}
+	}
+	
+	/**
+	 * Drive straight a certain distance at a certain speed
+	 * NOTE: to go backwards, both speed and distance should be negative
+	 * @param speed
+	 * @param distance
+	 */
+	public void driveDistance(int speed, int distance)
+	{
+		driveDirect(speed, speed);
+		waitDistance(distance);
+		stop();
+	}
+	
 	/*---------------------------------------------------------------------------
 	 * Basic implementation of minimal sensor reading functions
 	 * Note: should be refactored to cleaner interface in the future
@@ -275,7 +323,6 @@ public class Robot
 		byte[] recieved = new byte[1];
 			
 		
-		// TODO: Test this loop to make sure consistent with below
 		for(byte i = 0; i < numberOfSensors; i++)
 		{
 			command[1] = (byte)(firstSensorPacket + i);
@@ -287,56 +334,7 @@ public class Robot
 			returned[i] = recieved[0];
 		}
 		
-        /*
-		// TODO: Delete this if the above loop works as expected
-		command[1] = (byte)8;
-		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
-		{
-			ocp.write(command);
-			ocp.read(recieved);
-		}
-		returned[0] = recieved[0];
-		
-		command[1] = (byte)9;
-		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
-		{ITERATION
-			ocp.write(command);
-			ocp.read(recieved);
-		}
-		returned[1] = recieved[0];
-		
-		command[1] = (byte)10;
-		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
-		{
-			ocp.write(command);
-			ocp.read(recieved);
-		}
-		returned[2] = recieved[0];
-		
-		command[1] = (byte)11;
-		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
-		{
-			ocp.write(command);
-			ocp.read(recieved);
-		}
-		returned[3] = recieved[0];
-		
-		command[1] = (byte)12;
-		for(int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
-		{
-			ocp.write(command);
-			ocp.read(recieved);
-		}
-		returned[4] = recieved[0];
-		
-		command[1] = (byte)13;
-		for (int i = 0; i < BUFFER_FLUSH_ITERATION_SIZE; i++)
-		{
-			ocp.write(command);
-			ocp.read(recieved);
-		}
-		returned[5] = recieved[0];
-		*/
+       
 	
 		return returned;
 	}
