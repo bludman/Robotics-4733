@@ -1,5 +1,6 @@
 import java.util.Arrays;
 
+
 /**
  * A wrapper class that allows easy interaction with (and extension of) the iRobot Create.
  * 
@@ -34,7 +35,7 @@ public class Robot
 	}
 	
 	/**
-	 * Set up the commincation interface with the robot
+	 * Set up the communication interface with the robot
 	 * @return
 	 */
 	public boolean setup()
@@ -45,7 +46,7 @@ public class Robot
 		return false;
 	}
 	
-	/** Start the open interface with the robo. Should be called before sending commands */
+	/** Start the open interface with the robot. Should be called before sending commands */
 	public void start()
 	{ 
 		ocp.write(commandSet.start());
@@ -333,6 +334,14 @@ public class Robot
 			}
 			returned[i] = recieved[0];
 		}
+		
+		commandSet.querySensorList(new SensorData.PACKET_IDS[]{
+			SensorData.PACKET_IDS.BUMPS_AND_WHEEL_DROPS,
+			SensorData.PACKET_IDS.WALL,
+			SensorData.PACKET_IDS.CLIFF_LEFT,
+			SensorData.PACKET_IDS.CLIFF_FRONT_LEFT,
+			SensorData.PACKET_IDS.CLIFF_FRONT_RIGHT,
+			SensorData.PACKET_IDS.CLIFF_RIGHT});
 		
        
 	

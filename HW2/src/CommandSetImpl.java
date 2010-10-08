@@ -435,7 +435,7 @@ public class CommandSetImpl implements CommandSet
 	@Override
 	public byte[] querySensorList(SensorData.PACKET_IDS[] packetIds)
 	{
-		if (packetIds==null)
+		if (packetIds==null || packetIds.length==0)
 			throw new IllegalArgumentException("Invalid number of packet ids");
 		
 		int expectedNumberOfCommands=packetIds.length;
@@ -451,10 +451,7 @@ public class CommandSetImpl implements CommandSet
 			command[i+2] = (byte)packetId;
 		}
 		
-		if(expectedNumberOfCommands>0)
-			return command;
-		else
-			throw new IllegalArgumentException("Invalid number of packet ids");
+		return command;
 	}
 
 	@Override

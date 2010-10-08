@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class ControlGUI extends JPanel implements ActionListener, KeyListener
 {
 	private static final long serialVersionUID = 4428024130270567883L;
-	protected Robot robot = new Robot();
+	protected WallFollowingRobot robot = new WallFollowingRobot();
 	protected JButton Forward, Backward, Stop, TurnLeft, TurnRight, OpenPort, Mode, ReadSensors, Square;
 	protected JTextField TurnDegreeBox, MoveDistanceBox, MoveVelocityBox;
 	protected JTextArea message; // Note: Can we force this to display standard error/standard out?
@@ -260,8 +260,9 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 		if (e.getActionCommand().equals("Follow Wall"))
 		{
 			log("Following wall");
-			positionFrame = new RobotPositionFrame();
-			positionFrame.generateGUI();
+			//positionFrame = new RobotPositionFrame();
+			//positionFrame.generateGUI();
+			robot.findAndFollowWall();
 			
 			
 		}
@@ -383,6 +384,8 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 		// Stop
 		if (e.getActionCommand().equals("Stop"))
 		{
+			
+			robot.kill();
 			robot.stop();
 		}
 		
@@ -421,6 +424,10 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 			WALL_SIGNAL_Slider.setValue(convertedData);
 			WALL_SIGNAL_Label.setText("WALL_SIGNAL: "+convertedData);
 			log(Arrays.toString(data)+"convertedData: "+convertedData);
+			
+			
+			log("SensorDataQuery");
+			robot.querySingleSensor(SensorData.PACKET_IDS.CLIFF_RIGHT);
 		}
 		
 		// Square
