@@ -1,215 +1,186 @@
 import java.util.Arrays;
 
 /**
- * 
- */
-
-/**
- * @author Ben
- *
+ * @author Benjamin Ludman, Mike Hernandez
+ * Implementation for a wall-following iRobot Create.
  */
 public class WallFollowingRobot extends Robot 
 {
+	/** Enumeration to keep track of what state the iRobot Create is in. */
 	private enum DriveState{findingWall,turning, trackingWall, done};
 	
-	private int baseSpeed=150;
-	private int wheelSpeed=0;
-	private int turnAngleIncrement= 30;
-	/** Distance to keep from wall */
-	private int holdDistance=30;
-	/** Tolerance for holdDistance */
-	private int tolerance = 0;
-	private int backoffDistance=30;
-	private int backoffSpeed=100;
-	private int correctionSpeed = 40;
-	DriveState state= DriveState.findingWall;
+	/** Default speed of the iRobot Create. */
+	private final static int DEFAULT_BASE_SPEED = 120;
 	
-	public void kill()
+	/** Default speed by which to correct when following the wall. */
+	private final static int DEFAULT_CORRECTION_SPEED = 12;
+	
+	/** Base speed of the iRobot Create, before adjustments. */
+	private int baseSpeed;
+	
+	/** Adjustment to the base speed when corrections are necessary. */
+	private int wheelSpeed;
+	
+	/** Amount to turn when contact with a wall is detected. */
+	private int turnAngleIncrement;
+	
+	/** Distance to keep from wall */
+	private int holdDistance;
+	
+	/** Tolerance for holdDistance */
+	private int tolerance;
+	
+	/** Distance to move back from a wall after making contact. */
+	private int backoffDistance;
+	
+	/** Speed at which to move away from a wall after making contact. */
+	private int backoffSpeed;
+	
+	/** State of the iRobot Create. */
+	private DriveState state;
+	
+	/** 
+	 * Set up various parameters for the new robot.
+	 */
+	public WallFollowingRobot()
 	{
-		System.out.println("killing");
-		state=DriveState.done;
+		baseSpeed = DEFAULT_BASE_SPEED;
+		wheelSpeed = 0;
+		turnAngleIncrement = 30;
+		holdDistance = 40;
+		tolerance = 15;
+		backoffDistance = 20;
+		backoffSpeed = 100;
+		
+		state = DriveState.findingWall;
 	}
-
 
 	public void findAndFollowWall()
 	{
-		state=DriveState.findingWall;
+		/** Set initial state so the iRobot Create searches for a wall. */
+		state = DriveState.findingWall;
 		
-		while(state!=DriveState.done)
+		/** iRobot Create starts moving. */
+		while (state != DriveState.done)
 		{
-			if(state==DriveState.findingWall)
+			/** iRobot Create will remain in this state until it hits a wall. */
+			if (state == DriveState.findingWall)
 			{
-				//driveUntil(baseSpeed,Bump);
-				System.out.println("Finding wall");
+				// System.out.println("Finding wall");
 				driveDirect(baseSpeed, baseSpeed);
-				System.out.println("Driving towards wall");
-				this.waitEvent((byte)5);
-				System.out.println("waiting for wall");
-				while(!hitsWall())
-					System.out.println("Spinning");
+				// System.out.println("Driving towards wall");
+				this.waitEvent((byte) 5);
+				// System.out.println("waiting for wall");
 				
-				System.out.println("not spinning");
+				/** Performs a persistent check to see if the iRobot Create has made contact with a wall. */
+				while (!hitsWall())
+					;
+					// System.out.println("Spinning");
+				
+				//System.out.println("not spinning");
+				
+				/** Initiate turning sequence once the wall has been hit. */
 				state=DriveState.turning;
 			}
 			
-			if(state==DriveState.turning)
+			/** Initiated once the iRobot Create must turn and avoid a wall. */
+			if (state == DriveState.turning)
 			{
-				System.out.println("turning");
-				driveDistance(-backoffSpeed,-backoffDistance); //back up a bit
+				// System.out.println("turning");
+				/** Move back, turn, and move forward. */
+				driveDistance(-backoffSpeed, -backoffDistance);
 				turnDegrees(baseSpeed, turnAngleIncrement);
 				driveDistance(backoffSpeed, backoffDistance);
 				
-				try {
-					System.out.println("Sleeping");
-					Thread.sleep(2000);
-					System.out.println("waking");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+				/** Put the iRobot Create to sleep in order to perform a rotation without accidentally
+				 *  reading additional contact with the bump sensors.
+				 */
+				try 
+				{
+					// System.out.println("Sleeping");
+					Thread.sleep(1500);
+					// System.out.println("waking");
+				} 
+				catch (InterruptedException e) 
+				{	
 					e.printStackTrace();
 				}
 
-				state=DriveState.trackingWall;
+				/** Once the turn is complete, begin following the wall. */
+				state = DriveState.trackingWall;
 				
 			}
 			
-			if(state==DriveState.trackingWall)
+			/** The iRobot Create will follow a wall, and adjust its trajectory accordingly. */
+			if(state == DriveState.trackingWall)
 			{
-				System.out.println("Tracking wall");
-				//this.start(); //TODO: take me out, jsut for easy debugging
-						
+				//System.out.println("Tracking wall");
+				/** Check to see if contact has been made with a wall. */
 				if(hitsWall())
 				{
-					this.stop();
-					state=DriveState.turning;
+					/** Begin turning to compensate for contact made with the wall. */
+					state = DriveState.turning;
 				}
+				/** Contact has not been made. Keep adjusting path. */
 				else
 				{
-					int distanceToWall=readWallDistance();
+					int wallSignal = readWallDistance();
 										
-					if(distanceToWall<=0 || distanceToWall>holdDistance+tolerance)
-						wheelSpeed=-correctionSpeed;
-					else if(distanceToWall >0 && distanceToWall<(holdDistance-tolerance) ) //too close, turn left
-						wheelSpeed=correctionSpeed;
+					/** iRobot Create is too far from the wall. Veer right. */
+					if (wallSignal == 0 || wallSignal < (holdDistance - tolerance))
+					{
+						wheelSpeed = -DEFAULT_CORRECTION_SPEED;
+						baseSpeed = DEFAULT_BASE_SPEED - 30;
+					}
+					/** iRobot Create is too close to the wall. Veer Left. */
+					else if (wallSignal < 0 || wallSignal > (holdDistance + tolerance))
+					{
+						wheelSpeed = DEFAULT_CORRECTION_SPEED;
+						baseSpeed = DEFAULT_BASE_SPEED - 30;
+					}
+					/** iRobot Create is at a good distance from the wall. Speed up a bit. */
 					else
-						wheelSpeed= 0;
+					{
+						wheelSpeed = 0;
+						baseSpeed = DEFAULT_BASE_SPEED;
+					}
 					
-					
-					driveDirect(baseSpeed+wheelSpeed, baseSpeed-wheelSpeed);
+					/** Proceed forward with any applicable adjustments. */
+					driveDirect(baseSpeed + wheelSpeed, baseSpeed - wheelSpeed);
 				}
-				
-				
-				
-				
 			}
 		}
-		
-		
-		System.out.println("done");
-		
-		
+		// System.out.println("done");
 	}
 
 	
-
-	public void findAndFollowWall2()
+	/**
+	 * Checks to see if contact with a wall has been made.
+	 * @return hit A boolean value representing whether or not a wall was hit.
+	 */
+	private boolean hitsWall() 
 	{
-		state=DriveState.findingWall;
-		
-		while(state!=DriveState.done)
-		{
-			if(state==DriveState.findingWall)
-			{
-				//driveUntil(baseSpeed,Bump);
-				System.out.println("Finding wall");
-				driveDirect(baseSpeed, baseSpeed);
-				System.out.println("Driving towards wall");
-				this.waitEvent((byte)5);
-				System.out.println("waiting for wall");
-				while(!hitsWall())
-					System.out.println("Spinning");
-				
-				System.out.println("not spinning");
-				state=DriveState.turning;
-			}
-			
-			while(state==DriveState.turning)
-			{
-				System.out.println("turning");
-				driveDistance(-backoffSpeed,-backoffDistance); //back up a bit
-				turnDegrees(baseSpeed, turnAngleIncrement);
-				driveDistance(backoffSpeed, backoffDistance);
-				
-				try {
-					System.out.println("Sleeping");
-					Thread.sleep(2000);
-					System.out.println("waking");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				state=DriveState.trackingWall;
-				
-			}
-			
-			while(state==DriveState.trackingWall)
-			{
-				System.out.println("Tracking wall");
-				//this.start(); //TODO: take me out, jsut for easy debugging
-						
-				if(hitsWall())
-				{
-					this.stop();
-					state=DriveState.turning;
-//				
-//					try {
-//						Thread.sleep(500);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-				}
-				else
-				{
-					int distanceToWall=readWallDistance();
-					
-					
-					if(distanceToWall<=0 || distanceToWall>holdDistance+tolerance)
-						wheelSpeed=-correctionSpeed;
-					else if(distanceToWall >0 && distanceToWall<(holdDistance-tolerance) ) //too close, turn left
-						wheelSpeed=correctionSpeed;
-					else
-						wheelSpeed= 0;
-					
-					
-					driveDirect(baseSpeed+wheelSpeed, baseSpeed-wheelSpeed);
-				}
-				
-				
-				
-				
-			}
-		}
-		
-		
-		System.out.println("done");
-		
-		
-	}
-	
-	
-	private boolean hitsWall() {
 		byte[] data = new byte[1];
 		data = this.readBumpsAndWheelDrops();
-		boolean hit=getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.BUMP_LEFT, data[0]) || getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.BUMP_RIGHT, data[0]);
-		System.out.println("Hit: "+hit);
+		
+		/** Check to see if either the left or the right bump sensor has been hit. */
+		boolean hit = getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.BUMP_LEFT, data[0]) || 
+						getBumpOrWheelDropStatus(Robot.BUMPS_AND_WHEEL_DROPS.BUMP_RIGHT, data[0]);
+		// System.out.println("Hit: "+hit);
 		return hit;
 	}
 
-	private int readWallDistance() {
+	/**
+	 * Determine how far the iRobot Create is from the wall.
+	 * @return distance The signal value returned from the iRobot Create.
+	 */
+	private int readWallDistance() 
+	{
 		byte[] data = this.readWallSignal();
-		int distance= (int)(data[0] << 8) + data[1];
-		System.out.println("Distance: "+distance);
+		
+		/** Adjust returned data as specified in the original template program. */
+		int distance = (int)((data[0] << 8) & 0x00FF) + (int)(data[1] & 0x00FF);
+		// System.out.println("Distance: "+distance);
 		return distance;
 		
 	}

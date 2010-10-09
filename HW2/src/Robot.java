@@ -24,6 +24,8 @@ public class Robot
 	/** Manages the known state of the sensors */
 	private SensorData sensors;
 	
+	private PositionAndOrientation positionAndOrientation;
+	
 	/**
 	 * Constructor for the robot that instantiates the above objects.
 	 */
@@ -32,6 +34,7 @@ public class Robot
 		ocp= new OpenCommPort();
 		commandSet = new CommandSetImpl();
 		sensors = new SensorData();
+		positionAndOrientation = new PositionAndOrientation(0, 0, 90);
 	}
 	
 	/**
@@ -388,5 +391,38 @@ public class Robot
     {
     	 return sensors.getBumpOrWheelDropStatus(sensor);
     }
+    
+    /**
+     * 
+     * @param deltaX
+     * @param deltaY
+     * @param deltaAngle
+     */
+    public void changePositionAndOrientationBy(double deltaX, double deltaY, double deltaAngle)
+    {
+    	this.positionAndOrientation = new PositionAndOrientation(
+    			positionAndOrientation.getX()+deltaX, 
+    			positionAndOrientation.getY()+deltaY, 
+    			positionAndOrientation.getAngle()+deltaAngle);
+    }
+
+    
+    public void recordDrivenDistance(int distance, int angle)
+    {
+    	double deltaX=distance*Math.cos(angle);
+    	double deltaY=distance*Math.sin(angle);
+    	changePositionAndOrientationBy(deltaX, deltaY, angle);
+    }
+    
+    
+	/**
+	 * @return the positionAndOrientation
+	 */
+	public PositionAndOrientation getPositionAndOrientation() {
+		return positionAndOrientation;
+	}
+    
+    
+    
 	
 }

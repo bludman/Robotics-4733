@@ -262,7 +262,16 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 			log("Following wall");
 			//positionFrame = new RobotPositionFrame();
 			//positionFrame.generateGUI();
-			robot.findAndFollowWall();
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					robot.findAndFollowWall();
+				}
+			}).run();
+			
+			
 			
 			
 		}
@@ -385,7 +394,6 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 		if (e.getActionCommand().equals("Stop"))
 		{
 			
-			robot.kill();
 			robot.stop();
 		}
 		
@@ -426,8 +434,8 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 			log(Arrays.toString(data)+"convertedData: "+convertedData);
 			
 			
-			log("SensorDataQuery");
-			robot.querySingleSensor(SensorData.PACKET_IDS.CLIFF_RIGHT);
+			//log("SensorDataQuery");
+			//robot.querySingleSensor(SensorData.PACKET_IDS.CLIFF_RIGHT);
 		}
 		
 		// Square
