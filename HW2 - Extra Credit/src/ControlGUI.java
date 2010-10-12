@@ -274,62 +274,19 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		
 		// Open
 		if (e.getActionCommand().equals("Follow Wall"))
 		{
-			log("Following wall");
-			//positionFrame = new RobotPositionFrame();
-			//positionFrame.generateGUI();
-			
-			worker = new SwingWorker() {
-				   public Object construct() {
-					   return robot.findAndFollowWall();
-				      //return "Hello" + " " + "World";
-				   }
-				};
-				log("Starting worker");
-				worker.start();
-				log("Finished starting worker");
-				
-				
-//				
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				worker.interrupt();
-//				log("Interrupted");
-				
-				
-				//System.out.println(worker.get().toString());
-			
-			
-//			Thread t = new Thread(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					// TODO Auto-generated method stub
-//					robot.findAndFollowWall();
-//				}
-//			});
-			
-//			System.out.println("Runing");
-//			t.run();
-//			log("Finished running");
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				
-//				t.interrupt();
-//			
-			
+			worker = new SwingWorker() 
+			{
+				public Object construct() 
+				{   
+					return robot.findAndFollowWall();
+				}	
+			};
+			worker.start();
 		}
+		
 		// Open
 		if (e.getActionCommand().equals("Open"))
 		{
@@ -341,8 +298,7 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 				robot.start();
 				log("Open interface started");
 				OpenPort.setEnabled(false);
-			}
-			
+			}	
 		}
 		
 		// Default velocity selected
