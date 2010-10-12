@@ -37,6 +37,7 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 	
 	protected RobotPositionFrame positionFrame;
 	protected JButton followWallButton;
+	protected SwingWorker worker;
 	
 	public ControlGUI()
 	{
@@ -253,6 +254,24 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 		frame.setVisible(true);
 	}
 	
+	
+	Object doWork() {
+		   try {
+			   robot.findAndFollowWall();
+		         //updateStatus(i);
+		         if (Thread.interrupted()) {
+		            throw new InterruptedException();
+		         }
+		         Thread.sleep(500);
+		      
+		   }
+		   catch (InterruptedException e) {
+		      //updateStatus(0);
+		      return "Interrupted";  
+		   }
+		   return "All Done"; 
+		}
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		
@@ -262,17 +281,53 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 			log("Following wall");
 			//positionFrame = new RobotPositionFrame();
 			//positionFrame.generateGUI();
-			new Thread(new Runnable() {
+			
+			worker = new SwingWorker() {
+				   public Object construct() {
+					   return robot.findAndFollowWall();
+				      //return "Hello" + " " + "World";
+				   }
+				};
+				log("Starting worker");
+				worker.start();
+				log("Finished starting worker");
 				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					robot.findAndFollowWall();
-				}
-			}).run();
+				
+//				
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//				worker.interrupt();
+//				log("Interrupted");
+				
+				
+				//System.out.println(worker.get().toString());
 			
 			
+//			Thread t = new Thread(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//					robot.findAndFollowWall();
+//				}
+//			});
 			
+//			System.out.println("Runing");
+//			t.run();
+//			log("Finished running");
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//				
+//				t.interrupt();
+//			
 			
 		}
 		// Open
@@ -393,7 +448,10 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 		// Stop
 		if (e.getActionCommand().equals("Stop"))
 		{
-			
+			if(worker!=null)
+			{
+				worker.interrupt();
+			}
 			robot.stop();
 		}
 		

@@ -55,7 +55,11 @@ public class WallFollowingRobot extends Robot
 		state = DriveState.findingWall;
 	}
 
-	public void findAndFollowWall()
+	/**
+	 * Finds and follows walls
+	 * @return null for the purposes of SwingWorker compatibility.
+	 */
+	public Object findAndFollowWall()
 	{
 		/** Set initial state so the iRobot Create searches for a wall. */
 		state = DriveState.findingWall;
@@ -63,21 +67,27 @@ public class WallFollowingRobot extends Robot
 		/** iRobot Create starts moving. */
 		while (state != DriveState.done)
 		{
+			try 
+			{
+                if (Thread.interrupted()) {
+                	throw new InterruptedException("Exiting");
+                }
+                Thread.sleep(50);
+	        }
+	        catch (InterruptedException e) {
+	        	return null; //stop running the algorithm and return
+	        }
+			
 			/** iRobot Create will remain in this state until it hits a wall. */
 			if (state == DriveState.findingWall)
 			{
-				// System.out.println("Finding wall");
-				driveDirect(baseSpeed, baseSpeed);
-				// System.out.println("Driving towards wall");
-				this.waitEvent((byte) 5);
-				// System.out.println("waiting for wall");
+				driveDirect(baseSpeed, baseSpeed);//Driving towards wall
+				this.waitEvent((byte) 5); //Waiting for wall
 				
 				/** Performs a persistent check to see if the iRobot Create has made contact with a wall. */
 				while (!hitsWall())
-					;
-					// System.out.println("Spinning");
+					;//Spinning
 				
-				//System.out.println("not spinning");
 				
 				/** Initiate turning sequence once the wall has been hit. */
 				state=DriveState.turning;
@@ -86,7 +96,6 @@ public class WallFollowingRobot extends Robot
 			/** Initiated once the iRobot Create must turn and avoid a wall. */
 			if (state == DriveState.turning)
 			{
-				// System.out.println("turning");
 				/** Move back, turn, and move forward. */
 				driveDistance(-backoffSpeed, -backoffDistance);
 				turnDegrees(baseSpeed, turnAngleIncrement);
@@ -97,13 +106,12 @@ public class WallFollowingRobot extends Robot
 				 */
 				try 
 				{
-					// System.out.println("Sleeping");
 					Thread.sleep(1500);
-					// System.out.println("waking");
 				} 
 				catch (InterruptedException e) 
 				{	
-					e.printStackTrace();
+					//stop running the algorithm and return
+					return null;
 				}
 
 				/** Once the turn is complete, begin following the wall. */
@@ -114,7 +122,6 @@ public class WallFollowingRobot extends Robot
 			/** The iRobot Create will follow a wall, and adjust its trajectory accordingly. */
 			if(state == DriveState.trackingWall)
 			{
-				//System.out.println("Tracking wall");
 				/** Check to see if contact has been made with a wall. */
 				if(hitsWall())
 				{
@@ -150,7 +157,8 @@ public class WallFollowingRobot extends Robot
 				}
 			}
 		}
-		// System.out.println("done");
+		
+		return null;
 	}
 
 	
