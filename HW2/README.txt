@@ -56,6 +56,8 @@ SensorData.java
 	of hardcoding the sensor request data. Though this class is more robust, since the sensor data
 	was unpredictable, it was easier to debug. For future use of the abstractions we made in this
 	project we hope to get this class working completely.
+SwingWorker.java
+	Helper class included in order to allow threaded execution of elements in the GUI.
 WallFollowingRobot.java
 	A class for implementing a robot that follows a wall closely. Methods exist for normal
 	execution, detecting contact with a wall, and determining the wall signal when necessary.
