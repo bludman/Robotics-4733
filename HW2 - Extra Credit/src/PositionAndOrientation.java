@@ -40,4 +40,14 @@ public class PositionAndOrientation {
 		return angle;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PositionAndOrientation [angle=" + angle + ", x=" + x + ", y="
+				+ y + "]";
+	}
+
+	
 }

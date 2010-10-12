@@ -30,6 +30,12 @@ public class RobotPositionPanel extends JPanel {
 		points.add(new PositionAndOrientation(x, y,angle));
 	}
 
+	public void addPoint(PositionAndOrientation p)
+	{
+		points.add(p);
+	}
+	
+	
 	public void paintComponent(Graphics g1)
 	{
 		Graphics2D g= (Graphics2D)g1;
@@ -52,6 +58,9 @@ public class RobotPositionPanel extends JPanel {
 	
 	private void drawBot(Graphics2D g, double x, double y, double angle)
 	{
+		double CONVERSION_FACTOR=0.1;
+		x*=CONVERSION_FACTOR;
+		y*=CONVERSION_FACTOR;
 		int botRadius=10;
 		g.setColor(Color.yellow);
 		int botCenterX=X_CENTER+(int)x;

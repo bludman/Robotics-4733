@@ -398,7 +398,7 @@ public class Robot
      * @param deltaY
      * @param deltaAngle
      */
-    public void changePositionAndOrientationBy(double deltaX, double deltaY, double deltaAngle)
+    private void changePositionAndOrientationBy(double deltaX, double deltaY, double deltaAngle)
     {
     	this.positionAndOrientation = new PositionAndOrientation(
     			positionAndOrientation.getX()+deltaX, 
@@ -406,12 +406,17 @@ public class Robot
     			positionAndOrientation.getAngle()+deltaAngle);
     }
 
-    
-    public void recordDrivenDistance(int distance, int angle)
+    /**
+     * 
+     * @param distance
+     * @param angleInDegrees
+     */
+    private void recordDrivenDistance(double distance, double angleInDegrees)
     {
-    	double deltaX=distance*Math.cos(angle);
-    	double deltaY=distance*Math.sin(angle);
-    	changePositionAndOrientationBy(deltaX, deltaY, angle);
+    	double angleInRadians = Math.toRadians(angleInDegrees);
+    	double deltaX=distance*Math.cos(angleInRadians);
+    	double deltaY=distance*Math.sin(angleInRadians);
+    	changePositionAndOrientationBy(deltaX, deltaY, angleInDegrees);
     }
     
     
@@ -422,7 +427,44 @@ public class Robot
 		return positionAndOrientation;
 	}
     
-    
+    public PositionAndOrientation updateMyPosition()
+    {
+    	byte[] rawDistance=getDistanceSensor();
+    	byte[] rawAngle=getAngleSensor();
+    	
+    	//int distance = (int)((rawDistance[0] << 8)& 0x00FF) + (int)(rawDistance[1]& 0x00FF);
+    	int distance = (int)((rawDistance[0] << 8 ) | (rawDistance[1] & 0xff));
+    	//int angle = (int)((rawAngle[0] << 8)& 0x00FF) + (int)(rawAngle[1]& 0x00FF);
+    	int angle=(int)((rawAngle[0] << 8 ) | (rawAngle[1] & 0xff));
+    	
+    	System.out.println("Got values: distance:"+distance+" angle:"+angle);
+    	recordDrivenDistance(distance, angle);
+    	return this.positionAndOrientation;
+    }
+
+	private byte[] getAngleSensor() 
+	{
+
+		byte[] command = new byte[2];
+		command[0] = (byte)142;
+		command[1] = (byte)20;
+		byte[] recieved = new byte[2];
+		ocp.write(command);
+		ocp.read(recieved);
+		return recieved;
+		
+	}
+
+	private byte[] getDistanceSensor() 
+	{
+		byte[] command = new byte[2];
+		command[0] = (byte)142;
+		command[1] = (byte)19;
+		byte[] recieved = new byte[2];
+		ocp.write(command);
+		ocp.read(recieved);
+		return recieved;
+	}
     
 	
 }

@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Benjamin Ludman, Mike Hernandez
@@ -6,6 +8,9 @@ import java.util.Arrays;
  */
 public class WallFollowingRobot extends Robot 
 {
+	final private static int TRIGGER=1;
+	public List<PositionAndOrientation> trackedPositions= new ArrayList<PositionAndOrientation>();
+	
 	/** Enumeration to keep track of what state the iRobot Create is in. */
 	private enum DriveState{findingWall,turning, trackingWall, done};
 	
@@ -57,16 +62,33 @@ public class WallFollowingRobot extends Robot
 
 	/**
 	 * Finds and follows walls
-	 * @return null for the purposes of SwingWorker compatibility.
+	 * @return a list of positions and orientions the robot was in when following wall
 	 */
 	public Object findAndFollowWall()
 	{
 		/** Set initial state so the iRobot Create searches for a wall. */
 		state = DriveState.findingWall;
 		
+		int counter =0;
+		
 		/** iRobot Create starts moving. */
 		while (state != DriveState.done)
 		{
+			//Figure out where the iRobot Create is add it to the list or tracked positions 
+			//trackedPositions.add(this.updateMyPosition());
+			
+			if(counter==TRIGGER)
+			{
+				PositionAndOrientation p=this.updateMyPosition();
+				System.out.println(p.getX()+","+p.getY()+","+p.getAngle());
+				trackedPositions.add(p);
+				counter=0;//reset counter
+			}
+			else
+			{
+				counter++;
+			}
+			
 			try 
 			{
                 if (Thread.interrupted()) {
@@ -75,7 +97,8 @@ public class WallFollowingRobot extends Robot
                 Thread.sleep(50);
 	        }
 	        catch (InterruptedException e) {
-	        	return null; //stop running the algorithm and return
+	        	System.out.println("Interrupted");
+	        	return trackedPositions; //stop running the algorithm and return
 	        }
 			
 			/** iRobot Create will remain in this state until it hits a wall. */
@@ -110,8 +133,9 @@ public class WallFollowingRobot extends Robot
 				} 
 				catch (InterruptedException e) 
 				{	
+					System.out.println("Interrupted turning");
 					//stop running the algorithm and return
-					return null;
+					return trackedPositions;
 				}
 
 				/** Once the turn is complete, begin following the wall. */
@@ -158,7 +182,7 @@ public class WallFollowingRobot extends Robot
 			}
 		}
 		
-		return null;
+		return trackedPositions;
 	}
 
 	
@@ -192,6 +216,8 @@ public class WallFollowingRobot extends Robot
 		return distance;
 		
 	}
+
+	
 	
 	/**
 	 * Get the boolean value of a specific sensor in the BUMPS_AND_WHEEL_DROPS sensor packet 

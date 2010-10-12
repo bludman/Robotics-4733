@@ -13,7 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ControlGUI extends JPanel implements ActionListener, KeyListener
 {
@@ -255,23 +257,6 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 	}
 	
 	
-	Object doWork() {
-		   try {
-			   robot.findAndFollowWall();
-		         //updateStatus(i);
-		         if (Thread.interrupted()) {
-		            throw new InterruptedException();
-		         }
-		         Thread.sleep(500);
-		      
-		   }
-		   catch (InterruptedException e) {
-		      //updateStatus(0);
-		      return "Interrupted";  
-		   }
-		   return "All Done"; 
-		}
-	
 	public void actionPerformed(ActionEvent e)
 	{
 		// Open
@@ -407,9 +392,45 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 			if(worker!=null)
 			{
 				worker.interrupt();
+				
+				List<PositionAndOrientation> trackedPositions= new ArrayList<PositionAndOrientation>();
+				//Object positionList=worker.get();
+				
+				
+				JFrame positionFrame= new JFrame();
+				RobotPositionPanel positionPanel= new RobotPositionPanel();
+				positionFrame.add(positionPanel);
+				
+//				if(positionList!=null && (positionList instanceof  ArrayList<?>))
+//				{
+//					trackedPositions=(List<PositionAndOrientation>)positionList;
+					trackedPositions=robot.trackedPositions;
+					if(trackedPositions!=null)
+						for(PositionAndOrientation p: trackedPositions)
+							positionPanel.addPoint(p);
+					else
+						log("TrackedPositions is null");
+					
+					
+//				}
+//				else
+//					log("positionList is null");
+				
+
+				
+				
+				positionFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				
+				positionFrame.setSize(new Dimension(600, 500));
+				
+				positionFrame.pack();
+				positionFrame.setVisible(true);
 			}
+			log("Stopping");
 			robot.stop();
+			log("Stopped");
 		}
+		
 		
 		// Read Sensors
 		if (e.getActionCommand().equals("Read"))
@@ -447,9 +468,10 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 			WALL_SIGNAL_Label.setText("WALL_SIGNAL: "+convertedData);
 			log(Arrays.toString(data)+"convertedData: "+convertedData);
 			
+			System.out.println(robot.updateMyPosition().toString());
 			
-			//log("SensorDataQuery");
-			//robot.querySingleSensor(SensorData.PACKET_IDS.CLIFF_RIGHT);
+			
+			
 		}
 		
 		// Square
