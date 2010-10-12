@@ -38,7 +38,7 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 	protected int turnDegreeValue = 0;
 	
 	protected RobotPositionFrame positionFrame;
-	protected JButton followWallButton;
+	protected JButton followWallButton, followTrackedWallButton;
 	protected SwingWorker worker;
 	
 	public ControlGUI()
@@ -74,6 +74,9 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 		
 		followWallButton = new JButton("Follow Wall");
 		followWallButton.setActionCommand("Follow Wall");
+		
+		followTrackedWallButton = new JButton("Track Follow Wall");
+		followTrackedWallButton.setActionCommand("Track Follow Wall");
 		
 		
 		// Adding the Controls to the appropriate panel, empty labels take up space in the GridLayout
@@ -170,6 +173,7 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 		Stop.addActionListener(this);
 		Square.addActionListener(this);
 		followWallButton.addActionListener(this);
+		followTrackedWallButton.addActionListener(this);
 		MoveVelocityDefault.addActionListener(this);
 		MoveVelocitySpecify.addActionListener(this);
 		MoveDistanceDefault.addActionListener(this);
@@ -186,6 +190,7 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 		Other.add(ReadSensors);
 		Other.add(Square);
 		Other.add(followWallButton);
+		Other.add(followTrackedWallButton);
 		Other.add(message);
 		
 		// Set up checkboxes for boolean sensor data
@@ -259,14 +264,31 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		// Open
+		// Follow Wall Untracked
 		if (e.getActionCommand().equals("Follow Wall"))
 		{
+			followWallButton.setEnabled(false);
+			followTrackedWallButton.setEnabled(false);
 			worker = new SwingWorker() 
 			{
 				public Object construct() 
 				{   
-					return robot.findAndFollowWall();
+					return robot.findAndFollowWall(false);
+				}	
+			};
+			worker.start();
+		}
+		
+		// Follow Wall tracked
+		if (e.getActionCommand().equals("Track Follow Wall"))
+		{
+			followWallButton.setEnabled(false);
+			followTrackedWallButton.setEnabled(false);
+			worker = new SwingWorker() 
+			{
+				public Object construct() 
+				{   
+					return robot.findAndFollowWall(true);
 				}	
 			};
 			worker.start();
@@ -404,7 +426,7 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 //				if(positionList!=null && (positionList instanceof  ArrayList<?>))
 //				{
 //					trackedPositions=(List<PositionAndOrientation>)positionList;
-					trackedPositions=robot.trackedPositions;
+					trackedPositions=robot.getTrackedPositions();
 					if(trackedPositions!=null)
 						for(PositionAndOrientation p: trackedPositions)
 							positionPanel.addPoint(p);
@@ -429,6 +451,9 @@ public class ControlGUI extends JPanel implements ActionListener, KeyListener
 			log("Stopping");
 			robot.stop();
 			log("Stopped");
+			
+			followWallButton.setEnabled(true);
+			followTrackedWallButton.setEnabled(true);
 		}
 		
 		

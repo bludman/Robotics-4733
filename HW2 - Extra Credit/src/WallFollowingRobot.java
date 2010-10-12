@@ -9,8 +9,17 @@ import java.util.List;
 public class WallFollowingRobot extends Robot 
 {
 	final private static int TRIGGER=1;
-	public List<PositionAndOrientation> trackedPositions= new ArrayList<PositionAndOrientation>();
+	private List<PositionAndOrientation> trackedPositions;
 	
+	/**
+	 * @return the trackedPositions
+	 */
+	public List<PositionAndOrientation> getTrackedPositions() {
+		return trackedPositions;
+	}
+
+
+
 	/** Enumeration to keep track of what state the iRobot Create is in. */
 	private enum DriveState{findingWall,turning, trackingWall, done};
 	
@@ -64,25 +73,28 @@ public class WallFollowingRobot extends Robot
 	 * Finds and follows walls
 	 * @return a list of positions and orientions the robot was in when following wall
 	 */
-	public Object findAndFollowWall()
+	public Object findAndFollowWall(boolean trackPositions)
 	{
 		/** Set initial state so the iRobot Create searches for a wall. */
 		state = DriveState.findingWall;
+		int counter = 1;
 		
-		int counter =0;
+		trackedPositions= new ArrayList<PositionAndOrientation>(); //reset the tracked positions
+		this.positionAndOrientation = new PositionAndOrientation(0, 0, 90); //reset robot's positions
 		
 		/** iRobot Create starts moving. */
 		while (state != DriveState.done)
 		{
-			//Figure out where the iRobot Create is add it to the list or tracked positions 
-			//trackedPositions.add(this.updateMyPosition());
 			
-			if(counter==TRIGGER)
+			/** Track the changed positions only every "counter" iterations */
+			if(trackPositions && counter==TRIGGER)
 			{
+				//Figure out where the iRobot Create is add it to the list or tracked positions 
+				//trackedPositions.add(this.updateMyPosition());
 				PositionAndOrientation p=this.updateMyPosition();
 				System.out.println(p.getX()+","+p.getY()+","+p.getAngle());
 				trackedPositions.add(p);
-				counter=0;//reset counter
+				counter=1; //reset counter
 			}
 			else
 			{
@@ -97,7 +109,6 @@ public class WallFollowingRobot extends Robot
                 Thread.sleep(50);
 	        }
 	        catch (InterruptedException e) {
-	        	System.out.println("Interrupted");
 	        	return trackedPositions; //stop running the algorithm and return
 	        }
 			
@@ -133,9 +144,7 @@ public class WallFollowingRobot extends Robot
 				} 
 				catch (InterruptedException e) 
 				{	
-					System.out.println("Interrupted turning");
-					//stop running the algorithm and return
-					return trackedPositions;
+					return trackedPositions; //stop running the algorithm and return
 				}
 
 				/** Once the turn is complete, begin following the wall. */

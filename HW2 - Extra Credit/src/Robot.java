@@ -24,7 +24,7 @@ public class Robot
 	/** Manages the known state of the sensors */
 	private SensorData sensors;
 	
-	private PositionAndOrientation positionAndOrientation;
+	protected PositionAndOrientation positionAndOrientation;
 	
 	/**
 	 * Constructor for the robot that instantiates the above objects.
