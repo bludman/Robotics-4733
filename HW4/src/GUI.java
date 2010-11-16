@@ -3,7 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.*;
 import java.util.*;
+
 import javax.swing.*;
+
 
 public class GUI extends JPanel implements ActionListener
 {	
@@ -17,6 +19,7 @@ public class GUI extends JPanel implements ActionListener
 	ArrayList<double[][]> Vertices = new ArrayList<double[][]>();
 	ArrayList<double[][]> ConvexHull = new ArrayList<double[][]>();
 	ArrayList<double[][]> grownObstacles = new ArrayList<double[][]>();
+	ArrayList<double[][]> visibilityGraph = new ArrayList<double[][]>();
 	
 	
 	/* Swing components used in the GUI. */
@@ -34,7 +37,9 @@ public class GUI extends JPanel implements ActionListener
 			double GoalY, 
 			ArrayList<double[][]> Vertices,
 			ArrayList<double[][]> grownObstacles,
-			ArrayList<double[][]> ConvexHull)
+			ArrayList<double[][]> ConvexHull,
+			ArrayList<PathFinder.Edge> visibilityGraph
+			)
 	{
 		// Initialize values for the GUI
 		showStartPoint = false;
@@ -109,8 +114,20 @@ public class GUI extends JPanel implements ActionListener
 		{
 			this.AdjustObstacles(grownObstacles.get(i), "Grown");
 		}
+		
+		convertVisibilityGraph(visibilityGraph);
 	}
 	
+	private void convertVisibilityGraph(ArrayList<PathFinder.Edge> graph) 
+	{
+		for(PathFinder.Edge e: graph)
+		{
+			this.visibilityGraph.add(AdjustObstacles(e.getAsArray()));
+		}
+		
+		System.out.println("***Visibility graph has "+visibilityGraph.size() +" points ***");
+	}
+
 	public void actionPerformed(ActionEvent e)
 	{
 		// Draw start point, goal point, and obstacles
@@ -210,6 +227,13 @@ public class GUI extends JPanel implements ActionListener
 	{
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
+		
+		// Draw the visibility graph
+		if (showVisibilityGraph)
+		{
+			g2.setColor(Color.CYAN);
+			drawVisibilityGraph(g2);
+		}
 
 		// Draw start point
 		if (showStartPoint)
@@ -286,7 +310,7 @@ public class GUI extends JPanel implements ActionListener
 		// Draw grown obstacles
 		if (showConvex)
 		{
-			g2.setColor(Color.YELLOW);
+			g2.setColor(Color.GREEN);
 			
 			// Connect all of the vertices of all the obstacles
 			for (int i = 0; i < ConvexHull.size(); i++)
@@ -313,11 +337,7 @@ public class GUI extends JPanel implements ActionListener
 			}
 		}
 		
-		// Draw the visibility graph
-		if (showVisibilityGraph)
-		{
-			g2.setColor(Color.CYAN);
-		}
+		
 		
 		// Draw the optimal path
 		if (showOptimalPath)
@@ -341,6 +361,21 @@ public class GUI extends JPanel implements ActionListener
 			GoalY = Y * SCALE_FACTOR * -1 + this.getHeight() / 2;
 		}
 	}
+	
+	public double[][] AdjustObstacles(double[][] vertices)
+	{
+		double adjustedVertices[][] = new double[vertices.length][2];
+		
+		
+		for (int i = 0; i < vertices.length; i++)
+		{
+			// Adjust x and y values for swing
+			adjustedVertices[i][0] = vertices[i][0] * SCALE_FACTOR + this.getWidth() / 4;
+			adjustedVertices[i][1] = vertices[i][1] * SCALE_FACTOR * -1 + this.getHeight() / 2;
+		}
+		return adjustedVertices;
+	}
+
 	
 	public void AdjustObstacles(double[][] vertices, String choice)
 	{
@@ -373,9 +408,22 @@ public class GUI extends JPanel implements ActionListener
 		}
 	}
 
-	public void DrawGraph() 
+	public void drawVisibilityGraph(Graphics2D g2) 
 	{
-			
+		g2.setColor(Color.ORANGE);
+		
+		// Connect all of the vertices of all the obstacles
+		for (int i = 0; i < visibilityGraph.size() -1; i++)
+		{
+			System.out.println("Drawing edge: "+Arrays.toString(visibilityGraph.get(i)[0])+" -> "+Arrays.toString(visibilityGraph.get(i)[1]));
+				// Connect vertex j to vertex j + 1
+				g2.draw(new Line2D.Double(
+						visibilityGraph.get(i)[0][0], 
+						visibilityGraph.get(i)[0][1], 
+						visibilityGraph.get(i)[1][0], 
+						visibilityGraph.get(i)[1][1]));
+
+		}
 	}
 
 	public void DrawPath() 

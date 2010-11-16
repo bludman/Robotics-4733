@@ -1,3 +1,4 @@
+import java.awt.geom.Point2D;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -81,7 +82,7 @@ public class Driver
 		{
 			if(o!=null)
 			{
-				double[][] points=o.getHullPoints();
+				double[][] points=Obstacle.pointsToDouble(o.getHullPoints());
 				//System.out.println("Printed array: "+Arrays.toString(points));
 				
 				for(int i=0;i<points.length;i++)
@@ -103,8 +104,10 @@ public class Driver
 				Vertices,
 				grownVertices,
 				//GrownVertices,
-				convexHulls);
-				//ConvexHull);
+				convexHulls,
+				//ConvexHull,
+				PathFinder.findVisibilityGraph(new Point2D.Double(StartX, StartY), new Point2D.Double(GoalX, GoalY), obstacles)
+				);
 	}
 	
 	public static double[] GetStartAndGoalCoordinates(String FileName)

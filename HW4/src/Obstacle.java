@@ -1,9 +1,13 @@
+import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Stack;
+
 
 /**
  * 
@@ -212,7 +216,7 @@ public class Obstacle
 				convexStack.push(convexHull.get(i));
 				i++;
 			}
-			System.out.println("Stack: "+convexStack.toString());
+			//System.out.println("Stack: "+convexStack.toString());
 		}
 	
 		Point2D hull[] = new Point2D[convexStack.size()];
@@ -225,13 +229,13 @@ public class Obstacle
 		
 		hull=convexStack.toArray(hull);
 		
-		System.out.println("hull points:"+Arrays.toString(hull));
+		//System.out.println("hull points:"+Arrays.toString(hull));
 		this.convexHullVertices = hull;	
 	}
 	
-	public double[][] getHullPoints()
+	public Point2D[] getHullPoints()
 	{
-		return pointsToDouble(convexHullVertices);
+		return convexHullVertices;
 		/*
 		double[][] hull = new double[convexHullVertices.length][2];
 		for(int i=0;i<convexHullVertices.length;i++)
@@ -271,25 +275,67 @@ public class Obstacle
 	}
 	
 	
-	/**
-	 * Find the shortest path from the start point to goal point navigating the obstacles
-	 * @param start
-	 * @param goal
-	 * @param obstacles
-	 * @return
-	 */
-	public static ArrayList<Point2D> findShortestPath(Point2D start, Point2D goal, ArrayList<Obstacle> obstacles)
-	{
-		
-		
-		
-		return null;
-		
-	}
+	
 
 	public Point2D[] getGrownPoints() 
 	{
 		return this.grownVertices;
+	}
+
+
+	public Path2D toPath() {
+		Path2D.Double p =  new Path2D.Double();
+		
+		p.moveTo(this.convexHullVertices[0].getX(), this.convexHullVertices[1].getY());
+		for(Point2D point: this.convexHullVertices)
+			p.lineTo(point.getX(), point.getY());
+		
+		System.out.println("Current point: "+p.getBounds());
+		return p;
+	}
+
+
+	public static boolean intersects(ArrayList<Path2D> obstacles, ArrayList<Path2D> containingWalls, PathFinder.Edge edge) {
+		final int SAMPLE_POINTS = 50;
+		final double INCREMENT = 1.0/SAMPLE_POINTS;
+		final int X=0;
+		final int Y=1;
+		double[][] basePoint = edge.getAsArray();
+		
+		
+		//System.out.println("EDGE "+basePoint[0][X]+","+basePoint[0][Y]+"->"+basePoint[1][X]+","+basePoint[1][Y]);
+		
+		for(double u=INCREMENT;u<1;u+=INCREMENT)
+		{
+			//find the sample point
+			double x= (1.0-u)*basePoint[0][X]+u*basePoint[1][X];
+			double y= (1.0-u)*basePoint[0][Y]+u*basePoint[1][Y];
+			Point2D samplePoint = new Point2D.Double(x,y);
+			//System.out.println("Intersection point: "+samplePoint);
+			
+			//Check if sample point intersects any obstacle
+			for(Path2D obstacle: obstacles)
+			{
+				if(obstacle.contains(samplePoint))
+				{
+					System.out.println("Found intersection with obstacle");
+					return true;
+				}
+			}
+			
+			//Check if sample point goes outside the main bounds
+			for(Path2D wall: containingWalls)
+			{
+				if(!wall.contains(samplePoint))
+				{
+					System.out.println("Found intersection with outer bounds");
+					return true;
+				}
+			}
+		}
+		
+		//Edge sample points didn't intersect with any obstacles
+		return false;
 	}
 	
 	
