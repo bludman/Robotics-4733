@@ -1,17 +1,21 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
-import java.util.Stack;
 
 public class Driver
 {
 	/* Contains the vertices of all obstacles and environment. */
 	public static ArrayList<double[][]> Vertices;
 	
+	public static ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+	
 	/* Contains the grown vertices of all obstacles. */
 	public static ArrayList<double[][]> GrownVertices;
+	public static ArrayList<double[][]> grownVertices = new ArrayList<double[][]>();
 	
 	/* Contains the convex hull vertices of the grown obstacles. */
 	public static ArrayList<double[][]> ConvexHull;
+	public static ArrayList<double[][]> convexHulls = new ArrayList<double[][]>();
 	
 	/* Various coordinates and values necessary for proper execution of the program. */
 	public static double StartX, StartY, GoalX, GoalY;
@@ -58,6 +62,38 @@ public class Driver
 		
 		// Find the shortest path
 		FindPath();
+		
+		
+		
+		for(Obstacle o:obstacles)
+		{
+			if(o!=null)
+			{
+				double[][] points=Obstacle.pointsToDouble(o.getGrownPoints());
+				System.out.println(Arrays.toString(points));
+				grownVertices.add(points);
+				
+			}
+		}
+		
+		//obstacles.set(0, null);
+		for(Obstacle o:obstacles)
+		{
+			if(o!=null)
+			{
+				double[][] points=o.getHullPoints();
+				//System.out.println("Printed array: "+Arrays.toString(points));
+				
+				for(int i=0;i<points.length;i++)
+				{
+						System.out.print("("+points[i][0]+","+points[i][1]+") ");
+				}
+				
+				convexHulls.add(points);
+				
+				System.out.println("\nadding an obstacle to convex hull\n***\n");
+			}
+		}
 
 		Display = new GUI(
 				StartX,
@@ -65,7 +101,10 @@ public class Driver
 				GoalX,
 				GoalY,
 				Vertices,
-				ConvexHull);
+				grownVertices,
+				//GrownVertices,
+				convexHulls);
+				//ConvexHull);
 	}
 	
 	public static double[] GetStartAndGoalCoordinates(String FileName)
@@ -147,6 +186,7 @@ public class Driver
 				}
 				
 				Vertices.add(CurrentVertices);
+				obstacles.add(new Obstacle(CurrentVertices));
 			}
 		}
 		catch (FileNotFoundException fe)
@@ -168,13 +208,14 @@ public class Driver
 		
 		// Keeps track of position to add new vertices
 		int VertexCounter;
+		int obstacleCount=1;
 		
 		// For every obstacle
 		for(double[][] Vertex : Vertices)
 		{
 			// Exclude the environment boundary
 			if (!Vertices.get(0).equals(Vertex))
-				{
+			{
 				// Create a new array that will hold all of the newly created vertices
 				AllVertices = new double[Vertex.length * 8 + Vertex.length][2];
 				VertexCounter = 0;
@@ -217,7 +258,8 @@ public class Driver
 					AllVertices[VertexCounter][0] = Vertex[i][0] - RADIUS * Math.sin(THETA);
 					AllVertices[VertexCounter++][1] = Vertex[i][1] - RADIUS * Math.cos(THETA);
 				}
-				
+				obstacles.get(obstacleCount).setGrownVertices(AllVertices);
+				obstacleCount++;
 				GrownVertices.add(AllVertices);
 			}
 		}

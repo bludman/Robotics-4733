@@ -8,7 +8,7 @@ import javax.swing.*;
 public class GUI extends JPanel implements ActionListener
 {	
 	/* Boolean values that determine what to display. */
-	boolean StartPoint, GoalPoint, Obstacles, Convex, VisibilityGraph, OptimalPath;
+	boolean showStartPoint, showGoalPoint, showObstacles, showGrownObstacles, showConvex, showVisibilityGraph, showOptimalPath;
 	
 	/* Double values that determine where to display the above. */
 	double StartX, StartY, GoalX, GoalY;
@@ -16,30 +16,33 @@ public class GUI extends JPanel implements ActionListener
 	/* ArrayLists of vertices of objects to be displayed. */
 	ArrayList<double[][]> Vertices = new ArrayList<double[][]>();
 	ArrayList<double[][]> ConvexHull = new ArrayList<double[][]>();
+	ArrayList<double[][]> grownObstacles = new ArrayList<double[][]>();
+	
 	
 	/* Swing components used in the GUI. */
 	public JFrame Frame;
-	public JRadioButton ObstaclesButton, ConvexButton, VisibilityButton, PathButton;
+	public JRadioButton ObstaclesButton, grownObstaclesButton, ConvexButton, VisibilityButton, PathButton;
 	public ButtonGroup Buttons;
 	
 	/* Factor by which to scale the data. */
-	public final int SCALE_FACTOR = 50;
+	public final int SCALE_FACTOR = 60;
 	
 	public GUI(
 			double StartX, 
 			double StartY, 
 			double GoalX, 
 			double GoalY, 
-			ArrayList<double[][]> Vertices, 
+			ArrayList<double[][]> Vertices,
+			ArrayList<double[][]> grownObstacles,
 			ArrayList<double[][]> ConvexHull)
 	{
 		// Initialize values for the GUI
-		StartPoint = false;
-		GoalPoint = false;
-		Obstacles = false;
-		Convex = false;
-		VisibilityGraph = false;
-		OptimalPath = false;
+		showStartPoint = false;
+		showGoalPoint = false;
+		showObstacles = false;
+		showConvex = false;
+		showVisibilityGraph = false;
+		showOptimalPath = false;
 		
 		// this.Vertices = Vertices;
 		// this.ConvexHull = ConvexHull;
@@ -47,11 +50,14 @@ public class GUI extends JPanel implements ActionListener
 		// Initialize Swing components
 		Frame = new JFrame();
 		
-		ObstaclesButton = new JRadioButton("Start/Goal, Obstacles");
-		ObstaclesButton.setActionCommand("Obstacles");
+		ObstaclesButton = new JRadioButton("Start/Goal, showObstacles");
+		ObstaclesButton.setActionCommand("showObstacles");
 		ObstaclesButton.addActionListener(this);
-		ConvexButton = new JRadioButton("Convex Hulls");
-		ConvexButton.setActionCommand("Convex");
+		grownObstaclesButton = new JRadioButton("Grown Obstacles");
+		grownObstaclesButton.setActionCommand("showGrownObstacles");
+		grownObstaclesButton.addActionListener(this);
+		ConvexButton = new JRadioButton("showConvex Hulls");
+		ConvexButton.setActionCommand("showConvex");
 		ConvexButton.addActionListener(this);
 		VisibilityButton = new JRadioButton("Visibility Graph");
 		VisibilityButton.setActionCommand("Visibility");
@@ -63,6 +69,7 @@ public class GUI extends JPanel implements ActionListener
 		// Set up button group
 		Buttons = new ButtonGroup();
 		Buttons.add(ObstaclesButton);
+		Buttons.add(grownObstaclesButton);
 		Buttons.add(ConvexButton);
 		Buttons.add(VisibilityButton);
 		Buttons.add(PathButton);
@@ -70,6 +77,7 @@ public class GUI extends JPanel implements ActionListener
 		// Add components to the panel
 		this.setPreferredSize(new Dimension(800, 600));
 		this.add(ObstaclesButton);
+		this.add(grownObstaclesButton);
 		this.add(ConvexButton);
 		this.add(VisibilityButton);
 		this.add(PathButton);
@@ -94,41 +102,66 @@ public class GUI extends JPanel implements ActionListener
 		
 		for (int i = 0; i < ConvexHull.size(); i++)
 		{
-			this.AdjustObstacles(ConvexHull.get(i), "Convex");
+			this.AdjustObstacles(ConvexHull.get(i), "showConvex");
+		}
+		
+		for (int i = 0; i < grownObstacles.size(); i++)
+		{
+			this.AdjustObstacles(grownObstacles.get(i), "Grown");
 		}
 	}
 	
 	public void actionPerformed(ActionEvent e)
 	{
 		// Draw start point, goal point, and obstacles
-		if (e.getActionCommand().equals("Obstacles"))
+		if (e.getActionCommand().equals("showObstacles"))
 		{
 			// Tell the GUI to display nothing
 			this.Clear();
 			
 			// Draw the start and goal points on the panel
-			StartPoint = true;
-			GoalPoint = true;
+			showStartPoint = true;
+			showGoalPoint = true;
 			
 			// Draw the obstacles
-			Obstacles = true;
+			showObstacles = true;
+			
+			this.repaint();
+		}
+		
+		// Draw start point, goal point, original obstacles and grown obstacles
+		if (e.getActionCommand().equals("showGrownObstacles"))
+		{
+			// Tell the GUI to display nothing
+			this.Clear();
+			
+			// Draw the start and goal points on the panel
+			showStartPoint = true;
+			showGoalPoint = true;
+			
+			// Draw the obstacles
+			showObstacles = true;
+			
+			// Draw the grown obstacles
+			showGrownObstacles = true;
+			
 			
 			this.repaint();
 		}
 		
 		// Draw start point, goal point, and grown obstacles
-		if (e.getActionCommand().equals("Convex"))
+		if (e.getActionCommand().equals("showConvex"))
 		{
 			// Tell the GUI to display nothing
 			this.Clear();
 			
 			// Draw the start and goal points on the panel
-			StartPoint = true;
-			GoalPoint = true;
+			showStartPoint = true;
+			showGoalPoint = true;
 			
 			// Draw the obstacles and convex hulls, excluding the boundary of the environment
-			Obstacles = true;
-			Convex = true;
+			showObstacles = true;
+			showConvex = true;
 			
 			this.repaint();
 		}
@@ -140,14 +173,14 @@ public class GUI extends JPanel implements ActionListener
 			this.Clear();
 			
 			// Draw the start and goal points on the panel
-			StartPoint = true;
-			GoalPoint = true;
+			showStartPoint = true;
+			showGoalPoint = true;
 			
 			// Draw the convex hulls, excluding the boundary of the environment 
-			Convex = true;
+			showConvex = true;
 			
 			// Draw the visibility graph
-			VisibilityGraph = true;
+			showVisibilityGraph = true;
 			
 			this.repaint();
 		}
@@ -159,15 +192,15 @@ public class GUI extends JPanel implements ActionListener
 			this.Clear();
 			
 			// Draw the start and goal points on the panel
-			StartPoint = true;
-			GoalPoint = true;
+			showStartPoint = true;
+			showGoalPoint = true;
 			
 			// Draw the grown obstacles, excluding the boundary of the environment
-			Convex = true;
+			showConvex = true;
 			
 			// Draw the optimal path
-			// VisibilityGraph = true;
-			OptimalPath = true;
+			// showVisibilityGraph = true;
+			showOptimalPath = true;
 			
 			this.repaint();
 		}
@@ -179,7 +212,7 @@ public class GUI extends JPanel implements ActionListener
 		Graphics2D g2 = (Graphics2D)g;
 
 		// Draw start point
-		if (StartPoint)
+		if (showStartPoint)
 		{
 			// Draw a black x to represent the starting point
 			g2.setColor(Color.BLACK);
@@ -188,7 +221,7 @@ public class GUI extends JPanel implements ActionListener
 		}
 		
 		// Draw goal point
-		if (GoalPoint)
+		if (showGoalPoint)
 		{
 			// Draw a green + to represent the goal point
 			g2.setColor(Color.GREEN);
@@ -197,7 +230,7 @@ public class GUI extends JPanel implements ActionListener
 		}
 		
 		// Draw original obstacles
-		if (Obstacles)
+		if (showObstacles)
 		{
 			g2.setColor(Color.BLUE);
 		
@@ -224,15 +257,44 @@ public class GUI extends JPanel implements ActionListener
 		}
 		
 		// Draw grown obstacles
-		if (Convex)
+		if (showGrownObstacles)
 		{
-			g2.setColor(Color.RED);
+			g2.setColor(Color.PINK);
+		
+			// Connect all of the vertices of all the obstacles
+			for (int i = 0; i < grownObstacles.size(); i++)
+			{
+				for (int j = 0; j < grownObstacles.get(i).length - 1; j++)
+				{
+					// Connect vertex j to vertex j + 1
+					g2.draw(new Line2D.Double(
+							grownObstacles.get(i)[j][0], 
+							grownObstacles.get(i)[j][1], 
+							grownObstacles.get(i)[j + 1][0], 
+							grownObstacles.get(i)[j + 1][1]));
+				}
+				
+				// Connect the final vertex to the first
+				g2.draw(new Line2D.Double(
+						grownObstacles.get(i)[0][0], 
+						grownObstacles.get(i)[0][1], 
+						grownObstacles.get(i)[Vertices.get(i).length - 1][0], 
+						grownObstacles.get(i)[Vertices.get(i).length - 1][1]));
+			}
+		}
+		
+		// Draw grown obstacles
+		if (showConvex)
+		{
+			g2.setColor(Color.YELLOW);
 			
 			// Connect all of the vertices of all the obstacles
 			for (int i = 0; i < ConvexHull.size(); i++)
 			{
+				System.out.println("i:"+i);
 				for (int j = 0; j < ConvexHull.get(i).length - 1; j++)
 				{
+					System.out.println("j:"+j);
 					// Connect vertex j to vertex j + 1
 					g2.draw(new Line2D.Double(
 							ConvexHull.get(i)[j][0], 
@@ -242,6 +304,7 @@ public class GUI extends JPanel implements ActionListener
 				}
 				
 				// Connect the final vertex to the first
+				if(ConvexHull.get(i)!=null && ConvexHull.get(i).length >0)
 				g2.draw(new Line2D.Double(
 						ConvexHull.get(i)[0][0], 
 						ConvexHull.get(i)[0][1], 
@@ -251,13 +314,13 @@ public class GUI extends JPanel implements ActionListener
 		}
 		
 		// Draw the visibility graph
-		if (VisibilityGraph)
+		if (showVisibilityGraph)
 		{
 			g2.setColor(Color.CYAN);
 		}
 		
 		// Draw the optimal path
-		if (OptimalPath)
+		if (showOptimalPath)
 		{
 			g2.setColor(Color.YELLOW);
 		}
@@ -279,35 +342,34 @@ public class GUI extends JPanel implements ActionListener
 		}
 	}
 	
-	public void AdjustObstacles(double[][] Vertices, String Choice)
+	public void AdjustObstacles(double[][] vertices, String choice)
 	{
-		double FinalVertices[][] = new double[Vertices.length][2];
+		double adjustedVertices[][] = new double[vertices.length][2];
 		
-		// Draw original obstacles
-		if (Choice.equals("Original"))
+		
+		for (int i = 0; i < vertices.length; i++)
 		{
-			for (int i = 0; i < Vertices.length; i++)
-			{
-				// Adjust x and y values for swing
-				FinalVertices[i][0] = Vertices[i][0] * SCALE_FACTOR + this.getWidth() / 4;
-				FinalVertices[i][1] = Vertices[i][1] * SCALE_FACTOR * -1 + this.getHeight() / 2;
-			}
+			// Adjust x and y values for swing
+			adjustedVertices[i][0] = vertices[i][0] * SCALE_FACTOR + this.getWidth() / 4;
+			adjustedVertices[i][1] = vertices[i][1] * SCALE_FACTOR * -1 + this.getHeight() / 2;
+		}
 			
-			// Add the array to the list of original certices
-			this.Vertices.add(FinalVertices);
+		// Draw original obstacles
+		if (choice.equals("Original"))
+		{
+			// Add the array to the list of original vertices
+			this.Vertices.add(adjustedVertices);
 		}
 		// Draw grown obstacles/convex hull
-		else
+		else if (choice.equals("showConvex"))
 		{
-			for (int i = 0; i < Vertices.length; i++)
-			{
-				// Adjust x and y values for swing
-				FinalVertices[i][0] = Vertices[i][0] * SCALE_FACTOR + this.getWidth() / 4;
-				FinalVertices[i][1] = Vertices[i][1] * SCALE_FACTOR * -1 + this.getHeight() / 2;
-			}
-			
 			// Add the array to the list of convex hull vertices
-			this.ConvexHull.add(FinalVertices);
+			this.ConvexHull.add(adjustedVertices);
+		}
+		else if (choice.equals("Grown"))
+		{
+			// Add the array to the list of convex hull vertices
+			this.grownObstacles.add(adjustedVertices);
 		}
 	}
 
@@ -323,12 +385,13 @@ public class GUI extends JPanel implements ActionListener
 	
 	public void Clear()
 	{
-		StartPoint = false;
-		GoalPoint = false;
-		Obstacles = false;
-		Convex = false;
-		VisibilityGraph = false;
-		OptimalPath = false;
+		showStartPoint = false;
+		showGoalPoint = false;
+		showObstacles = false;
+		showGrownObstacles = false;
+		showConvex = false;
+		showVisibilityGraph = false;
+		showOptimalPath = false;
 		
 		this.repaint();
 	}
