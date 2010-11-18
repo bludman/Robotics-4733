@@ -286,10 +286,11 @@ public class Obstacle
 	public Path2D toPath() {
 		Path2D.Double p =  new Path2D.Double();
 		
-		p.moveTo(this.convexHullVertices[0].getX(), this.convexHullVertices[1].getY());
+		p.moveTo(this.convexHullVertices[0].getX(), this.convexHullVertices[0].getY());
 		for(Point2D point: this.convexHullVertices)
 			p.lineTo(point.getX(), point.getY());
 		
+		p.closePath();
 		System.out.println("Current point: "+p.getBounds());
 		return p;
 	}
@@ -334,6 +335,7 @@ public class Obstacle
 			if(!containingWalls.contains(samplePoint))
 			{
 				System.out.println("Found intersection with outer bounds");
+				
 				return true;
 			}
 		}

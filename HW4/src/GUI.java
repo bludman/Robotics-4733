@@ -216,6 +216,7 @@ public class GUI extends JPanel implements ActionListener
 			// Draw the start and goal points on the panel
 			showStartPoint = true;
 			showGoalPoint = true;
+			showObstacles = true;
 			
 			
 			// Draw the convex hulls, excluding the boundary of the environment 
@@ -388,7 +389,7 @@ public class GUI extends JPanel implements ActionListener
 	public double[] adjustPoint(Point2D point)
 	{
 		double[] p = new double[2];
-		p[0]= point.getX()* SCALE_FACTOR + this.getWidth() / 4;
+		p[0]= point.getX()* SCALE_FACTOR + this.getWidth() / 3;
 		p[1]= point.getY()* SCALE_FACTOR *-1 + this.getHeight() / 2;
 		return p;
 	}
@@ -399,13 +400,13 @@ public class GUI extends JPanel implements ActionListener
 		if (Choice.equals("Start"))
 		{
 			// Adjust for proper Swing display
-			StartX = X * SCALE_FACTOR + this.getWidth() / 4;
+			StartX = X * SCALE_FACTOR + this.getWidth() / 3;
 			StartY = Y * SCALE_FACTOR * -1 + this.getHeight() / 2;
 		}
 		else
 		{
 			// Adjust for proper Swing display
-			GoalX = X * SCALE_FACTOR + this.getWidth() / 4;
+			GoalX = X * SCALE_FACTOR + this.getWidth() / 3;
 			GoalY = Y * SCALE_FACTOR * -1 + this.getHeight() / 2;
 		}
 	}
@@ -418,7 +419,7 @@ public class GUI extends JPanel implements ActionListener
 		for (int i = 0; i < vertices.length; i++)
 		{
 			// Adjust x and y values for swing
-			adjustedVertices[i][0] = vertices[i][0] * SCALE_FACTOR + this.getWidth() / 4;
+			adjustedVertices[i][0] = vertices[i][0] * SCALE_FACTOR + this.getWidth() / 3;
 			adjustedVertices[i][1] = vertices[i][1] * SCALE_FACTOR * -1 + this.getHeight() / 2;
 		}
 		return adjustedVertices;
@@ -433,7 +434,7 @@ public class GUI extends JPanel implements ActionListener
 		for (int i = 0; i < vertices.length; i++)
 		{
 			// Adjust x and y values for swing
-			adjustedVertices[i][0] = vertices[i][0] * SCALE_FACTOR + this.getWidth() / 4;
+			adjustedVertices[i][0] = vertices[i][0] * SCALE_FACTOR + this.getWidth() / 3;
 			adjustedVertices[i][1] = vertices[i][1] * SCALE_FACTOR * -1 + this.getHeight() / 2;
 		}
 			
@@ -459,7 +460,7 @@ public class GUI extends JPanel implements ActionListener
 	
 	public void drawMarker(Graphics2D g2,double x, double y, Color c)
 	{
-		System.out.println("Marker at: "+x+","+y);
+		//System.out.println("Marker at: "+x+","+y);
 		g2.setColor(c);
 		int SIZE=5;
 		g2.draw(new Line2D.Double(x - SIZE, y, x + SIZE, y));
