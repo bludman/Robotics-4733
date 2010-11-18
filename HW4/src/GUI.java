@@ -238,6 +238,8 @@ public class GUI extends JPanel implements ActionListener
 			showStartPoint = true;
 			showGoalPoint = true;
 			
+			showObstacles = true;
+			
 			// Draw the grown obstacles, excluding the boundary of the environment
 			showConvex = true;
 			
@@ -361,7 +363,6 @@ public class GUI extends JPanel implements ActionListener
 		// Draw the visibility graph
 		if (showVisibilityGraph)
 		{
-			g2.setColor(Color.CYAN);
 			drawVisibilityGraph(g2);
 		}
 		
@@ -369,7 +370,7 @@ public class GUI extends JPanel implements ActionListener
 		// Draw the optimal path
 		if (showOptimalPath)
 		{
-			g2.setColor(Color.RED);
+			g2.setColor(Color.CYAN);
 			for(int i=1;i< shortestPath.length;i++)
 			{
 				
@@ -377,7 +378,8 @@ public class GUI extends JPanel implements ActionListener
 				g2.fillOval(
 						(int)shortestPath[i-1][0]-2, 
 						(int)shortestPath[i-1][1]-2, 4,4);
-				g2.setColor(Color.RED);
+				
+				g2.setColor(Color.CYAN);
 				g2.draw(new Line2D.Double(
 						shortestPath[i-1][0], 
 						shortestPath[i-1][1], 

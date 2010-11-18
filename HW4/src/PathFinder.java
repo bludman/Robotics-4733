@@ -2,6 +2,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -111,12 +112,14 @@ public class PathFinder {
 			}
 		}
 		
+		//Add back any edges along the perimeter of obstacles
 		if(obstacles!=null)
 			for(Obstacle o: obstacles)
 			{
 				edges.addAll(o.getPerimeterAsEdges());
 			}
 		
+		//Add back any edges along the perimeter of the wall
 		if(wallObstacle!=null)
 			edges.addAll(wallObstacle.getPerimeterAsEdges());
 		
@@ -136,6 +139,7 @@ public class PathFinder {
 	{
 		HashSet<Point2D> visited = new HashSet<Point2D>();
 		final HashMap<Point2D,Double> distanceToStart = new HashMap<Point2D, Double>();
+		HashMap<Point2D,Point2D> updatedBy = new HashMap<Point2D, Point2D>();
 		
 		//PriorityQueue<Point2D> unvisited = new PriorityQueue<Point2D>();
 		//HashSet<Point2D> unvisited;
@@ -157,6 +161,7 @@ public class PathFinder {
 		for(Point2D p: adjacency.get(start))
 		{
 			distanceToStart.put(p, p.distance(start));
+			updatedBy.put(p, start);
 		}
 		
 		//Set the distance of the start vertext to itself
@@ -198,35 +203,82 @@ public class PathFinder {
 			System.out.println("Unvisited has "+unvisited.size()+" nodes");
 			//Find closest Vertex V that is UNVISITED
 			Point2D v =unvisited.poll();
+			
 			//Mark V as VISITED
 			visited.add(v);
-			shortestPath.add(v);
-			System.out.println("Adding point: "+v);
+			//shortestPath.add(v);
+			System.out.println("Settled point: "+v);
+			
 			
 			//Stop of we've found the final position
-			if(v.equals(goal)){
-				System.out.println("Found goal early!");
-				return shortestPath;
-			}
+//			if(v.equals(goal)){
+//				System.out.println("Found goal early!");
+//				return shortestPath;
+//			}
 				
 			
 			//For each UNVISITED vertex W visible from V
 			ArrayList<Point2D> visiblePointsFromV = adjacency.get(v);
 			for(Point2D w : visiblePointsFromV)
 			{
-				if(!visited.contains(v))
+				if(!visited.contains(w))
 				{
 					//If (DIST(S,V) + DIST(V,W)) < DIST(S,W)
 					if((distanceToStart.get(v)+v.distance(w) )< distanceToStart.get(w))
 					{
+						System.out.println((distanceToStart.get(v)+v.distance(w) )+"is smaller than "+distanceToStart.get(w));
 						//then DIST(S,W) = DIST(S,V) + DIST(V,W)
 						distanceToStart.put(w, distanceToStart.get(v)+v.distance(w));
+						updatedBy.put(w,v);
 					}
 				}
 			}
+			
 		}
 		
-			System.out.println("Finished find shortest path, returning");	
+		
+		
+//		//While Vertices in G remain UNVISITED
+//		while(!unvisited.isEmpty())
+//		{
+//			//Find closest Vertex V that is UNVISITED
+//			Point2D v = unvisited.poll();
+//			
+//			//Mark V as VISITED
+//			visited.add(v);
+//			shortestPath.add(v);
+//			
+//			
+//			//For each UNVISITED vertex W visible from V
+//			ArrayList<Point2D> visible = adjacency.get(v);
+//			for( Point2D w: visible)
+//			{
+//				if(!visited.contains(w))
+//				{
+//					//If (DIST(S,V) + DIST(V,W)) < DIST(S,W)
+//					if((distanceToStart.get(v)+v.distance(w))< distanceToStart.get(w))
+//					{
+//						//then DIST(S,W) = DIST(S,V) + DIST(V,W)
+//						distanceToStart.put(w)
+//					}
+//						
+//				}
+//			}
+//		}
+		
+		
+		
+		
+			System.out.println("Finished find shortest path, returning");
+		Point2D t = goal;
+		while(!t.equals(start))
+		{
+			shortestPath.add(t);
+			t=updatedBy.get(t);
+		}
+			shortestPath.add(start);
+			Collections.reverse(shortestPath);
+			
 		return shortestPath;
 		
 	}
