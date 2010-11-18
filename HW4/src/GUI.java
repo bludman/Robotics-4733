@@ -10,26 +10,32 @@ import javax.swing.*;
 public class GUI extends JPanel implements ActionListener
 {	
 	/* Boolean values that determine what to display. */
-	boolean showStartPoint, showGoalPoint, showObstacles, showGrownObstacles, showConvex, showVisibilityGraph, showOptimalPath;
+	private boolean showStartPoint, showGoalPoint, showObstacles, showGrownObstacles, showConvex, showVisibilityGraph, showOptimalPath;
 	
 	/* Double values that determine where to display the above. */
-	double StartX, StartY, GoalX, GoalY;
+	private double StartX, StartY, GoalX, GoalY;
 	
 	/* ArrayLists of vertices of objects to be displayed. */
-	ArrayList<double[][]> Vertices = new ArrayList<double[][]>();
-	ArrayList<double[][]> ConvexHull = new ArrayList<double[][]>();
-	ArrayList<double[][]> grownObstacles = new ArrayList<double[][]>();
-	ArrayList<double[][]> visibilityGraph = new ArrayList<double[][]>();
-	double[][] shortestPath;
+	private ArrayList<double[][]> Vertices = new ArrayList<double[][]>();
+	private ArrayList<double[][]> ConvexHull = new ArrayList<double[][]>();
+	private ArrayList<double[][]> grownObstacles = new ArrayList<double[][]>();
+	private ArrayList<double[][]> visibilityGraph = new ArrayList<double[][]>();
+	private double[][] shortestPath;
+	private ArrayList<Point2D> shortestPathPoints;
 	
+	
+	DijkstraRobot robot = new DijkstraRobot();
 	
 	/* Swing components used in the GUI. */
-	public JFrame Frame;
-	public JRadioButton ObstaclesButton, grownObstaclesButton, ConvexButton, VisibilityButton, PathButton;
-	public ButtonGroup Buttons;
+	private JFrame Frame;
+	private JRadioButton ObstaclesButton, grownObstaclesButton, ConvexButton, VisibilityButton, PathButton;
+	private JButton driveButton;
+	
+	
+	private ButtonGroup Buttons;
 	
 	/* Factor by which to scale the data. */
-	public final int SCALE_FACTOR = 60;
+	private final int SCALE_FACTOR = 60;
 	
 	public GUI(
 			double StartX, 
@@ -57,9 +63,14 @@ public class GUI extends JPanel implements ActionListener
 		// Initialize Swing components
 		Frame = new JFrame();
 		
+		driveButton = new JButton("Drive!");
+		driveButton.setActionCommand("Drive");
+		driveButton.addActionListener(this);
+		driveButton.setEnabled(false);
 		ObstaclesButton = new JRadioButton("Start/Goal, showObstacles");
 		ObstaclesButton.setActionCommand("showObstacles");
 		ObstaclesButton.addActionListener(this);
+		ObstaclesButton.setSelected(true);
 		grownObstaclesButton = new JRadioButton("Grown Obstacles");
 		grownObstaclesButton.setActionCommand("showGrownObstacles");
 		grownObstaclesButton.addActionListener(this);
@@ -83,6 +94,7 @@ public class GUI extends JPanel implements ActionListener
 		
 		// Add components to the panel
 		this.setPreferredSize(new Dimension(800, 600));
+		this.add(driveButton);
 		this.add(ObstaclesButton);
 		this.add(grownObstaclesButton);
 		this.add(ConvexButton);
@@ -119,7 +131,10 @@ public class GUI extends JPanel implements ActionListener
 		
 		convertVisibilityGraph(visibilityGraph);
 		System.out.println("Shortest path:" +shortestPath.toString());
+		shortestPathPoints = shortestPath;
 		convertShortestPath(shortestPath);
+		
+		robot.initializeRobot();
 	}
 	
 	private void convertShortestPath(ArrayList<Point2D> shortestPath) 
@@ -154,9 +169,19 @@ public class GUI extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
+		
+		if(e.getActionCommand().equals("Drive"))
+		{
+			
+			
+			robot.followPath(shortestPathPoints);
+		}
+		
+		
 		// Draw start point, goal point, and obstacles
 		if (e.getActionCommand().equals("showObstacles"))
 		{
+			robot.driveDistance(100, 500);
 			// Tell the GUI to display nothing
 			this.Clear();
 			
@@ -231,6 +256,16 @@ public class GUI extends JPanel implements ActionListener
 		// Draw start point, goal point, grown obstacles, and shortest path
 		if (e.getActionCommand().equals("Path"))
 		{
+			try{
+			robot.safe();
+			driveButton.setEnabled(true);
+			}catch(NullPointerException npe)
+			{
+				//Swallow if robot isn't connected
+				System.err.println(npe.getMessage());
+			}
+			
+			
 			// Tell the GUI to display nothing
 			this.Clear();
 			
