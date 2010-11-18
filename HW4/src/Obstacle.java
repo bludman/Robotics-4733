@@ -295,12 +295,19 @@ public class Obstacle
 	}
 
 
-	public static boolean intersects(ArrayList<Path2D> obstacles, ArrayList<Path2D> containingWalls, PathFinder.Edge edge) {
+	/**
+	 * Check whether an adge intersects a list of obstacles, or goes outside a containing wall
+	 * @param obstacles
+	 * @param containingWalls
+	 * @param edge
+	 * @return
+	 */
+	public static boolean intersects(ArrayList<Path2D> obstacles, Path2D containingWalls, PathFinder.Edge edge) {
 		final int SAMPLE_POINTS = 50;
 		final double INCREMENT = 1.0/SAMPLE_POINTS;
 		final int X=0;
 		final int Y=1;
-		double[][] basePoint = edge.getAsArray();
+		double[][] basePoint = edge.toArray();
 		
 		
 		//System.out.println("EDGE "+basePoint[0][X]+","+basePoint[0][Y]+"->"+basePoint[1][X]+","+basePoint[1][Y]);
@@ -318,22 +325,20 @@ public class Obstacle
 			{
 				if(obstacle.contains(samplePoint))
 				{
-					System.out.println("Found intersection with obstacle");
+					//System.out.println("Found intersection with obstacle");
 					return true;
 				}
 			}
 			
 			//Check if sample point goes outside the main bounds
-			for(Path2D wall: containingWalls)
+			if(!containingWalls.contains(samplePoint))
 			{
-				if(!wall.contains(samplePoint))
-				{
-					System.out.println("Found intersection with outer bounds");
-					return true;
-				}
+				System.out.println("Found intersection with outer bounds");
+				return true;
 			}
 		}
 		
+		//System.out.println("Edge is good: "+edge);
 		//Edge sample points didn't intersect with any obstacles
 		return false;
 	}

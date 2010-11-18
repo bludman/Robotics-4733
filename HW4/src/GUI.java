@@ -20,6 +20,7 @@ public class GUI extends JPanel implements ActionListener
 	ArrayList<double[][]> ConvexHull = new ArrayList<double[][]>();
 	ArrayList<double[][]> grownObstacles = new ArrayList<double[][]>();
 	ArrayList<double[][]> visibilityGraph = new ArrayList<double[][]>();
+	double[][] shortestPath;
 	
 	
 	/* Swing components used in the GUI. */
@@ -38,7 +39,8 @@ public class GUI extends JPanel implements ActionListener
 			ArrayList<double[][]> Vertices,
 			ArrayList<double[][]> grownObstacles,
 			ArrayList<double[][]> ConvexHull,
-			ArrayList<PathFinder.Edge> visibilityGraph
+			ArrayList<PathFinder.Edge> visibilityGraph,
+			ArrayList<Point2D> shortestPath
 			)
 	{
 		// Initialize values for the GUI
@@ -97,8 +99,8 @@ public class GUI extends JPanel implements ActionListener
 		Frame.setVisible(true);
 			
 		// Scale and save the data as necessary
-		this.AdjustPoint(StartX, this.StartY, "Start");
-		this.AdjustPoint(GoalX, this.GoalY, "Goal");
+		this.AdjustPoint(StartX, StartY, "Start");
+		this.AdjustPoint(GoalX, GoalY, "Goal");
 		
 		for (int i = 0; i < Vertices.size(); i++)
 		{
@@ -116,13 +118,35 @@ public class GUI extends JPanel implements ActionListener
 		}
 		
 		convertVisibilityGraph(visibilityGraph);
+		System.out.println("Shortest path:" +shortestPath.toString());
+		convertShortestPath(shortestPath);
 	}
 	
+	private void convertShortestPath(ArrayList<Point2D> shortestPath) 
+	{
+		double[][] path = new double[shortestPath.size()][2];
+		
+		int i=0;
+		for(Point2D p: shortestPath)
+		{
+			path[i++]=adjustPoint(p);
+			
+		}
+		this.shortestPath=path;
+		
+		System.out.println("***Shortest path has "+this.shortestPath.length +" points ***");
+		for( i=0;i<path.length;i++)
+		{
+			System.out.println(path[i][0]+","+path[i][1]);
+		}
+		
+	}
+
 	private void convertVisibilityGraph(ArrayList<PathFinder.Edge> graph) 
 	{
 		for(PathFinder.Edge e: graph)
 		{
-			this.visibilityGraph.add(AdjustObstacles(e.getAsArray()));
+			this.visibilityGraph.add(AdjustObstacles(e.toArray()));
 		}
 		
 		System.out.println("***Visibility graph has "+visibilityGraph.size() +" points ***");
@@ -193,6 +217,7 @@ public class GUI extends JPanel implements ActionListener
 			showStartPoint = true;
 			showGoalPoint = true;
 			
+			
 			// Draw the convex hulls, excluding the boundary of the environment 
 			showConvex = true;
 			
@@ -239,18 +264,18 @@ public class GUI extends JPanel implements ActionListener
 		if (showStartPoint)
 		{
 			// Draw a black x to represent the starting point
-			g2.setColor(Color.BLACK);
-			g2.draw(new Line2D.Double(StartX - 2, StartY - 2, StartX + 2, StartY + 2));
-			g2.draw(new Line2D.Double(StartX + 2, StartY - 2, StartX - 2, StartY + 2));
+			drawMarker(g2, StartX, StartY, Color.BLACK);
+//			g2.setColor(Color.BLACK);
+//			g2.draw(new Line2D.Double(StartX - 2, StartY - 2, StartX + 2, StartY + 2));
+//			g2.draw(new Line2D.Double(StartX + 2, StartY - 2, StartX - 2, StartY + 2));
 		}
 		
 		// Draw goal point
 		if (showGoalPoint)
 		{
 			// Draw a green + to represent the goal point
-			g2.setColor(Color.GREEN);
-			g2.draw(new Line2D.Double(GoalX - 2, GoalY, GoalX + 2, GoalY));
-			g2.draw(new Line2D.Double(GoalX, GoalY - 2, GoalX, GoalY + 2));
+			drawMarker(g2, GoalX, GoalY, Color.GREEN);
+		
 		}
 		
 		// Draw original obstacles
@@ -315,10 +340,10 @@ public class GUI extends JPanel implements ActionListener
 			// Connect all of the vertices of all the obstacles
 			for (int i = 0; i < ConvexHull.size(); i++)
 			{
-				System.out.println("i:"+i);
+				//System.out.println("i:"+i);
 				for (int j = 0; j < ConvexHull.get(i).length - 1; j++)
 				{
-					System.out.println("j:"+j);
+					//System.out.println("j:"+j);
 					// Connect vertex j to vertex j + 1
 					g2.draw(new Line2D.Double(
 							ConvexHull.get(i)[j][0], 
@@ -343,9 +368,32 @@ public class GUI extends JPanel implements ActionListener
 		if (showOptimalPath)
 		{
 			g2.setColor(Color.YELLOW);
+			for(int i=1;i< shortestPath.length;i++)
+			{
+				
+				g2.setColor(Color.BLUE);
+				g2.fillOval(
+						(int)shortestPath[i-1][0]-2, 
+						(int)shortestPath[i-1][1]-2, 4,4);
+				g2.setColor(Color.YELLOW);
+				g2.draw(new Line2D.Double(
+						shortestPath[i-1][0], 
+						shortestPath[i-1][1], 
+						shortestPath[i][0], 
+						shortestPath[i][1]));
+			}
 		}
 	}
 
+	public double[] adjustPoint(Point2D point)
+	{
+		double[] p = new double[2];
+		p[0]= point.getX()* SCALE_FACTOR + this.getWidth() / 4;
+		p[1]= point.getY()* SCALE_FACTOR *-1 + this.getHeight() / 2;
+		return p;
+	}
+	
+	
 	public void AdjustPoint(double X, double Y, String Choice) 
 	{
 		if (Choice.equals("Start"))
@@ -408,14 +456,28 @@ public class GUI extends JPanel implements ActionListener
 		}
 	}
 
+	
+	public void drawMarker(Graphics2D g2,double x, double y, Color c)
+	{
+		System.out.println("Marker at: "+x+","+y);
+		g2.setColor(c);
+		int SIZE=5;
+		g2.draw(new Line2D.Double(x - SIZE, y, x + SIZE, y));
+		g2.draw(new Line2D.Double(x, y - SIZE, x, y + SIZE));
+	}
+	
+	/**
+	 * Draw the visibility graph
+	 * @param g2
+	 */
 	public void drawVisibilityGraph(Graphics2D g2) 
 	{
-		g2.setColor(Color.ORANGE);
+		g2.setColor(Color.RED);
 		
 		// Connect all of the vertices of all the obstacles
 		for (int i = 0; i < visibilityGraph.size() -1; i++)
 		{
-			System.out.println("Drawing edge: "+Arrays.toString(visibilityGraph.get(i)[0])+" -> "+Arrays.toString(visibilityGraph.get(i)[1]));
+			//System.out.println("Drawing edge: "+Arrays.toString(visibilityGraph.get(i)[0])+" -> "+Arrays.toString(visibilityGraph.get(i)[1]));
 				// Connect vertex j to vertex j + 1
 				g2.draw(new Line2D.Double(
 						visibilityGraph.get(i)[0][0], 

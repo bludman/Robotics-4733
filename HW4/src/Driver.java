@@ -3,12 +3,14 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
+
 public class Driver
 {
 	/* Contains the vertices of all obstacles and environment. */
 	public static ArrayList<double[][]> Vertices;
 	
 	public static ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+	public static Obstacle wall;
 	
 	/* Contains the grown vertices of all obstacles. */
 	public static ArrayList<double[][]> GrownVertices;
@@ -46,8 +48,11 @@ public class Driver
 		double returned[] = GetStartAndGoalCoordinates("hw3_start_goal.txt");
 		StartX = returned[0];
 		StartY = returned[1];
+		
 		GoalX = returned[2];
 		GoalY = returned[3];
+		
+		System.out.println("RETURNED: "+Arrays.toString(returned));
 		
 		// Retrieve the vertices of all obstacles, store in ArrayList Vertices
 		GetVertices("hw3_world_obstacles.txt");
@@ -96,6 +101,20 @@ public class Driver
 			}
 		}
 
+		ArrayList<PathFinder.Edge> visibilityGraph= PathFinder.findVisibilityGraph(new Point2D.Double(StartX, StartY), new Point2D.Double(GoalX, GoalY), obstacles,wall);
+		ArrayList<Point2D> shortestPath = PathFinder.findShortestPath(new Point2D.Double(StartX, StartY), new Point2D.Double(GoalX, GoalY), visibilityGraph);
+		
+		//SAMPLE DATA
+		shortestPath = new ArrayList<Point2D>();
+		shortestPath.add(new Point2D.Double(StartX, StartY));
+		//shortestPath.add(new Point2D.Double(0,0));
+		//shortestPath.add(new Point2D.Double(1,1));
+		//shortestPath.add(new Point2D.Double(-1,2));
+		//shortestPath.add(new Point2D.Double(10,2));
+		shortestPath.add(new Point2D.Double(GoalX, GoalY));
+		
+		System.out.println("StartY: "+StartY);
+		
 		Display = new GUI(
 				StartX,
 				StartY,
@@ -106,7 +125,8 @@ public class Driver
 				//GrownVertices,
 				convexHulls,
 				//ConvexHull,
-				PathFinder.findVisibilityGraph(new Point2D.Double(StartX, StartY), new Point2D.Double(GoalX, GoalY), obstacles)
+				visibilityGraph,
+				shortestPath
 				);
 	}
 	
@@ -189,7 +209,10 @@ public class Driver
 				}
 				
 				Vertices.add(CurrentVertices);
-				obstacles.add(new Obstacle(CurrentVertices));
+				if(i==0)
+					wall= new Obstacle(CurrentVertices);
+				else
+					obstacles.add(new Obstacle(CurrentVertices));
 			}
 		}
 		catch (FileNotFoundException fe)
@@ -261,7 +284,7 @@ public class Driver
 					AllVertices[VertexCounter][0] = Vertex[i][0] - RADIUS * Math.sin(THETA);
 					AllVertices[VertexCounter++][1] = Vertex[i][1] - RADIUS * Math.cos(THETA);
 				}
-				obstacles.get(obstacleCount).setGrownVertices(AllVertices);
+				obstacles.get(obstacleCount-1).setGrownVertices(AllVertices);
 				obstacleCount++;
 				GrownVertices.add(AllVertices);
 			}
