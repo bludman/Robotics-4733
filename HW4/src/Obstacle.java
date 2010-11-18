@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.Stack;
 
 
+
+
 /**
  * 
  */
@@ -343,6 +345,20 @@ public class Obstacle
 		//System.out.println("Edge is good: "+edge);
 		//Edge sample points didn't intersect with any obstacles
 		return false;
+	}
+
+
+	public ArrayList<PathFinder.Edge> getPerimeterAsEdges() 
+	{
+		ArrayList<PathFinder.Edge> edges = new ArrayList<PathFinder.Edge>();
+		for(int i=0;i<(convexHullVertices.length-1);i++)
+		{
+			edges.add(new PathFinder.Edge(convexHullVertices[i], convexHullVertices[i+1]));
+		}
+		
+		edges.add(new PathFinder.Edge(convexHullVertices[0], convexHullVertices[convexHullVertices.length-1]));
+		
+		return edges;
 	}
 	
 	

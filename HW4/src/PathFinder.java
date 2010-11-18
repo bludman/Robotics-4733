@@ -110,6 +110,16 @@ public class PathFinder {
 					edges.add(edge);
 			}
 		}
+		
+		if(obstacles!=null)
+			for(Obstacle o: obstacles)
+			{
+				edges.addAll(o.getPerimeterAsEdges());
+			}
+		
+		if(wallObstacle!=null)
+			edges.addAll(wallObstacle.getPerimeterAsEdges());
+		
 
 		return edges;
 		
@@ -133,7 +143,7 @@ public class PathFinder {
 		
 		
 		//HashMap<Point2D, Point2D> adjacency = new HashMap<Point2D, Point2D>();
-		HashMap<Point2D, ArrayList<Point2D>> adjacency = buildGraph(edges);
+		HashMap<Point2D, ArrayList<Point2D>> adjacency = buildAdjacencyList(edges);
 		ArrayList<Point2D> shortestPath = new ArrayList<Point2D>();
 		
 		//Set all initial distances from start to infinity
@@ -155,23 +165,24 @@ public class PathFinder {
 		//OUTPUT THe distance list
 		for(Point2D p: distanceToStart.keySet())
 		{
-			System.out.println(p+": dist: "+distanceToStart.get(p));
+			//System.out.println(p+": dist: "+distanceToStart.get(p));
 		}
-		System.out.println("START:"+start+": dist: "+distanceToStart.get(start));
-		
+		//System.out.println("START:"+start+": dist: "+distanceToStart.get(start));
+		System.out.println("Does adj contain start-finish? "+ adjacency.get(start).contains(goal));
 		
 		
 		Comparator<Point2D> distanceToStartComparator = new Comparator<Point2D>() {
-			private HashMap<Point2D,Double> distances = distanceToStart;
+			//private HashMap<Point2D,Double> distances = distanceToStart;
 			
 			@Override
 			public int compare(Point2D a, Point2D b) {
-				return distances.get(a).compareTo(distanceToStart.get(b));
+				//return distances.get(a).compareTo(distanceToStart.get(b));
+				return distanceToStart.get(a).compareTo(distanceToStart.get(b));
 			}
 		};
 		
-		PriorityQueue<Point2D> unvisited = new PriorityQueue<Point2D>(adjacency.size(), distanceToStartComparator);
-		
+		PriorityQueue<Point2D> unvisited = new PriorityQueue<Point2D>(adjacency.keySet().size(), distanceToStartComparator);
+		unvisited.addAll(distanceToStart.keySet());
 		
 		
 		//add all nodes from edges to hashset with default infinite distance
@@ -179,19 +190,25 @@ public class PathFinder {
 		//remove the source node from the hashset
 		//move nodes from temp to the heap
 		
+		System.out.println("Before alg: Unvisited has "+unvisited.size()+" nodes");
 		
 		//While Vertices in G remain UNVISITED
 		while(!unvisited.isEmpty())
 		{
+			System.out.println("Unvisited has "+unvisited.size()+" nodes");
 			//Find closest Vertex V that is UNVISITED
 			Point2D v =unvisited.poll();
 			//Mark V as VISITED
 			visited.add(v);
 			shortestPath.add(v);
+			System.out.println("Adding point: "+v);
 			
 			//Stop of we've found the final position
-			if(v.equals(goal))
+			if(v.equals(goal)){
+				System.out.println("Found goal early!");
 				return shortestPath;
+			}
+				
 			
 			//For each UNVISITED vertex W visible from V
 			ArrayList<Point2D> visiblePointsFromV = adjacency.get(v);
@@ -209,12 +226,12 @@ public class PathFinder {
 			}
 		}
 		
-				
+			System.out.println("Finished find shortest path, returning");	
 		return shortestPath;
 		
 	}
 
-	private static HashMap<Point2D, ArrayList<Point2D>> buildGraph(ArrayList<Edge> edges) {
+	private static HashMap<Point2D, ArrayList<Point2D>> buildAdjacencyList(ArrayList<Edge> edges) {
 		HashMap<Point2D, ArrayList<Point2D>> adj= new HashMap<Point2D, ArrayList<Point2D>>();
 		for(Edge e: edges)
 		{

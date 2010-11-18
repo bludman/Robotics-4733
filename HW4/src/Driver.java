@@ -105,13 +105,13 @@ public class Driver
 		ArrayList<Point2D> shortestPath = PathFinder.findShortestPath(new Point2D.Double(StartX, StartY), new Point2D.Double(GoalX, GoalY), visibilityGraph);
 		
 		//SAMPLE DATA
-		shortestPath = new ArrayList<Point2D>();
-		shortestPath.add(new Point2D.Double(StartX, StartY));
-		//shortestPath.add(new Point2D.Double(0,0));
-		//shortestPath.add(new Point2D.Double(1,1));
-		//shortestPath.add(new Point2D.Double(-1,2));
-		//shortestPath.add(new Point2D.Double(10,2));
-		shortestPath.add(new Point2D.Double(GoalX, GoalY));
+//		shortestPath = new ArrayList<Point2D>();
+//		shortestPath.add(new Point2D.Double(StartX, StartY));
+//		//shortestPath.add(new Point2D.Double(0,0));
+//		//shortestPath.add(new Point2D.Double(1,1));
+//		//shortestPath.add(new Point2D.Double(-1,2));
+//		//shortestPath.add(new Point2D.Double(10,2));
+//		shortestPath.add(new Point2D.Double(GoalX, GoalY));
 		
 		System.out.println("StartY: "+StartY);
 		
