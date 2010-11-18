@@ -16,7 +16,6 @@ public class Driver
 	public static ArrayList<double[][]> grownVertices = new ArrayList<double[][]>();
 	
 	/* Contains the convex hull vertices of the grown obstacles. */
-	public static ArrayList<double[][]> ConvexHull;
 	public static ArrayList<double[][]> convexHulls = new ArrayList<double[][]>();
 	
 	/* Various coordinates and values necessary for proper execution of the program. */
@@ -32,88 +31,55 @@ public class Driver
 	
 	public static void main(String args[])
 	{	
-		// Require correct number of arguments
-		// if (args.length != 3)
-		// {
-		//	System.out.println("Usage: java Driver.java obstacle_textfile start_goal_textfile");
-		//	return;
-		// }
+		 //Require correct number of arguments
+		 if (args.length != 2)
+		 {
+			System.out.println("Usage: java Driver.java obstacle_textfile start_goal_textfile");
+			return;
+		 }
 		
 		Vertices = new ArrayList<double[][]>();
 		GrownVertices = new ArrayList<double[][]>();
-		ConvexHull = new ArrayList<double[][]>();
 		
 		// Retrieve the start and goal coordinates
-		double returned[] = GetStartAndGoalCoordinates("hw3_start_goal.txt");
+		double returned[] = GetStartAndGoalCoordinates(args[1]);
 		StartX = returned[0];
 		StartY = returned[1];
 		
 		GoalX = returned[2];
 		GoalY = returned[3];
 		
-		System.out.println("RETURNED: "+Arrays.toString(returned));
-		
 		// Retrieve the vertices of all obstacles, store in ArrayList Vertices
-		GetVertices("hw3_world_obstacles.txt");
+		GetVertices(args[0]);
 		
 		// Grow the obstacles, excluding the boundary of the environment
+		//TODO: Refactor this to the obstacle class
 		GrowObstacles(Vertices);
-		
-		// Find the convex hull of each obstacle
-		FindConvexHull(GrownVertices);
-		
-		// Calculate the visibility graph
-		CalculateGraph();
-		
-		// Find the shortest path
-		FindPath();
-		
-		
 		
 		for(Obstacle o:obstacles)
 		{
 			if(o!=null)
 			{
 				double[][] points=Obstacle.pointsToDouble(o.getGrownPoints());
-				System.out.println(Arrays.toString(points));
 				grownVertices.add(points);
-				
 			}
 		}
 		
-		//obstacles.set(0, null);
 		for(Obstacle o:obstacles)
 		{
 			if(o!=null)
 			{
 				double[][] points=Obstacle.pointsToDouble(o.getHullPoints());
-				//System.out.println("Printed array: "+Arrays.toString(points));
-				
-				for(int i=0;i<points.length;i++)
-				{
-						System.out.print("("+points[i][0]+","+points[i][1]+") ");
-				}
-				
 				convexHulls.add(points);
-				
-				System.out.println("\nadding an obstacle to convex hull\n***\n");
 			}
 		}
 
+		// Calculate the visibility graph
 		ArrayList<PathFinder.Edge> visibilityGraph= PathFinder.findVisibilityGraph(new Point2D.Double(StartX, StartY), new Point2D.Double(GoalX, GoalY), obstacles,wall);
+		
+		// Calculate the shortest path
 		ArrayList<Point2D> shortestPath = PathFinder.findShortestPath(new Point2D.Double(StartX, StartY), new Point2D.Double(GoalX, GoalY), visibilityGraph);
-		
-		//SAMPLE DATA
-//		shortestPath = new ArrayList<Point2D>();
-//		shortestPath.add(new Point2D.Double(StartX, StartY));
-//		//shortestPath.add(new Point2D.Double(0,0));
-//		//shortestPath.add(new Point2D.Double(1,1));
-//		//shortestPath.add(new Point2D.Double(-1,2));
-//		//shortestPath.add(new Point2D.Double(10,2));
-//		shortestPath.add(new Point2D.Double(GoalX, GoalY));
-		
-		System.out.println("StartY: "+StartY);
-		
+
 		Display = new GUI(
 				StartX,
 				StartY,
@@ -121,9 +87,7 @@ public class Driver
 				GoalY,
 				Vertices,
 				grownVertices,
-				//GrownVertices,
 				convexHulls,
-				//ConvexHull,
 				visibilityGraph,
 				shortestPath
 				);
@@ -290,104 +254,4 @@ public class Driver
 		}
 	}
 	
-	private static void FindConvexHull(ArrayList<double[][]> GrownVertices)
-	{
-		// Contains the current P_0
-		double[] RightmostLowest = new double[2];
-		int RLPosition = 0;
-		
-		// Stack for finding the convex hull
-		Stack<double[]> ConvexStack = new Stack<double[]>();
-		
-		// For each set of grown vertices
-		for (double[][] Vertex : GrownVertices)
-		{
-			// Initialize to negative/positive infinity to avoid accidentally selecting a point 0, 0
-			RightmostLowest = new double[]{Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY};;
-			RLPosition = 0;
-			
-			// Find the rightmost, lowest point
-			for (int i = 0; i < Vertex.length; i++)
-			{
-				// Retain the point with the lowest y value
-				if (Vertex[i][1] < RightmostLowest[1])
-				{
-					RightmostLowest = Vertex[i];
-					RLPosition = i;
-				}
-				// If the y values match, pick the point with the greatest x value
-				else if (Vertex[i][1] == RightmostLowest[1])
-				{
-					if (Vertex[i][0] > RightmostLowest[0])
-					{
-						RightmostLowest = Vertex[i];
-						RLPosition = i;
-					}
-				}
-			}
-			
-			// Put the point at the beginning of the array
-			double[] Temp = Vertex[0];
-			Vertex[0] = RightmostLowest;
-			Vertex[RLPosition] = Temp;
-			
-			// Rightmost, lowest point found. Sort the rest of the points
-			for (int i = 1; i < Vertex.length; i++)
-			{
-				for (int j = i; j < Vertex.length; j++)
-				{
-					// Points sorted from right (beginning of array) to left (end of array)
-					if (!OnLeft(RightmostLowest, Vertex[i], Vertex[j]))
-					{
-						Temp = Vertex[j];
-						Vertex[j] = Vertex[i];
-						Vertex[i] = Temp;
-					}
-				}
-			}
-			
-			// Push starting values onto the stack
-			ConvexStack.push(Vertex[0]);
-			ConvexStack.push(Vertex[Vertex.length - 1]);
-			
-			// Points sorted, find convex hull
-			for (int i = 1; i < Vertex.length; i += 0)
-			{
-				Temp = ConvexStack.pop();
-				if (OnLeft(Temp, ConvexStack.peek(), Vertex[i]))
-				{
-					// Push current point onto the stack if it is strictly left of the line
-					// formed by the two points on top of the stack
-					ConvexStack.push(Temp);
-					ConvexStack.push(Vertex[i]);
-					i++;
-				}
-			}
-		
-			double Hull[][] = new double[ConvexStack.size()][2];
-			
-			// Store information that is in the stack
-			for (int i = 0; i < ConvexStack.size(); i++)
-			{	
-				Hull[i] = ConvexStack.pop();
-			}
-			
-			// Add the information to the ConvexHull ArrayList
-			ConvexHull.add(Hull);	
-		}
-	}
-	
-	private static boolean OnLeft(double[] Point0, double[] Point1, double[] Point2)
-	{
-		return (Point1[0] - Point0[0]) * (Point2[1] - Point0[1]) 
-		> (Point2[0] - Point0[0]) * (Point1[1] - Point0[1]);
-	}
-	
-	private static void CalculateGraph() 
-	{	
-	}
-	
-	private static void FindPath() 
-	{		
-	}
 }

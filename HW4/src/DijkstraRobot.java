@@ -7,6 +7,8 @@ import java.awt.geom.Point2D;
  */
 public class DijkstraRobot extends Robot 
 {
+	private static final int DEFAULT_SPEED = 100;
+	private static final int MM_IN_M = 1000;
 	
 	/* 
 	 * Constructor for Dijkstra robot
@@ -14,29 +16,6 @@ public class DijkstraRobot extends Robot
 	public DijkstraRobot()
 	{
 		
-	}
-	
-	public static void main(String args[])
-	{
-		ArrayList<Point2D> points = new ArrayList<Point2D>();
-		
-		// starting point
-		points.add(new Point2D.Double(1, 0));
-		
-		// straight line
-		points.add(new Point2D.Double(1, 1));
-		
-		// case 1
-		points.add(new Point2D.Double(2, 1.5));
-		
-		// case 2
-		points.add(new Point2D.Double(1, 1));
-		
-		// case 3
-		points.add(new Point2D.Double(.5, 0));
-		
-		// case 4
-		points.add(new Point2D.Double(1, 1));
 	}
 	
 	/* 
@@ -61,82 +40,19 @@ public class DijkstraRobot extends Robot
 	 */
 	public void followPath(ArrayList<Point2D> vertices)
 	{
-		double distance, degrees, currentAngle = 0;
+		pathAlgorithm1(vertices);
+		//pathAlgorithm2(vertices);
+		//pathAlgorithm3(vertices);
 		
-		for (int i = 0; i < vertices.size() - 1; i++)
-		{
-			// Get the angle between the two points
-			degrees = getAngle(vertices.get(i), vertices.get(i + 1));
-			
-			// Get the distance between the two points
-			distance = vertices.get(i).distance(vertices.get(i + 1));
-			
-			// Convert the distance value from meters to millimeters
-			distance = Math.floor(distance * 1000);
-			
-			// Perform the proper rotation and translation
-			this.turnDegrees(200, (int)degrees);
-			this.driveDistance(200, (int)distance);
-			
-			// Return to original configuration (theta = 0)
-			this.turnDegrees(200, (int)-degrees);
-		}
-		
-		/*
-		for (int i = 0; i < vertices.size() - 1; i++)
-		{
-			// Get the angle between the two points
-			degrees = getAngle(vertices.get(i), vertices.get(i + 1));
-			
-			// Get the distance between the two points
-			distance = vertices.get(i).distance(vertices.get(i + 1));
-			
-			// Convert the distance value from meters to millimeters
-			distance = Math.floor(distance * 1000);
-			
-			// Perform the proper rotation
-			// Case 1: new angle is "below" old angle, but less than 180 degrees away
-			if (currentAngle > degrees && currentAngle - 180 < degrees)
-			{
-				// Rotate right
-				this.turnDegrees(200, (int)degrees);
-				
-			}
-			// Case 2: new angle is "above" old angle, but less than 180 degrees away
-			else if (currentAngle < degrees && degrees - 180 < currentAngle)
-			{
-				// Rotate left
-				this.turnDegrees(200, (int)-degrees);
-			}
-			// Case 3: new angle is "below" old angle by at least 180 degrees
-			else if (currentAngle > degrees && currentAngle - 180 > degrees)
-			{
-				// Rotate right
-				this.turnDegrees(200, (int)(360 - degrees));
-			}
-			// Case 4: new angle is "above" old angle by at least 180 degrees
-			else if (currentAngle < degrees && degrees - 180 > currentAngle)
-			{
-				// Rotate left
-				this.turnDegrees(200, (int)(degrees - 360));
-			}
-			
-			// Perform the proper translation
-			this.driveDistance(200, (int)distance);
-				
-			// Save the current angle for the next iteration
-			currentAngle = degrees;
-		}
-		*/
 	}
-	
-	/*
+
+	/**
 	 * Take in two Point2D objects and output the angle between them.
 	 * @param p1 the first point
 	 * @param p2 the second point
 	 * @returns the angle measure in degrees
 	 */
-	public double getAngle(Point2D p1, Point2D p2)
+	private double getAngle(Point2D p1, Point2D p2)
 	{
 		double degrees;
 		
@@ -148,4 +64,126 @@ public class DijkstraRobot extends Robot
 		
 		return degrees;
 	}
+	
+	
+	/**
+	 * This implementation resets the robot back to 
+	 * its original orientation between waypoints.
+	 * This is less efficient than calculating the new angle 
+	 * based on the new orientation but in testing, 
+	 * gave more accurate results
+	 * @param vertices
+	 */
+	private void pathAlgorithm1(ArrayList<Point2D> vertices) {
+		double distance;
+		double degrees;
+		
+		for (int i = 0; i < vertices.size() - 1; i++)
+		{
+			// Get the angle between the two points
+			degrees = getAngle(vertices.get(i), vertices.get(i + 1));
+			
+			// Get the distance between the two points
+			distance = vertices.get(i).distance(vertices.get(i + 1));
+			
+			// Convert the distance value from meters to millimeters
+			distance = Math.floor(distance * MM_IN_M);
+			
+			// Perform the proper rotation and translation
+			this.turnDegrees(DEFAULT_SPEED, (int)degrees);
+			this.driveDistance(DEFAULT_SPEED, (int)distance);
+			
+			// Return to original configuration (theta = 0)
+			this.turnDegrees(DEFAULT_SPEED, (int)-degrees);
+		}
+	}
+	
+	/**
+	 * This implementation takes into acount the last angle
+	 * the robot was in, and should be equivalent to above,
+	 * but had worse odometry error 
+	 * @param vertices
+	 */
+	private void pathAlgorithm2(ArrayList<Point2D> vertices) {
+		double distance;
+		double degrees;
+		double lastAngle=0;
+		for (int i = 0; i < vertices.size() - 1; i++)
+		{
+			// Get the angle between the two points
+			degrees = getAngle(vertices.get(i), vertices.get(i + 1));
+			
+			// Get the distance between the two points
+			distance = vertices.get(i).distance(vertices.get(i + 1));
+			
+			// Convert the distance value from meters to millimeters
+			distance = Math.floor(distance * MM_IN_M);
+			
+			// Perform the proper rotation and translation
+			this.turnDegrees(DEFAULT_SPEED, (int)(degrees-lastAngle));
+			this.driveDistance(DEFAULT_SPEED, (int)distance);
+			
+			lastAngle=degrees;
+			// Return to original configuration (theta = 0)
+			//this.turnDegrees(DEFAULT_SPEED, (int)-degrees);
+		}
+		this.turnDegrees(DEFAULT_SPEED, (int)-lastAngle);
+	}
+	
+	/**
+	 * Another path following angle that should be more robust but 
+	 * needs further testing
+	 * @param vertices
+	 */
+	private void pathAlgorithm3(ArrayList<Point2D> vertices) {
+		double distance;
+		double degrees;
+		double currentAngle = 0;
+		for (int i = 0; i < vertices.size() - 1; i++)
+		{
+			// Get the angle between the two points
+			degrees = getAngle(vertices.get(i), vertices.get(i + 1));
+			
+			// Get the distance between the two points
+			distance = vertices.get(i).distance(vertices.get(i + 1));
+			
+			// Convert the distance value from meters to millimeters
+			distance = Math.floor(distance * MM_IN_M);
+			
+			// Perform the proper rotation
+			// Case 1: new angle is "below" old angle, but less than 180 degrees away
+			if (currentAngle > degrees && currentAngle - 180 < degrees)
+			{
+				// Rotate right
+				this.turnDegrees(DEFAULT_SPEED, (int)degrees);
+				
+			}
+			// Case 2: new angle is "above" old angle, but less than 180 degrees away
+			else if (currentAngle < degrees && degrees - 180 < currentAngle)
+			{
+				// Rotate left
+				this.turnDegrees(DEFAULT_SPEED, (int)-degrees);
+			}
+			// Case 3: new angle is "below" old angle by at least 180 degrees
+			else if (currentAngle > degrees && currentAngle - 180 > degrees)
+			{
+				// Rotate right
+				this.turnDegrees(DEFAULT_SPEED, (int)(360 - degrees));
+			}
+			// Case 4: new angle is "above" old angle by at least 180 degrees
+			else if (currentAngle < degrees && degrees - 180 > currentAngle)
+			{
+				// Rotate left
+				this.turnDegrees(DEFAULT_SPEED, (int)(degrees - 360));
+			}
+			
+			// Perform the proper translation
+			this.driveDistance(DEFAULT_SPEED, (int)distance);
+				
+			// Save the current angle for the next iteration
+			currentAngle = degrees;
+		}
+	}
+
+
 }

@@ -9,6 +9,8 @@ import javax.swing.*;
 
 public class GUI extends JPanel implements ActionListener
 {	
+	private static final long serialVersionUID = 1285428836134718207L;
+
 	/* Boolean values that determine what to display. */
 	private boolean showStartPoint, showGoalPoint, showObstacles, showGrownObstacles, showConvex, showVisibilityGraph, showOptimalPath;
 	
@@ -130,7 +132,6 @@ public class GUI extends JPanel implements ActionListener
 		}
 		
 		convertVisibilityGraph(visibilityGraph);
-		System.out.println("Shortest path:" +shortestPath.toString());
 		shortestPathPoints = shortestPath;
 		convertShortestPath(shortestPath);
 		
@@ -148,13 +149,6 @@ public class GUI extends JPanel implements ActionListener
 			
 		}
 		this.shortestPath=path;
-		
-		System.out.println("***Shortest path has "+this.shortestPath.length +" points ***");
-		for( i=0;i<path.length;i++)
-		{
-			System.out.println(path[i][0]+","+path[i][1]);
-		}
-		
 	}
 
 	private void convertVisibilityGraph(ArrayList<PathFinder.Edge> graph) 
@@ -163,8 +157,6 @@ public class GUI extends JPanel implements ActionListener
 		{
 			this.visibilityGraph.add(AdjustObstacles(e.toArray()));
 		}
-		
-		System.out.println("***Visibility graph has "+visibilityGraph.size() +" points ***");
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -181,7 +173,6 @@ public class GUI extends JPanel implements ActionListener
 		// Draw start point, goal point, and obstacles
 		if (e.getActionCommand().equals("showObstacles"))
 		{
-			robot.driveDistance(100, 500);
 			// Tell the GUI to display nothing
 			this.Clear();
 			
@@ -264,7 +255,6 @@ public class GUI extends JPanel implements ActionListener
 				//Swallow if robot isn't connected
 				System.err.println(npe.getMessage());
 			}
-			
 			
 			// Tell the GUI to display nothing
 			this.Clear();
@@ -373,10 +363,8 @@ public class GUI extends JPanel implements ActionListener
 			// Connect all of the vertices of all the obstacles
 			for (int i = 0; i < ConvexHull.size(); i++)
 			{
-				//System.out.println("i:"+i);
 				for (int j = 0; j < ConvexHull.get(i).length - 1; j++)
 				{
-					//System.out.println("j:"+j);
 					// Connect vertex j to vertex j + 1
 					g2.draw(new Line2D.Double(
 							ConvexHull.get(i)[j][0], 
@@ -498,7 +486,6 @@ public class GUI extends JPanel implements ActionListener
 	
 	public void drawMarker(Graphics2D g2,double x, double y, Color c)
 	{
-		//System.out.println("Marker at: "+x+","+y);
 		g2.setColor(c);
 		int SIZE=5;
 		g2.draw(new Line2D.Double(x - SIZE, y, x + SIZE, y));
@@ -514,24 +501,19 @@ public class GUI extends JPanel implements ActionListener
 		g2.setColor(Color.RED);
 		
 		// Connect all of the vertices of all the obstacles
-		for (int i = 0; i < visibilityGraph.size() -1; i++)
+		for (int i = 0; i < visibilityGraph.size(); i++)
 		{
-			//System.out.println("Drawing edge: "+Arrays.toString(visibilityGraph.get(i)[0])+" -> "+Arrays.toString(visibilityGraph.get(i)[1]));
-				// Connect vertex j to vertex j + 1
-				g2.draw(new Line2D.Double(
-						visibilityGraph.get(i)[0][0], 
-						visibilityGraph.get(i)[0][1], 
-						visibilityGraph.get(i)[1][0], 
-						visibilityGraph.get(i)[1][1]));
-
+			// Connect vertex j to vertex j + 1
+			g2.draw(new Line2D.Double(
+					visibilityGraph.get(i)[0][0], 
+					visibilityGraph.get(i)[0][1], 
+					visibilityGraph.get(i)[1][0], 
+					visibilityGraph.get(i)[1][1]));
 		}
+		
+		
 	}
 
-	public void DrawPath() 
-	{
-
-	}
-	
 	public void Clear()
 	{
 		showStartPoint = false;

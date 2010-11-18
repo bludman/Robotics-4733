@@ -1,6 +1,3 @@
-import java.util.Arrays;
-
-
 /**
  * A wrapper class that allows easy interaction with (and extension of) the iRobot Create.
  * 
