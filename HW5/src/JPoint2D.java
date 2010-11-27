@@ -12,6 +12,11 @@ public class JPoint2D {
 		mY = y;
 	}
 	
+	public String toString(){
+		return "("+mX+","+mY+")";
+		
+	}
+	
 	public int getX()
 	{
 		return mX;

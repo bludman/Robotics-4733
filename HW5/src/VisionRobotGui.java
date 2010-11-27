@@ -44,7 +44,7 @@ public class VisionRobotGui {
 	{
 		
 		//connect to the camera and pull an image out of it
-		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=1&quality=3");
+		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
 
 		//setup the JFrame for display
 		original = new JImageDisplay();
@@ -99,8 +99,10 @@ public class VisionRobotGui {
 		Vector<JBlob> jbs = new Vector<JBlob>();
 		JBlobDetector jbd = new JBlobDetector();
 		jbs = jbd.findBlobs(jmask, CONNECTIVITY);
-
+		
 		original.setBlobs(jbs);
+		
+		
 		//update the image in each display window
 		original.updateImage(ji.getBufferedImage());
 		mask.updateImage(jmask.getBufferedImage());
