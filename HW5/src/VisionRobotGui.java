@@ -39,7 +39,7 @@ public class VisionRobotGui {
 	private static final int MAX_NUMBER_OF_RANGE_VALUES = 2; //LOW, HIGH
 	
 	
-	public VisionRobotGui() throws IOException 
+	public VisionRobotGui() throws MalformedURLException 
 	{
 		
 		//connect to the camera and pull an image out of it
@@ -97,8 +97,9 @@ public class VisionRobotGui {
 		//blob detection
 		Vector<JBlob> jbs = new Vector<JBlob>();
 		JBlobDetector jbd = new JBlobDetector();
-		jbs = jbd.findBlobs(jmask, 4);
+		jbs = jbd.findBlobs(jmask, 8);
 
+		original.setBlobs(jbs);
 		//update the image in each display window
 		original.updateImage(ji.getBufferedImage());
 		mask.updateImage(jmask.getBufferedImage());

@@ -1,5 +1,8 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Vector;
+
 import javax.swing.*;
 
 public class JImageDisplay extends JPanel {
@@ -10,6 +13,9 @@ public class JImageDisplay extends JPanel {
 	//current selected rectangle
 	Rectangle rect;
 	Dimension size = new Dimension();
+	
+	//current tracked blob
+	ArrayList<Rectangle> blobRectangles;
 	
 	//flag to indicate whether there is a new selection since last query of isSelectionUpdated
 	boolean selectionUpdated;
@@ -31,6 +37,8 @@ public class JImageDisplay extends JPanel {
 	    addKeyListener(keyListener);
 	    rect = new Rectangle();
 	    selectionUpdated = false;
+	    
+	    blobRectangles = new ArrayList<Rectangle>();
 	}
 	
 	public void updateImage(BufferedImage image)
@@ -56,6 +64,10 @@ public class JImageDisplay extends JPanel {
 //		System.out.println(rect.getY());
 		g.setColor(Color.red);
 		g.drawRect((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
+		
+		g.setColor(Color.BLUE);
+		for(Rectangle blobRectangle: blobRectangles)
+			g.drawRect((int)blobRectangle.getX(), (int)blobRectangle.getY(), (int)blobRectangle.getWidth(), (int)blobRectangle.getHeight());
 	}
 
 	public Dimension getPreferredSize() { return size; }
@@ -80,6 +92,13 @@ public class JImageDisplay extends JPanel {
 	public void setSelectionUpdated()
 	{
 		selectionUpdated = true;
+	}
+
+	public void setBlobs(Vector<JBlob> jbs) {
+		this.blobRectangles = new ArrayList<Rectangle>();
+		for(JBlob blob : jbs)
+			this.blobRectangles.add(blob.getBoundingBox());
+		
 	}
 
 }

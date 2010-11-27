@@ -1,3 +1,4 @@
+import java.awt.Rectangle;
 import java.util.Vector;
 
 
@@ -64,6 +65,11 @@ public int getHeight()
 public JPoint2D getPoint(int idx)
 {
 	return mPoints.get(idx);
+}
+
+public Rectangle getBoundingBox()
+{
+	return new Rectangle(mX, mY, mWidth, mHeight);
 }
 
 

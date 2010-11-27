@@ -68,11 +68,9 @@ public class JImageProcessing {
 			for(int y=minY;y<maxY;y++)
 			{
 				pixel = in.getPixel(x,y);
-				System.out.println(Arrays.toString(pixel));
 				for(int chanel = 0;chanel<numChannels;chanel++)
 				{
 					if(pixel[chanel]<low[chanel]){
-						System.out.println("Replacing "+low[chanel]+" with "+pixel[chanel]);
 						low[chanel]= pixel[chanel];
 					}
 					
