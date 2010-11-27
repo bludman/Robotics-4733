@@ -22,6 +22,11 @@ public JBlob()
 	mPoints = new Vector<JPoint2D>();
 }
 
+public void addPoint(JPoint2D p)
+{
+	addPoint(p.getX(), p.getY());
+}
+
 public void addPoint(int x, int y)
 {
 	mPoints.add(new JPoint2D(x,y));
@@ -70,6 +75,10 @@ public JPoint2D getPoint(int idx)
 public Rectangle getBoundingBox()
 {
 	return new Rectangle(mX, mY, mWidth, mHeight);
+}
+
+public boolean contains(JPoint2D m) {
+	return this.mPoints.contains(m);
 }
 
 

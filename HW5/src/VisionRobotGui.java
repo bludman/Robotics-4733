@@ -37,13 +37,14 @@ public class VisionRobotGui {
 	private static final int HIGH = 1;
 	private static final int MAX_NUMBER_OF_CHANELS = 3;
 	private static final int MAX_NUMBER_OF_RANGE_VALUES = 2; //LOW, HIGH
+	private static final int CONNECTIVITY = 4;
 	
 	
 	public VisionRobotGui() throws MalformedURLException 
 	{
 		
 		//connect to the camera and pull an image out of it
-		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
+		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=1&quality=3");
 
 		//setup the JFrame for display
 		original = new JImageDisplay();
@@ -97,7 +98,7 @@ public class VisionRobotGui {
 		//blob detection
 		Vector<JBlob> jbs = new Vector<JBlob>();
 		JBlobDetector jbd = new JBlobDetector();
-		jbs = jbd.findBlobs(jmask, 8);
+		jbs = jbd.findBlobs(jmask, CONNECTIVITY);
 
 		original.setBlobs(jbs);
 		//update the image in each display window

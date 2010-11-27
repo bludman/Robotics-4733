@@ -95,6 +95,7 @@ public class JImageDisplay extends JPanel {
 	}
 
 	public void setBlobs(Vector<JBlob> jbs) {
+		System.out.println("Adding "+jbs.size()+" blobs");
 		this.blobRectangles = new ArrayList<Rectangle>();
 		for(JBlob blob : jbs)
 			this.blobRectangles.add(blob.getBoundingBox());
