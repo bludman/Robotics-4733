@@ -14,6 +14,23 @@ public class JBlobDetector {
 	// 8 means check all the eight pixels around one 
 	public Vector<JBlob> findBlobs(JImage mask, int connectivity)
 	{
+		if(connectivity==4)
+			return findBlobs4(mask);
+		else if(connectivity==8)
+			return findBlobs8(mask);
+		else 
+			throw new IllegalArgumentException("Invalid connectivity value");
+	}
+	
+	private Vector<JBlob> findBlobs4(JImage mask)
+	{
+		Vector<JBlob> blobs = new Vector<JBlob>();
+
+		return blobs;
+	}
+	
+	private Vector<JBlob> findBlobs8(JImage mask)
+	{
 		Vector<JBlob> blobs = new Vector<JBlob>();
 
 		return blobs;

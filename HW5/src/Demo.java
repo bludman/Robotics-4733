@@ -89,6 +89,7 @@ public class Demo {
 			{
 				System.out.println(original.getSelectedRectangle());
 			}
+			System.out.println("Updating ");
 		}
 	}
 }
