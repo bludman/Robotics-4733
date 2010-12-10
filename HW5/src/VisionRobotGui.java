@@ -17,14 +17,10 @@ import javax.imageio.stream.ImageInputStream;
 import javax.swing.JFrame;
 
 /**
- * 
+ * Constructs the necessary containers for the images. Used to display several aspects of the BlobTrackingRobot.
  */
-
-/**
- * @author Ben
- *
- */
-public class VisionRobotGui {
+public class VisionRobotGui 
+{
 	
 	private JImageDisplay original;
 	private JFrame f_original;
@@ -34,7 +30,6 @@ public class VisionRobotGui {
 	private int[][] range;
 	private BlobTracker tracker;
 	private BlobTrackingRobot trackingRobot;
-	private DoorFindingRobot doorRobot;
 	
 	
 	private static final int LOW = 0;
@@ -48,15 +43,10 @@ public class VisionRobotGui {
 	{
 		
 		//connect to the camera and pull an image out of it
-//		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
-//		camera = new URL("http://scotthoi.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
-//		camera = new URL("http://columbia.edu/~bsl2106/img1.jpg");
 		camera = new URL("http://192.168.1.8/img/snapshot.cgi?size=2&quality=3");
 
 		//setup the JFrame for display
 		trackingRobot = new BlobTrackingRobot();
-		//doorRobot = new DoorFindingRobot();
-		
 		
 		original = new JImageDisplay(trackingRobot);
 		f_original = new JFrame();
@@ -73,9 +63,7 @@ public class VisionRobotGui {
 		f_mask.setVisible(true);
 		f_mask.setLocation(350,0);
 
-		range = new int[MAX_NUMBER_OF_RANGE_VALUES][MAX_NUMBER_OF_CHANELS];
-
-		
+		range = new int[MAX_NUMBER_OF_RANGE_VALUES][MAX_NUMBER_OF_CHANELS];	
 	}
 
 	
@@ -86,6 +74,7 @@ public class VisionRobotGui {
 		Iterator<?> readers = ImageIO.getImageReadersByFormatName("jpeg");
 		ImageReader reader = (ImageReader)readers.next();
 		tracker = new BlobTracker(original.getWidth());
+		
 		while(true)
 		{
 			BufferedImage bi = getNextFrame(reader);
@@ -94,22 +83,20 @@ public class VisionRobotGui {
 	}
 	
 	
-	
-	
-	private void processFrame(BufferedImage bi) {
-		//setup the window size according to the image
+	private void processFrame(BufferedImage bi) 
+	{
+		// setup the window size according to the image
 		f_original.setSize(bi.getWidth(), bi.getHeight());
 		f_mask.setSize(bi.getWidth(), bi.getHeight());
 		
-		//get a JImage out of the decompressed image
+		// get a JImage out of the decompressed image
 		JImage ji = new JImage(bi);
 
-		//specify the range of RGB channels
+		// specify the range of RGB channels
 		JImage jmask = new JImage(bi);
 		jmask = JImageProcessing.threshold(ji, range[LOW], range[HIGH]);
-
 		
-		//blob detection
+		// blob detection
 		Vector<JBlob> jbs = new Vector<JBlob>();
 		JBlobDetector jbd = new JBlobDetector();
 		jbs = jbd.findBlobs(jmask);
@@ -117,18 +104,23 @@ public class VisionRobotGui {
 		original.setBlobs(jbs);
 		mask.setBlobs(jbs);
 
+		// find the largest blob
 		JBlob max = JBlob.findBiggestBlob(jbs, original.getWidth(), original.getHeight());
 		
+		// draw the centroid
 		original.bluePoint= max.getCentroid();
 		mask.bluePoint= max.getCentroid();
 		
+		// draw an additional point
 		original.redPoint= max.getPointBelow(max.getCentroid());
 		tracker.update(max,original.getWidth());
 		
-		try{
+		try
+		{
 			trackingRobot.driveInstructions(tracker.getForwardsBackwardsDirection(), tracker.getLeftRightDirection());
 		}
-		catch (Exception e){
+		catch (Exception e)
+		{
 			System.out.println("Couldn't send instruction");
 		}
 		
@@ -149,7 +141,8 @@ public class VisionRobotGui {
 	}
 
 
-	private BufferedImage getNextFrame(ImageReader reader) throws IOException {
+	private BufferedImage getNextFrame(ImageReader reader) throws IOException 
+	{
 		URLConnection yc = camera.openConnection();
 		InputStream input = new BufferedInputStream(yc.getInputStream());
 		ImageInputStream iis = ImageIO.createImageInputStream(input);
@@ -167,8 +160,8 @@ public class VisionRobotGui {
 		return bi;
 	}
 	
-	public static void main(String[] args) throws Exception {
-
+	public static void main(String[] args) throws Exception 
+	{
 		System.out.println("Initializing GUI");
 		VisionRobotGui robotGui = new VisionRobotGui();
 		robotGui.start();
