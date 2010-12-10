@@ -1,8 +1,18 @@
 import java.awt.Rectangle;
 import java.util.Arrays;
 
-
-public class JImageProcessing {
+/**
+ * Used for thresholding an image and finding an appropriate range of colors for tracking
+ * the object.
+ */
+public class JImageProcessing 
+{
+	/** Thresholds the image
+	 * @param in: the image to be thresholded (thresheld?)
+	 * @param lower: lower range of color data
+	 * @param upper: higher range of color data
+	 * @return: the manipulated image
+	 */
 	static public JImage threshold(JImage in, int lower[], int upper[])
 	{
 		int width = in.getWidth();
@@ -40,9 +50,9 @@ public class JImageProcessing {
 	}
 	
 	/**
-	 * Calculate a range of values to be used based on the color of the blob in the selected rectange.
-	 * @param in
-	 * @param rect
+	 * Calculate a range of values to be used based on the color of the blob in the selected rectangle.
+	 * @param in: the input image
+	 * @param rect: the surrounding rectangle
 	 * @return
 	 */
 	static public int[][] findRangeByAverage(JImage in, Rectangle rect)
@@ -90,15 +100,16 @@ public class JImageProcessing {
 		// Calculate full range to be returned
 		for (int i = 0; i < numChannels ; i++)
 		{
-			if(numPixels!=0)
+			if(numPixels !=0 )
 				values[i] /= numPixels;
 			else 
-				values[i]=0;
+				values[i] = 0;
 			
 			low[i] = (int)values[i] - RANGE;
 			high[i] = (int)values[i] + RANGE;
 		}
-		System.out.println("Picked color: "+ Arrays.toString(values));
+		
+		// System.out.println("Picked color: "+ Arrays.toString(values));
 		return new int[][] {low, high};
 	}
 }

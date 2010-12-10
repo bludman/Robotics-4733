@@ -81,7 +81,6 @@ public class JImageDisplay extends JPanel {
 		{
 			g.setColor(Color.red);
 			g.fillOval(redPoint.getX()-RADIUS, redPoint.getY()-RADIUS, RADIUS*2, RADIUS*2);
-			g.drawLine(this.getWidth()/2, this.getHeight(), redPoint.getX(), redPoint.getY());
 		}
 		if(bluePoint!=null)
 		{

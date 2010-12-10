@@ -17,14 +17,10 @@ import javax.imageio.stream.ImageInputStream;
 import javax.swing.JFrame;
 
 /**
- * 
+ * Constructs the necessary containers for the images. Used to display several aspects of the BlobTrackingRobot.
  */
-
-/**
- * @author Ben
- *
- */
-public class VisionRobotGui {
+public class VisionRobotGui 
+{
 	
 	private JImageDisplay original;
 	private JFrame f_original;
@@ -47,16 +43,12 @@ public class VisionRobotGui {
 	{
 		
 		//connect to the camera and pull an image out of it
-//		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
-//		camera = new URL("http://scotthoi.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
-//		camera = new URL("http://columbia.edu/~bsl2106/img1.jpg");
 		camera = new URL("http://192.168.1.8/img/snapshot.cgi?size=2&quality=3");
 
 		//setup the JFrame for display
 		doorRobot = new DoorFindingRobot();
 		
 		
-		original = new JImageDisplay(doorRobot);
 		f_original = new JFrame();
 		f_original.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f_original.add(original);
@@ -71,9 +63,7 @@ public class VisionRobotGui {
 		f_mask.setVisible(true);
 		f_mask.setLocation(350,0);
 
-		range = new int[MAX_NUMBER_OF_RANGE_VALUES][MAX_NUMBER_OF_CHANELS];
-
-		
+		range = new int[MAX_NUMBER_OF_RANGE_VALUES][MAX_NUMBER_OF_CHANELS];	
 	}
 
 	
@@ -84,6 +74,7 @@ public class VisionRobotGui {
 		Iterator<?> readers = ImageIO.getImageReadersByFormatName("jpeg");
 		ImageReader reader = (ImageReader)readers.next();
 		tracker = new BlobTracker(original.getWidth());
+		
 		while(true)
 		{
 			BufferedImage bi = getNextFrame(reader);
@@ -150,7 +141,8 @@ public class VisionRobotGui {
 	}
 
 
-	private BufferedImage getNextFrame(ImageReader reader) throws IOException {
+	private BufferedImage getNextFrame(ImageReader reader) throws IOException 
+	{
 		URLConnection yc = camera.openConnection();
 		InputStream input = new BufferedInputStream(yc.getInputStream());
 		ImageInputStream iis = ImageIO.createImageInputStream(input);
@@ -168,8 +160,8 @@ public class VisionRobotGui {
 		return bi;
 	}
 	
-	public static void main(String[] args) throws IOException  {
-
+	public static void main(String[] args) throws Exception 
+	{
 		System.out.println("Initializing GUI");
 		VisionRobotGui robotGui = new VisionRobotGui();
 		robotGui.start();

@@ -277,32 +277,4 @@ public class Robot
 	{
 		this.ocp.write(command);
 	}
-	
-	/**
-	 * Read the bump and wheel drop sensor
-	 * NOTE: Includes read buffer flushing
-	 * @return
-	 */
-	public byte[] readBumpsAndWheelDrops()
-	{
-		byte[] command = new byte[2];
-		command[0] = (byte)142;
-		command[1] = (byte)7;
-		byte[] recieved = new byte[1];
-		
-		ocp.write(command);
-		ocp.read(recieved);
-		
-		return recieved;
-	}
-	
-	/* Ordinal represents the bit in the BUMPS_AND_WHEEL_DROPS sensor data's byte value */
-	public static enum BUMPS_AND_WHEEL_DROPS{
-		BUMP_RIGHT,			//bit 0
-		BUMP_LEFT,			//bit 1
-		WHEEL_DROP_RIGHT,	//bit 2
-		WHEEL_DROP_LEFT,	//bit 3
-		WHEEL_DROP_CASTER	//bit 4
-		/* Ignore bits 5-7 */
-	}
 }
