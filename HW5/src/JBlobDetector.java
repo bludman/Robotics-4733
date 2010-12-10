@@ -11,13 +11,6 @@ public class JBlobDetector {
 	{
 	}
 
-	private Vector<JBlob> findBlobs4(JImage mask)
-	{
-		Vector<JBlob> blobs = new Vector<JBlob>();
-
-		return blobs;
-	}
-
 	private static String findSet(Properties map, String key)
 	{
 		if(map==null)
@@ -41,7 +34,7 @@ public class JBlobDetector {
 		//set[findSet(s1, set)]=findSet(s2, set);
 	}
 	
-	public Vector<JBlob> findBlobs(JImage mask, int connectivity)
+	public Vector<JBlob> findBlobs(JImage mask)
 	{
 		Vector<JBlob> blobs = new Vector<JBlob>();
 		
@@ -132,8 +125,6 @@ public class JBlobDetector {
 				b.addPoint(col, row);
 			}
 		}
-
-		
 
 		Vector<JBlob> finalBlobs = new Vector<JBlob>();
 		

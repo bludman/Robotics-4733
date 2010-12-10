@@ -39,10 +39,7 @@ public class JKeyListener extends KeyAdapter {
 		{
 			robot.driveDirect(100, 100);
 		}
-		else
-		{
-			System.out.println("Pressed: "+pressedKey);
-		}
+	
 		//...... you can add more functions
 	}
 }

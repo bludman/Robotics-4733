@@ -17,7 +17,7 @@ public class DoorFindingRobot extends Robot {
 	private STATE state= STATE.APPROACHING;
 	private BlobTracker tracker;
 	
-	public DoorFindingRobot() 
+	public DoorFindingRobot(int myWidth) 
 	{
 		tracker = new BlobTracker(myWidth);
 	}
@@ -71,6 +71,16 @@ public class DoorFindingRobot extends Robot {
 	}
 	
 	
+	private void driveTowards(JPoint2D targetPoint) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private JBlob lookForDoor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public void createSong() {
 		byte[] command = new byte[15];
 		command[0] = (byte)140;//Song command 
@@ -118,27 +128,27 @@ public class DoorFindingRobot extends Robot {
 		double theta  = Math.toDegrees(Math.atan2(toY, toX));
 		return theta;
 	}
-	
-	public static void main(String[] args) throws Exception {
-
-		DoorFindingRobot bot = new DoorFindingRobot();
-		boolean setupStatus = bot.setup();
-		if (setupStatus)
-		{
-			bot.start();
-		}
-	
-		
-		Thread.sleep(3000);
-		System.out.println("Switching to safe mode");
-		bot.safe();
-		System.out.println("Creating song");
-		bot.createSong();
-		Thread.sleep(3000);
-		System.out.println("Playing song");
-		bot.playSong();
-
-	
-	}
+//	
+//	public static void main(String[] args) throws Exception {
+//
+//		DoorFindingRobot bot = new DoorFindingRobot();
+//		boolean setupStatus = bot.setup();
+//		if (setupStatus)
+//		{
+//			bot.start();
+//		}
+//	
+//		
+//		Thread.sleep(3000);
+//		System.out.println("Switching to safe mode");
+//		bot.safe();
+//		System.out.println("Creating song");
+//		bot.createSong();
+//		Thread.sleep(3000);
+//		System.out.println("Playing song");
+//		bot.playSong();
+//
+//	
+//	}
 	
 }

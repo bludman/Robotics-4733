@@ -114,7 +114,7 @@ public class JImageDisplay extends JPanel {
 	}
 
 	public void setBlobs(Vector<JBlob> jbs) {
-		System.out.println("Adding "+jbs.size()+" blobs");
+		//System.out.println("Adding "+jbs.size()+" blobs");
 		this.blobRectangles = new ArrayList<Rectangle>();
 
 		
@@ -130,14 +130,10 @@ public class JImageDisplay extends JPanel {
 				biggestRectangle= blob.getBoundingBox();
 				maxPoints = blob.getNumPoints();
 			}
-			// System.out.println(blob.getBoundingBox());
 		}
 		
 		blobRectangles.add(biggestRectangle);
 		
-//		for(JBlob blob : jbs)
-//			blobRectangles.add(blob.getBoundingBox());
-				
 	}
 
 }

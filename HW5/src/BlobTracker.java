@@ -40,7 +40,7 @@ public class BlobTracker
 		if (percent>MARGIN)
 		{
 			System.out.println("Backwards");
-			fb=DIRECTION.FORWARDS;
+			fb=DIRECTION.BACKWARDS;
 			// Move backwards
 		}
 		// Object has moved further from the camera
@@ -48,7 +48,7 @@ public class BlobTracker
 		{
 			System.out.println("Forwards");
 			// Move forwards
-			fb=DIRECTION.BACKWARDS;
+			fb=DIRECTION.FORWARDS;
 		}
 		else
 		{
@@ -91,8 +91,8 @@ public class BlobTracker
 			preferredArea = blob.getNumPoints();
 			recalibrate = false;
 		}
-		 System.out.println("Centroid: " + centroid.getX() + ", " + centroid.getY());
-		// System.out.println("Old area: " + oldArea);
+//		 System.out.println("Centroid: " + centroid.getX() + ", " + centroid.getY());
+//		 System.out.println("Old area: " + oldArea);
 //		System.out.println("New area: " + newArea);
 //		System.out.println("Preferred Area: " + preferredArea);
 		 

@@ -41,7 +41,6 @@ public class VisionRobotGui {
 	private static final int HIGH = 1;
 	private static final int MAX_NUMBER_OF_CHANELS = 3;
 	private static final int MAX_NUMBER_OF_RANGE_VALUES = 2; //LOW, HIGH
-	private static final int CONNECTIVITY = 4;
 	 
 	
 	
@@ -51,11 +50,13 @@ public class VisionRobotGui {
 		//connect to the camera and pull an image out of it
 //		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
 //		camera = new URL("http://scotthoi.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
-		camera = new URL("http://columbia.edu/~bsl2106/img1.jpg");
+//		camera = new URL("http://columbia.edu/~bsl2106/img1.jpg");
+		camera = new URL("http://192.168.1.8/img/snapshot.cgi?size=2&quality=3");
 
 		//setup the JFrame for display
 		trackingRobot = new BlobTrackingRobot();
-		doorRobot = new DoorFindingRobot();
+		//doorRobot = new DoorFindingRobot();
+		
 		
 		original = new JImageDisplay(trackingRobot);
 		f_original = new JFrame();
@@ -73,7 +74,7 @@ public class VisionRobotGui {
 		f_mask.setLocation(350,0);
 
 		range = new int[MAX_NUMBER_OF_RANGE_VALUES][MAX_NUMBER_OF_CHANELS];
-		
+
 		
 	}
 
@@ -107,10 +108,11 @@ public class VisionRobotGui {
 		JImage jmask = new JImage(bi);
 		jmask = JImageProcessing.threshold(ji, range[LOW], range[HIGH]);
 
+		
 		//blob detection
 		Vector<JBlob> jbs = new Vector<JBlob>();
 		JBlobDetector jbd = new JBlobDetector();
-		jbs = jbd.findBlobs(jmask, CONNECTIVITY);
+		jbs = jbd.findBlobs(jmask);
 		
 		original.setBlobs(jbs);
 		mask.setBlobs(jbs);
@@ -122,6 +124,7 @@ public class VisionRobotGui {
 		
 		original.redPoint= max.getPointBelow(max.getCentroid());
 		tracker.update(max,original.getWidth());
+		
 		try{
 			trackingRobot.driveInstructions(tracker.getForwardsBackwardsDirection(), tracker.getLeftRightDirection());
 		}

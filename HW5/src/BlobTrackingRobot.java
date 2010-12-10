@@ -8,9 +8,9 @@
  */
 public class BlobTrackingRobot extends Robot {
 
-	private final int speed = 100;
+	private final int speed = 50;
 	private final int angle = 15;
-	private final int distance = 100;
+	private final int distance = 50;
 	
 	public void driveInstructions(BlobTracker.DIRECTION fb, BlobTracker.DIRECTION lr)
 	{
@@ -20,16 +20,20 @@ public class BlobTrackingRobot extends Robot {
 		}
 		else if(lr==BlobTracker.DIRECTION.RIGHT)
 		{
-			this.turnDegrees(-speed, -angle);
+			this.turnDegrees(speed, -angle);
 		}
 		
-		if(fb==BlobTracker.DIRECTION.LEFT)
+		if(fb==BlobTracker.DIRECTION.FORWARDS)
 		{
-			this.driveDistance(speed, distance);
+			this.driveDirect(speed, speed);
 		}
-		else if(fb==BlobTracker.DIRECTION.RIGHT)
+		else if(fb==BlobTracker.DIRECTION.BACKWARDS)
 		{
-			this.turnDegrees(-speed, -distance);
+			this.driveDirect(-speed, -speed);
+		}
+		else
+		{
+			this.stop();
 		}
 	}
 	
