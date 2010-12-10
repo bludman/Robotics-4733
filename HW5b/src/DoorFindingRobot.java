@@ -2,21 +2,19 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Vector;
 
-import javax.swing.JFrame;
 
 /**
  * 
  */
 
 /**
- * @author Ben
+ * @author Ben and Mike
  *
  */
 public class DoorFindingRobot extends Robot {
 
 	private final int speed = 100;
 	private final int knockSpeed = 200;
-	private final int angle = 15;
 	private final int distance = 75;
 	
 	private int[][] range;

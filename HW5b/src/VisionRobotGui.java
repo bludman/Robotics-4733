@@ -6,9 +6,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
@@ -92,52 +90,6 @@ public class VisionRobotGui
 		
 		doorRobot.doMove(bi, original, mask);
 		
-//		
-//		//get a JImage out of the decompressed image
-//		JImage ji = new JImage(bi);
-//
-//		//specify the range of RGB channels
-//		JImage jmask = new JImage(bi);
-//		jmask = JImageProcessing.threshold(ji, range[LOW], range[HIGH]);
-//
-//		
-//		//blob detection
-//		Vector<JBlob> jbs = new Vector<JBlob>();
-//		JBlobDetector jbd = new JBlobDetector();
-//		jbs = jbd.findBlobs(jmask);
-//		
-//		original.setBlobs(jbs);
-//		mask.setBlobs(jbs);
-//
-//		JBlob max = JBlob.findBiggestBlob(jbs, original.getWidth(), original.getHeight());
-//		
-//		original.bluePoint= max.getCentroid();
-//		mask.bluePoint= max.getCentroid();
-//		
-//		original.redPoint= max.getPointBelow(max.getCentroid());
-//		tracker.update(max,original.getWidth());
-//		
-//		try{
-//			trackingRobot.driveInstructions(tracker.getForwardsBackwardsDirection(), tracker.getLeftRightDirection());
-//		}
-//		catch (Exception e){
-//			System.out.println("Couldn't send instruction");
-//		}
-//		
-//		//update the image in each display window
-//		original.updateImage(ji.getBufferedImage());
-//		mask.updateImage(jmask.getBufferedImage());
-//		
-//		//check if there is any update for original image
-//		//and output the selected rectangle if there is an update
-//		if(original.isSelectionUpdated())
-//		{
-//			System.out.println(original.getSelectedRectangle());
-//			
-//			range = JImageProcessing.findRangeByAverage(ji, original.getSelectedRectangle());
-//			tracker.recalibrate();
-//			System.out.println("low: "+Arrays.toString(range[0])+" high: "+Arrays.toString(range[1]));
-//		}
 	}
 
 
