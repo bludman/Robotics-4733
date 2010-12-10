@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -170,8 +169,6 @@ public class JImage {
 	public void writeOut(String filePath) throws IOException
 	{
 		BufferedImage bi = getBufferedImage();
-		//write out the image
-		File outfile;
 		OutputStream outputStream = new FileOutputStream (filePath);
 		ImageIO.write(bi, "jpg", outputStream);
 	}

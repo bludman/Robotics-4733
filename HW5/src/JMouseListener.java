@@ -16,12 +16,24 @@ public class JMouseListener extends MouseInputAdapter {
 	public void mousePressed(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		currentRect = new Rectangle(x, y, 0, 0);
-		updateSize(e);
+		
+		if(e.getButton() == e.BUTTON1 )
+		{
+			System.out.println("Updating");
+			currentRect = new Rectangle(x, y, 0, 0);
+			updateSize(e);
+		}
+		
+		if(e.getButton() == e.BUTTON3 )
+		{
+			System.out.println(x+","+y);
+			System.out.println("theta: "+BlobTrackingRobot.findTurnAngle(display.getWidth(), display.getHeight(), x, y));
+		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		updateSize(e);
+		if(e.getButton() == e.BUTTON1)
+				updateSize(e);
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -32,9 +44,12 @@ public class JMouseListener extends MouseInputAdapter {
 	void updateSize(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
+		if(e.getButton() == e.BUTTON1 )
+		{
 		currentRect.setSize(x - currentRect.x,
 				y - currentRect.y);
 		display.setSelectedRectangle(currentRect);
+		}
 	}
 
 }

@@ -33,29 +33,38 @@ public class VisionRobotGui {
 	private URL camera;
 	private int[][] range;
 	private BlobTracker tracker;
+	private BlobTrackingRobot trackingRobot;
+	private DoorFindingRobot doorRobot;
+	
 	
 	private static final int LOW = 0;
 	private static final int HIGH = 1;
 	private static final int MAX_NUMBER_OF_CHANELS = 3;
 	private static final int MAX_NUMBER_OF_RANGE_VALUES = 2; //LOW, HIGH
 	private static final int CONNECTIVITY = 4;
+	 
 	
 	
 	public VisionRobotGui() throws MalformedURLException 
 	{
 		
 		//connect to the camera and pull an image out of it
-		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
+//		camera = new URL("http://mikeben.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
+//		camera = new URL("http://scotthoi.myipcamera.com/img/snapshot.cgi?size=3&quality=3");
+		camera = new URL("http://columbia.edu/~bsl2106/img1.jpg");
 
 		//setup the JFrame for display
-		original = new JImageDisplay();
+		trackingRobot = new BlobTrackingRobot();
+		doorRobot = new DoorFindingRobot();
+		
+		original = new JImageDisplay(trackingRobot);
 		f_original = new JFrame();
 		f_original.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f_original.add(original);
 		f_original.setResizable(false);
 		f_original.setVisible(true);
 
-		mask = new JImageDisplay();
+		mask = new JImageDisplay(trackingRobot);	
 		f_mask = new JFrame();
 		f_mask.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f_mask.add(mask);
@@ -65,6 +74,7 @@ public class VisionRobotGui {
 
 		range = new int[MAX_NUMBER_OF_RANGE_VALUES][MAX_NUMBER_OF_CHANELS];
 		
+		
 	}
 
 	
@@ -72,7 +82,7 @@ public class VisionRobotGui {
 	{
 		System.out.println("Starting");
 		//create a reader to read the image from the input stream
-		Iterator readers = ImageIO.getImageReadersByFormatName("jpeg");
+		Iterator<?> readers = ImageIO.getImageReadersByFormatName("jpeg");
 		ImageReader reader = (ImageReader)readers.next();
 		tracker = new BlobTracker(original.getWidth());
 		while(true)
@@ -105,11 +115,19 @@ public class VisionRobotGui {
 		original.setBlobs(jbs);
 		mask.setBlobs(jbs);
 
-		JBlob max = findBiggestBlob(jbs);
+		JBlob max = JBlob.findBiggestBlob(jbs, original.getWidth(), original.getHeight());
 		
+		original.bluePoint= max.getCentroid();
+		mask.bluePoint= max.getCentroid();
+		
+		original.redPoint= max.getPointBelow(max.getCentroid());
 		tracker.update(max,original.getWidth());
-		tracker.checkCentroid();
-		tracker.checkArea();
+		try{
+			trackingRobot.driveInstructions(tracker.getForwardsBackwardsDirection(), tracker.getLeftRightDirection());
+		}
+		catch (Exception e){
+			System.out.println("Couldn't send instruction");
+		}
 		
 		//update the image in each display window
 		original.updateImage(ji.getBufferedImage());
@@ -127,26 +145,6 @@ public class VisionRobotGui {
 		}
 	}
 
-	private JBlob findBiggestBlob(Vector<JBlob> jbs) 
-	{	
-		JBlob biggest = new JBlob();
-		if (jbs == null)
-		{
-			return null;
-		}
-		
-		for (JBlob b : jbs)
-		{
-			if (b.getBoundingBox().getHeight() * b.getBoundingBox().getWidth() < original.getHeight() * original.getWidth() &&
-					b.getNumPoints() > biggest.getNumPoints())
-			{
-				biggest = b;
-			}
-		}
-		
-		// System.out.println(biggest.getBoundingBox());
-		return biggest;
-	}
 
 	private BufferedImage getNextFrame(ImageReader reader) throws IOException {
 		URLConnection yc = camera.openConnection();

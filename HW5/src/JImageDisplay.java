@@ -7,26 +7,33 @@ import javax.swing.*;
 
 public class JImageDisplay extends JPanel {
 	
+	private static final long serialVersionUID = 1L;
+
 	//current display image
-	BufferedImage image;
+	private BufferedImage image;
 	
 	//current selected rectangle
-	Rectangle rect;
-	Dimension size = new Dimension();
+	private Rectangle rect;
+	private Dimension size = new Dimension();
 	
 	//current tracked blob
-	ArrayList<Rectangle> blobRectangles;
+	private ArrayList<Rectangle> blobRectangles;
+	
+	//tracked points
+	public JPoint2D redPoint;
+	public JPoint2D bluePoint;
+	private static final int RADIUS = 5;
 	
 	//flag to indicate whether there is a new selection since last query of isSelectionUpdated
-	boolean selectionUpdated;
+	private boolean selectionUpdated;
 	
-	JMouseListener mouseListener;
-	JKeyListener keyListener;
+	private JMouseListener mouseListener;
+	private JKeyListener keyListener;
 
-	public JImageDisplay() {
+	public JImageDisplay(Robot robot) {
 		//initialize two listeners
 		mouseListener = new JMouseListener(this);
-		keyListener = new JKeyListener(this);
+		keyListener = new JKeyListener(this, robot);
 		
 		//add mouse listener
 		addMouseListener(mouseListener);
@@ -68,6 +75,18 @@ public class JImageDisplay extends JPanel {
 		g.setColor(Color.BLUE);
 		for(Rectangle blobRectangle: blobRectangles)
 			g.drawRect((int)blobRectangle.getX(), (int)blobRectangle.getY(), (int)blobRectangle.getWidth(), (int)blobRectangle.getHeight());
+		
+		
+		if(redPoint!=null)
+		{
+			g.setColor(Color.red);
+			g.fillOval(redPoint.getX()-RADIUS, redPoint.getY()-RADIUS, RADIUS*2, RADIUS*2);
+		}
+		if(bluePoint!=null)
+		{
+			g.setColor(Color.blue);
+			g.fillOval(bluePoint.getX()-RADIUS, bluePoint.getY()-RADIUS, RADIUS*2, RADIUS*2);
+		}
 	}
 
 	public Dimension getPreferredSize() { return size; }

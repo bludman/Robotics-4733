@@ -98,7 +98,7 @@ public class JImageProcessing {
 			low[i] = (int)values[i] - RANGE;
 			high[i] = (int)values[i] + RANGE;
 		}
-		
+		System.out.println("Picked color: "+ Arrays.toString(values));
 		return new int[][] {low, high};
 	}
 }

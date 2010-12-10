@@ -1,9 +1,4 @@
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Properties;
-import java.util.Queue;
 import java.util.Vector;
 
 public class JBlobDetector {
