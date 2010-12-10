@@ -72,6 +72,48 @@ public JPoint2D getPoint(int idx)
 	return mPoints.get(idx);
 }
 
+public JPoint2D getCentroid()
+{
+	int xSum=0;
+	int ySum=0;
+	
+	if (mPoints.size() == 0)
+		return null;
+	
+	for(JPoint2D p: mPoints)
+	{
+		xSum+= p.getX();
+		ySum+= p.getY();
+	}
+	
+	
+		
+	xSum /= mPoints.size();
+	ySum /= mPoints.size();
+	
+	return new JPoint2D(xSum,ySum);
+}
+
+public static JBlob findBiggestBlob(Vector<JBlob> blobs)
+{
+	
+	int maxPoints = 0, totalPoints = 0;
+	JBlob theBlob = null;
+	for(JBlob blob : blobs)
+	{
+//		totalPoints = blob.getNumPoints();
+//		if(totalPoints > maxPoints && 
+//				blob.getBoundingBox().getHeight() *blob.getBoundingBox().getWidth() < this.getHeight()*this.getWidth())
+//		{
+//			biggestRectangle= blob.getBoundingBox();
+//			maxPoints = blob.getNumPoints();
+//		}
+//		// System.out.println(blob.getBoundingBox());
+	}
+	
+	return theBlob;
+}
+
 public Rectangle getBoundingBox()
 {
 	return new Rectangle(mX, mY, mWidth, mHeight);

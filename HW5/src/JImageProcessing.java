@@ -40,45 +40,65 @@ public class JImageProcessing {
 	}
 	
 	/**
-	 * Find the range of colors from a rectangle in an image
+	 * Calculate a range of values to be used based on the color of the blob in the selected rectange.
 	 * @param in
 	 * @param rect
 	 * @return
 	 */
-	static public int[][] findRangeByExtrema(JImage in, Rectangle rect)
+	static public int[][] findRangeByAverage(JImage in, Rectangle rect)
 	{
+		// Number of channels in the image
 		int numChannels = in.getNumChannels();
+		
+		// Holds the values of an individual pixel
 		int pixel[] = new int [numChannels];
+		
+		// Keeps track of total pixel values from all channels
+		long values[] = new long[numChannels];
+		
+		// Number of pixels in the image, range for blob recognition
+		int numPixels, RANGE = 20;
+		
+		// Values to be returned, calculated using range
 		int[] low = new int[numChannels];
 		int[] high = new int[numChannels];
 		
-		for(int chanel = 0;chanel<numChannels;chanel++)
-		{
-			low[chanel]= Integer.MAX_VALUE;
-			high[chanel] = Integer.MIN_VALUE;
-		}
-		
+		// Rectangle values
 		int minX = (int) rect.getMinX();
 		int maxX = (int) rect.getMaxX();
 		int minY = (int) rect.getMinY();
 		int maxY = (int) rect.getMaxY();
 		
-		for(int x=minX;x<maxX;x++)
+		for (int x = minX; x < maxX; x++)
 		{
-			for(int y=minY;y<maxY;y++)
+			for (int y = minY; y < maxY; y++)
 			{
+				// Grab pixel data
 				pixel = in.getPixel(x,y);
-				for(int chanel = 0;chanel<numChannels;chanel++)
+				
+				// Keep track of totals
+				for (int i = 0; i < numChannels; i++)
 				{
-					if(pixel[chanel]<low[chanel]){
-						low[chanel]= pixel[chanel];
-					}
-					
-					if(pixel[chanel]>high[chanel])
-						high[chanel]= pixel[chanel];
+					values[i] += pixel[i];
 				}
 			}
 		}
-		return new int[][]{low,high};
+		
+		// Calculate "normalizing" factors
+		numPixels = (maxX - minX) * (maxY - minY);
+
+		// Calculate full range to be returned
+		for (int i = 0; i < numChannels ; i++)
+		{
+			if(numPixels!=0)
+				values[i] /= numPixels;
+			else 
+				values[i]=0;
+			
+			low[i] = (int)values[i] - RANGE;
+			high[i] = (int)values[i] + RANGE;
+		}
+		
+		return new int[][] {low, high};
 	}
 }

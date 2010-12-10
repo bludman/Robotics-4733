@@ -16,10 +16,6 @@ public class JBlobDetector {
 	{
 	}
 
-
-
-
-	
 	private Vector<JBlob> findBlobs4(JImage mask)
 	{
 		Vector<JBlob> blobs = new Vector<JBlob>();

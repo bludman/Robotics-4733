@@ -32,6 +32,7 @@ public class VisionRobotGui {
 	private JFrame f_mask;
 	private URL camera;
 	private int[][] range;
+	private BlobTracker tracker;
 	
 	private static final int LOW = 0;
 	private static final int HIGH = 1;
@@ -73,6 +74,7 @@ public class VisionRobotGui {
 		//create a reader to read the image from the input stream
 		Iterator readers = ImageIO.getImageReadersByFormatName("jpeg");
 		ImageReader reader = (ImageReader)readers.next();
+		tracker = new BlobTracker(original.getWidth());
 		while(true)
 		{
 			BufferedImage bi = getNextFrame(reader);
@@ -101,7 +103,13 @@ public class VisionRobotGui {
 		jbs = jbd.findBlobs(jmask, CONNECTIVITY);
 		
 		original.setBlobs(jbs);
+		mask.setBlobs(jbs);
+
+		JBlob max = findBiggestBlob(jbs);
 		
+		tracker.update(max,original.getWidth());
+		tracker.checkCentroid();
+		tracker.checkArea();
 		
 		//update the image in each display window
 		original.updateImage(ji.getBufferedImage());
@@ -113,9 +121,31 @@ public class VisionRobotGui {
 		{
 			System.out.println(original.getSelectedRectangle());
 			
-			range = JImageProcessing.findRangeByExtrema(ji, original.getSelectedRectangle());
+			range = JImageProcessing.findRangeByAverage(ji, original.getSelectedRectangle());
+			tracker.recalibrate();
 			System.out.println("low: "+Arrays.toString(range[0])+" high: "+Arrays.toString(range[1]));
 		}
+	}
+
+	private JBlob findBiggestBlob(Vector<JBlob> jbs) 
+	{	
+		JBlob biggest = new JBlob();
+		if (jbs == null)
+		{
+			return null;
+		}
+		
+		for (JBlob b : jbs)
+		{
+			if (b.getBoundingBox().getHeight() * b.getBoundingBox().getWidth() < original.getHeight() * original.getWidth() &&
+					b.getNumPoints() > biggest.getNumPoints())
+			{
+				biggest = b;
+			}
+		}
+		
+		// System.out.println(biggest.getBoundingBox());
+		return biggest;
 	}
 
 	private BufferedImage getNextFrame(ImageReader reader) throws IOException {
